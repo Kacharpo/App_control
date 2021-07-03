@@ -7,7 +7,7 @@
     tools:context=".Principal">
 
     <EditText
-        android:id="@+id/editTextTextPersonName5"
+        android:id="@+id/tp_ubicacion"
         android:layout_width="380dp"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -18,20 +18,32 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/ly_ruta"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName5"></LinearLayout>
+        app:layout_constraintTop_toBottomOf="@+id/tp_ubicacion"></LinearLayout>
 
     <com.google.android.gms.maps.MapView
-        android:id="@+id/mapView"
+        android:id="@+id/mv_destino"
         android:layout_width="387dp"
         android:layout_height="529dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.666"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ly_ruta" />
+
+    <TextView
+        android:id="@+id/tv_ficha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="FICHA CONDUCTOR"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/mv_destino" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

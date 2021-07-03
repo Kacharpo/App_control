@@ -7,7 +7,7 @@
     tools:context=".RegistroControl">
 
     <EditText
-        android:id="@+id/editTextTextPersonName"
+        android:id="@+id/tp_nombre"
         android:layout_width="420dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -21,7 +21,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName2"
+        android:id="@+id/tp_apellido"
         android:layout_width="420dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -32,10 +32,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName" />
+        app:layout_constraintTop_toBottomOf="@+id/tp_nombre" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName3"
+        android:id="@+id/tn_numero"
         android:layout_width="420dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -46,10 +46,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextDate" />
+        app:layout_constraintTop_toBottomOf="@+id/td_fecha" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName4"
+        android:id="@+id/te_correo"
         android:layout_width="420dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -60,10 +60,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName3" />
+        app:layout_constraintTop_toBottomOf="@+id/tn_numero" />
 
     <EditText
-        android:id="@+id/editTextDate"
+        android:id="@+id/td_fecha"
         android:layout_width="420dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -73,10 +73,10 @@
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2" />
+        app:layout_constraintTop_toBottomOf="@+id/tp_apellido" />
 
     <EditText
-        android:id="@+id/editTextTextPassword"
+        android:id="@+id/tpass_contrasena"
         android:layout_width="420dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -86,10 +86,10 @@
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName4" />
+        app:layout_constraintTop_toBottomOf="@+id/te_correo" />
 
     <EditText
-        android:id="@+id/editTextTextPassword2"
+        android:id="@+id/tpass_confirmar"
         android:layout_width="420dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -99,10 +99,10 @@
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/tpass_contrasena" />
 
     <EditText
-        android:id="@+id/editTextNumber"
+        android:id="@+id/tn_ruta"
         android:layout_width="420dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -112,10 +112,10 @@
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword2" />
+        app:layout_constraintTop_toBottomOf="@+id/tpass_confirmar" />
 
     <EditText
-        android:id="@+id/editTextNumber2"
+        android:id="@+id/tn_licencia"
         android:layout_width="420dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -125,20 +125,20 @@
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNumber" />
+        app:layout_constraintTop_toBottomOf="@+id/tn_ruta" />
 
     <Spinner
-        android:id="@+id/spinner"
+        android:id="@+id/sp_tipo"
         android:layout_width="420dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNumber2" />
+        app:layout_constraintTop_toBottomOf="@+id/tn_licencia" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btn_aceptar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -148,7 +148,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner"
+        app:layout_constraintTop_toBottomOf="@+id/sp_tipo"
         app:layout_constraintVertical_bias="1.0" />
 
     <ImageView
