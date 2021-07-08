@@ -18,7 +18,6 @@ import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -30,7 +29,6 @@ public class Principal extends FragmentActivity implements OnMapReadyCallback {
     private TextView tv_inicio, tv_final,tv_tiempo,tv_conductor, tv_disponibilidad,tv_iniciotxt,
             tv_finaltxt,tv_tiempotxt,tv_conductortxt, tv_disponibilidadtxt, tv_rutas, tv_ficha;
     private ImageView img_conductor;
-    private MapView mv_destino;
 
     private GoogleMap mMap;
     private boolean UbiAct = false;
@@ -52,7 +50,6 @@ public class Principal extends FragmentActivity implements OnMapReadyCallback {
         tv_conductortxt = (TextView)findViewById(R.id.tv_c_conductortxt);
         tv_disponibilidadtxt = (TextView)findViewById(R.id.tv_c_disponibilidadtxt);
         img_conductor = (ImageView)findViewById(R.id.img_c_conductor);
-        mv_destino = (MapView)findViewById(R.id.mv_c_destino);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.mv_c_destino);
