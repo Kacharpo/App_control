@@ -1,3 +1,36 @@
 <resources>
     <string name="app_name">App_control</string>
+    //ResgistroControl
+    <string name="txt_c_nombre">Nombre</string>
+    <string name="txt_c_apellido">Apellido</string>
+    <string name="txt_c_fecha">Fecha de nacimiento</string>
+    <string name="txt_c_numero">Numero de celular</string>
+    <string name="txt_c_correo">E-mail</string>
+    <string name="txt_c_contrasena">Contraseña</string>
+    <string name="txt_c_confirmar">Confirmar contraseña</string>
+    <string name="txt_c_ruta">Ruta</string>
+    <string name="txt_c_licencia">Licencia</string>
+    <string name="btn_c_aceptar">Aceptar</string>
+    <string name="sp_c_tipo">Tipo de transporte</string>
+    //RecuperarContra
+    <string name="txt_c_correoContra">E-mail</string>
+    <string name="tv_c_olvidaste">¿Olvidaste Contraseña?</string>
+    <string name="tv_c_introducir">Introducir un correo electronico con el que te registraste. En un
+        momento recibiras un correo para configurar de nuevo la contraseña de tu cuenta.</string>
+    <string name="btn_c_enviar">Enviar</string>
+    //Principal
+    <string name="txt_c_ubicacion">Ubicacion</string>
+    <string name="tv_c_ficha">Luis Manuel Perez</string>
+    <string name="tv_c_inicio">Inicio</string>
+    <string name="tv_c_final">Final</string>
+    <string name="tv_c_tiempo">Tiempo</string>
+    <string name="tv_c_conductor">Conductor</string>
+    <string name="tv_c_disponibilidad">Disponibilidad</string>
+    <string name="tv_c_iniciotxt">Inicio</string>
+    <string name="tv_c_finaltxt">Final</string>
+    <string name="tv_c_tiempotxt">Tiempo</string>
+    <string name="tv_c_conductortxt">Conductor</string>
+    <string name="tv_c_disponibilidadtxt">Disponibilidad</string>
+    <string name="tv_c_rutas">Rutas</string>
+    //
 </resources>

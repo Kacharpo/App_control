@@ -4,46 +4,169 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F44336"
     tools:context=".Principal">
 
     <EditText
-        android:id="@+id/tp_ubicacion"
+        android:id="@+id/txt_c_ubicacion"
         android:layout_width="380dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="#FFFFFF"
+        android:backgroundTint="#FFFFFF"
         android:ems="10"
-        android:hint="Ubicacion"
+        android:hint="@string/txt_c_ubicacion"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/tv_c_rutas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/tv_c_rutas"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_c_ubicacion" />
+
     <LinearLayout
         android:id="@+id/ly_ruta"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_c_rutas">
+
+        <TextView
+            android:id="@+id/tv_c_inicio"
+            android:layout_width="82dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/tv_c_inicio"
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/tv_c_final"
+            android:layout_width="82dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/tv_c_final"
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/tv_c_tiempo"
+            android:layout_width="82dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/tv_c_tiempo"
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/tv_c_conductor"
+            android:layout_width="82dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/tv_c_conductor"
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/tv_c_disponibilidad"
+            android:layout_width="92dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/tv_c_disponibilidad"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tp_ubicacion"></LinearLayout>
+        app:layout_constraintTop_toBottomOf="@+id/ly_ruta">
 
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/mv_destino"
-        android:layout_width="387dp"
-        android:layout_height="529dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.666"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ly_ruta" />
+        <TextView
+            android:id="@+id/tv_c_iniciotxt"
+            android:layout_width="82dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#FFFFFF"
+            android:text="@string/tv_c_iniciotxt" />
 
-    <TextView
-        android:id="@+id/tv_ficha"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="FICHA CONDUCTOR"
+        <TextView
+            android:id="@+id/tv_c_finaltxt"
+            android:layout_width="82dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#FFFFFF"
+            android:text="@string/tv_c_finaltxt" />
+
+        <TextView
+            android:id="@+id/tv_c_tiempotxt"
+            android:layout_width="82dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#FFFFFF"
+            android:text="@string/tv_c_tiempotxt" />
+
+        <TextView
+            android:id="@+id/tv_c_conductortxt"
+            android:layout_width="82dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#FFFFFF"
+            android:text="@string/tv_c_conductortxt" />
+
+        <TextView
+            android:id="@+id/tv_c_disponibilidadtxt"
+            android:layout_width="92dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#FFFFFF"
+            android:text="@string/tv_c_disponibilidadtxt" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="105dp"
+        android:background="#FFFFFF"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mv_destino" />
+        app:layout_constraintTop_toBottomOf="@+id/mv_destino"
+        app:layout_constraintVertical_bias="0.0">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/tv_c_ficha"
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
+            android:text="@string/tv_c_ficha" />
+
+    </LinearLayout>
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/mv_destino"
+        android:layout_width="match_parent"
+        android:layout_height="460dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.555"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

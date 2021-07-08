@@ -7,17 +7,19 @@
     tools:context=".RecuperarContra">
 
     <TextView
-        android:id="@+id/tv_olvidaste"
+        android:id="@+id/tv_c_olvidaste"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="52dp"
-        android:text="¿Olvidaste Contraseña?"
+        android:text="@string/tv_c_olvidaste"
+        android:textColor="#000000"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/img_c_recuperar" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/img_c_recuperar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -28,37 +30,43 @@
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/tv_introducir"
-        android:layout_width="wrap_content"
+        android:id="@+id/tv_c_introducir"
+        android:layout_width="400dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="72dp"
-        android:text="Introducir un correo electronico con el que te registraste. En un momento recibiras un correo para configurar de nuevo la contraseña de tu cuenta."
+        android:layout_marginTop="68dp"
+        android:text="@string/tv_c_introducir"
+        android:textColor="#000000"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.454"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_olvidaste" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_c_olvidaste" />
 
     <EditText
-        android:id="@+id/te_correoContra"
+        android:id="@+id/txt_c_correoContra"
         android:layout_width="420dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
+        android:backgroundTint="#F44336"
         android:ems="10"
+        android:hint="@string/txt_c_correoContra"
         android:inputType="textEmailAddress"
+        android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.555"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_introducir" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_c_introducir" />
 
     <Button
-        android:id="@+id/btn_enviar"
+        android:id="@+id/btn_c_enviar"
         android:layout_width="420dp"
         android:layout_height="wrap_content"
-        android:text="Enviar"
+        android:backgroundTint="#F44336"
+        android:text="@string/btn_c_enviar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.444"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/te_correoContra"
+        app:layout_constraintTop_toBottomOf="@+id/txt_c_correoContra"
         app:layout_constraintVertical_bias="0.337" />
 </androidx.constraintlayout.widget.ConstraintLayout>
