@@ -142,11 +142,11 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mv_destino"
+        app:layout_constraintTop_toBottomOf="@+id/mv_c_destino"
         app:layout_constraintVertical_bias="0.0">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/img_c_conductor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -161,7 +161,7 @@
     </LinearLayout>
 
     <com.google.android.gms.maps.MapView
-        android:id="@+id/mv_destino"
+        android:id="@+id/mv_c_destino"
         android:layout_width="match_parent"
         android:layout_height="460dp"
         app:layout_constraintEnd_toEndOf="parent"

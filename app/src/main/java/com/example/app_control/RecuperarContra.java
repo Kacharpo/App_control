@@ -2,7 +2,9 @@ package com.example.app_control;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -27,7 +29,8 @@ public class RecuperarContra extends AppCompatActivity {
         img_recuperar = (ImageView)findViewById(R.id.img_c_recuperar);
     }
 
-    public void Enviar(){
-
+    public void Enviar(View view){
+        Intent enviar = new Intent(this,Principal.class);
+        startActivity(enviar);
     }
 }

@@ -2,7 +2,9 @@ package com.example.app_control;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,8 +43,9 @@ public class RegistroControl extends AppCompatActivity {
         sp_tipo.setAdapter(adapter1);
     }
 
-    public void Aceptar(){
-
+    public void Aceptar(View view){
+        Intent aceptar = new Intent(this,RecuperarContra.class);
+        startActivity(aceptar);
     }
 
 }

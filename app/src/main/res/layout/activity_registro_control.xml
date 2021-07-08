@@ -155,6 +155,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         android:backgroundTint="#F44336"
+        android:onClick="Aceptar"
         android:text="@string/btn_c_aceptar"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         app:cornerRadius="10dp"

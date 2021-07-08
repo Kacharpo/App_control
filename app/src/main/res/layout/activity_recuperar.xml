@@ -62,6 +62,7 @@
         android:layout_width="420dp"
         android:layout_height="wrap_content"
         android:backgroundTint="#F44336"
+        android:onClick="Enviar"
         android:text="@string/btn_c_enviar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
