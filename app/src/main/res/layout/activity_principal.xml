@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="#F44336"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Principal"
-    android:orientation="vertical">
+    tools:context=".Principal">
 
     <EditText
         android:id="@+id/txt_c_ubicacion"
@@ -16,21 +15,28 @@
         android:backgroundTint="#FFFFFF"
         android:ems="10"
         android:hint="@string/txt_c_ubicacion"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_c_rutas"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/tv_c_rutas"
-        android:textColor="#FFFFFF" />
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_c_ubicacion" />
 
     <FrameLayout
+        android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="400dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_c_rutas">
 
         <fragment
             android:id="@+id/map"
@@ -49,6 +55,12 @@
         android:layout_height="50dp"
         android:layout_gravity="bottom|right"
         android:background="#FFFFFF"
-        android:text="@string/tv_c_ficha" />
+        android:text="@string/tv_c_ficha"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frameLayout"
+        app:layout_constraintVertical_bias="1.0" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

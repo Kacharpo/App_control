@@ -52,6 +52,7 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
         setContentView(R.layout.activity_principal);
 
         et_ubicacion = (EditText)findViewById(R.id.txt_c_ubicacion);
+        /*
         tv_inicio = (TextView)findViewById(R.id.tv_c_inicio);
         tv_final = (TextView)findViewById(R.id.tv_c_final);
         tv_tiempo = (TextView)findViewById(R.id.tv_c_tiempo);
@@ -62,10 +63,11 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
         tv_tiempotxt = (TextView)findViewById(R.id.tv_c_tiempotxt);
         tv_conductortxt = (TextView)findViewById(R.id.tv_c_conductortxt);
         tv_disponibilidadtxt = (TextView)findViewById(R.id.tv_c_disponibilidadtxt);
+        */
         tv_rutas = (TextView)findViewById(R.id.tv_c_rutas);
         tv_ficha = (TextView)findViewById(R.id.tv_c_ficha);
 
-        img_conductor = (ImageView)findViewById(R.id.img_c_conductor);
+       // img_conductor = (ImageView)findViewById(R.id.img_c_conductor);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
