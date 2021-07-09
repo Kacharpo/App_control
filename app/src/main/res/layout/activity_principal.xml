@@ -40,7 +40,7 @@
                 android:textColor="#FFFFFF" />
 
             <HorizontalScrollView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
                 <LinearLayout
@@ -145,35 +145,36 @@
                 </LinearLayout>
             </HorizontalScrollView>
 
-        </LinearLayout>
-
-        <fragment
-            android:id="@+id/map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="423dp"
-            android:layout_gravity="center" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:background="#FFFFFF"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/img_c_conductor"
-                android:layout_width="wrap_content"
+            <fragment
+                android:id="@+id/map"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                tools:srcCompat="@tools:sample/avatars" />
+                android:layout_gravity="center"
+                tools:layout="@layout/activity_principal" />
 
-            <TextView
-                android:id="@+id/tv_c_ficha"
-                android:layout_width="300dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="start"
-                android:text="@string/tv_c_ficha" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:background="#FFFFFF"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/img_c_conductor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    tools:srcCompat="@tools:sample/avatars" />
+
+                <TextView
+                    android:id="@+id/tv_c_ficha"
+                    android:layout_width="300dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="start"
+                    android:text="@string/tv_c_ficha" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
