@@ -31,11 +31,11 @@
         app:layout_constraintTop_toBottomOf="@+id/txt_c_ubicacion" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tv_c_rutastxt"
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:background="#FFFFFF"
-        android:text="TextView"
+        android:text="@string/tv_c_rutas"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_c_rutas" />
@@ -47,7 +47,7 @@
         app:layout_constraintBottom_toTopOf="@+id/tv_c_ficha"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView">
+        app:layout_constraintTop_toBottomOf="@+id/tv_c_rutastxt">
 
         <fragment
             android:id="@+id/map"

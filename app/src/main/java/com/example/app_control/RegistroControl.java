@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 
 public class RegistroControl extends AppCompatActivity {
@@ -17,6 +18,7 @@ public class RegistroControl extends AppCompatActivity {
     private EditText et_nombre, et_apellido, et_fecha,et_numero , et_correo, et_contrasena, et_confirmar, et_ruta, et_licencia;
     private Button btn_aceptar;
     private ImageView img_control;
+    private RadioButton rb_terminos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,10 +37,11 @@ public class RegistroControl extends AppCompatActivity {
         img_control = (ImageView)findViewById(R.id.img_c_control);
         btn_aceptar = (Button)findViewById(R.id.btn_c_aceptar);
         sp_tipo = (Spinner)findViewById(R.id.sp_c_tipo);
+        rb_terminos = (RadioButton)findViewById(R.id.rb_c_terminos);
 
         String [] tipo = {"Euroban", "Urban", "Combi"};
 
-        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
+        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipo);
 
         sp_tipo.setAdapter(adapter1);
     }

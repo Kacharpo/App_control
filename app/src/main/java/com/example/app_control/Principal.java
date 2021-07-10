@@ -38,7 +38,7 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
 
     private EditText et_ubicacion;
     private TextView tv_inicio, tv_final,tv_tiempo,tv_conductor, tv_disponibilidad,tv_iniciotxt,
-            tv_finaltxt,tv_tiempotxt,tv_conductortxt, tv_disponibilidadtxt, tv_rutas, tv_ficha;
+            tv_finaltxt,tv_tiempotxt,tv_conductortxt, tv_disponibilidadtxt, tv_rutas, tv_ficha, tv_rutastxt;
     private ImageView img_conductor;
 
     private GoogleMap mMap;
@@ -65,6 +65,7 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
         tv_disponibilidadtxt = (TextView)findViewById(R.id.tv_c_disponibilidadtxt);
         */
         tv_rutas = (TextView)findViewById(R.id.tv_c_rutas);
+        tv_rutastxt = (TextView)findViewById(R.id.tv_c_rutastxt);
         tv_ficha = (TextView)findViewById(R.id.tv_c_ficha);
 
        // img_conductor = (ImageView)findViewById(R.id.img_c_conductor);

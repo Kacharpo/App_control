@@ -12,6 +12,7 @@
     <string name="txt_c_licencia">Licencia</string>
     <string name="btn_c_aceptar">Aceptar</string>
     <string name="sp_c_tipo">Tipo de transporte</string>
+    <string name="rb_c_terminos">Acepto Terminos y Condiciones</string>
     //RecuperarContra
     <string name="txt_c_correoContra">E-mail</string>
     <string name="tv_c_olvidaste">¿Olvidaste Contraseña?</string>
@@ -32,7 +33,7 @@
     <string name="tv_c_conductortxt">Conductor</string>
     <string name="tv_c_disponibilidadtxt">Disponibilidad</string>
     <string name="tv_c_rutas">Rutas</string>
-
+    //Maps
     <string name="marker_detail_lating">(%1$.2f,%2$.2f)</string>
     //
 </resources>

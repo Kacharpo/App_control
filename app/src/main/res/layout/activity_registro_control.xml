@@ -135,6 +135,13 @@
                 android:layout_marginTop="16dp"
                 android:backgroundTint="#F44336" />
 
+            <RadioButton
+                android:id="@+id/rb_c_terminos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/rb_c_terminos" />
+
             <Button
                 android:id="@+id/btn_c_aceptar"
                 android:layout_width="wrap_content"
