@@ -2,7 +2,9 @@ package com.example.app_control;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -11,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 public class RegistroControl extends AppCompatActivity {
 
@@ -39,7 +42,7 @@ public class RegistroControl extends AppCompatActivity {
         sp_tipo = (Spinner)findViewById(R.id.sp_c_tipo);
         rb_terminos = (RadioButton)findViewById(R.id.rb_c_terminos);
 
-        String [] tipo = {"Euroban", "Urban", "Combi"};
+        String [] tipo = {"Tipo","Euroban", "Urban", "Combi"};
 
         ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipo);
 
@@ -47,8 +50,53 @@ public class RegistroControl extends AppCompatActivity {
     }
 
     public void Aceptar(View view){
-        Intent aceptar = new Intent(this,RecuperarContra.class);
-        startActivity(aceptar);
+
+        AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this, "registro_control",null,1);
+        SQLiteDatabase db = admin.getWritableDatabase();
+
+        int id_control = 1;
+        String nombre = et_nombre.getText().toString();
+        String apellido = et_apellido.getText().toString();
+        String fecha = et_fecha.getText().toString();
+        String numero = et_numero.getText().toString();
+        String correo = et_correo.getText().toString();
+        String contrasena = et_contrasena.getText().toString();
+        String confirmar = et_confirmar.getText().toString();
+        String ruta = et_ruta.getText().toString();
+        String licencia = et_licencia.getText().toString();
+        String tipo = sp_tipo.getSelectedItem().toString();
+        boolean terminos = rb_terminos.isChecked();
+
+        if(!nombre.isEmpty() && !apellido.isEmpty() && !fecha.isEmpty() && !numero.isEmpty() && !correo.isEmpty() && !contrasena.isEmpty() && !confirmar.isEmpty() && !ruta.isEmpty() && !licencia.isEmpty() && !tipo.isEmpty() && !tipo.equals("Tipo")){
+            if(contrasena.equals(confirmar)){
+                if(terminos == true){
+                    ContentValues registro = new ContentValues();
+                    registro.put("id_control",id_control);
+                    registro.put("nombre", nombre);
+                    registro.put("apellido", apellido);
+                    registro.put("fecha", fecha);
+                    registro.put("numero", numero);
+                    registro.put("correo", correo);
+                    registro.put("contrasena", contrasena);
+                    registro.put("ruta", ruta);
+                    registro.put("licencia", licencia);
+                    registro.put("tipo", tipo);
+                    db.insert("registro_control",null,registro);
+                    db.close();
+                    Toast.makeText(this, "Registro Exitoso", Toast.LENGTH_SHORT).show();
+
+                    Intent aceptar = new Intent(this,RecuperarContra.class);
+                    startActivity(aceptar);
+                }else{
+                    Toast.makeText(this, "Debes aceptar los terminos y condiciones", Toast.LENGTH_SHORT).show();
+                }
+
+            }else {
+                Toast.makeText(this, "Contraseñas incorrectas", Toast.LENGTH_SHORT).show();
+            }
+        }else {
+            Toast.makeText(this, "Debes llenar todos los campos", Toast.LENGTH_SHORT).show();
+        }
     }
 
 }
