@@ -65,7 +65,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="#F44336"
-                android:onClick="Enviar"
                 android:text="@string/btn_c_enviar" />
         </LinearLayout>
     </ScrollView>

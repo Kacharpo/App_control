@@ -85,6 +85,9 @@ public class RecuperarContra extends Activity implements OnClickListener{
 
         RetreiveFeedTask task = new RetreiveFeedTask();
         task.execute();
+
+        Intent next = new Intent(this,Principal.class);
+        startActivity(next);
     }
 
     class RetreiveFeedTask extends AsyncTask<String, Void, String> {
@@ -122,8 +125,7 @@ public class RecuperarContra extends Activity implements OnClickListener{
         enviar.putExtra(Intent.EXTRA_TEXT,"Su contraseña es: ");
         startActivity(enviar);
         */
-        Intent next = new Intent(this,Principal.class);
-        startActivity(next);
+
     }
 }
 
