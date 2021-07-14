@@ -16,21 +16,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.App_control">
-        <activity android:name=".Login"/>
-        <activity android:name=".MainActivity"></activity>
-        <activity android:name=".CredentialActivity">
+        <activity android:name=".Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Principal" />
+        <activity android:name=".RecuperarContra" />
+        <activity android:name=".RegistroControl"/>
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDc-RTZCRzOWBS8r2v30SndwK9CzYv3Tew" />
 
-        <activity android:name=".Principal" />
-        <activity android:name=".RecuperarContra" />
-        <activity android:name=".RegistroControl"/>
     </application>
 
 </manifest>

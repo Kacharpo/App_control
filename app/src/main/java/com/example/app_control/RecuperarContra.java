@@ -1,20 +1,22 @@
 package com.example.app_control;
 
-import androidx.appcompat.app.AppCompatActivity;
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import android.app.Activity;
-import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.app_control.utils.InputValidation;
 
 import java.util.Properties;
+
 import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -24,30 +26,13 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.os.AsyncTask;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
 
-
-public class RecuperarContra extends Activity implements OnClickListener{
+public class RecuperarContra extends AppCompatActivity{
 
     private EditText et_correo;
     private TextView tv_olvidaste, tv_introducir;
     private Button btn_enviar;
     private ImageView img_recuperar;
-
-    Session session = null;
-    ProgressDialog pdialog = null;
-    Context context = null;
-    EditText reciep;
-    String rec;
-    String subject = "Recuperar contra";
-    String textMessage = "Tu contraseña es: ";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,14 +45,30 @@ public class RecuperarContra extends Activity implements OnClickListener{
         btn_enviar = (Button)findViewById(R.id.btn_c_enviar);
         img_recuperar = (ImageView)findViewById(R.id.img_c_recuperar);
 
-        context = this;
+        //Values received from another Activity (Screen)
+        final String recipientEmail = "elpatron.desonora.01@gmail.com";
+        final String recipientPassword = "CortesyAsadero";
+        final String subject = "Recuperar contraseña";
+        final String message = "Su contraseña es: ";
+
+        btn_enviar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (InputValidation.isValidEditText(et_correo, getString(R.string.field_is_required))) {
+                    sendEmailWithGmail(
+                            recipientEmail,
+                            recipientPassword,
+                            et_correo.getText().toString(),
+                            subject,
+                            message);
+                }
+            }
+        });
 
     }
 
-    @Override
-    public void onClick(View v) {
-        rec = et_correo.getText().toString();
-
+    private void sendEmailWithGmail(final String recipientEmail, final String recipientPassword,
+                                    String to, String subject, String message) {
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.socketFactory.port", "465");
@@ -75,57 +76,71 @@ public class RecuperarContra extends Activity implements OnClickListener{
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.port", "465");
 
-        session = Session.getDefaultInstance(props, new Authenticator() {
+        Session session = Session.getDefaultInstance(props, new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("tona23.tona14@gmail.com", "Gi0vann&MP2314");
+                return new PasswordAuthentication(recipientEmail, recipientPassword);
             }
         });
 
-        pdialog = ProgressDialog.show(context, "", "Sending Mail...", true);
-
-        RetreiveFeedTask task = new RetreiveFeedTask();
+        SenderAsyncTask task = new RecuperarContra.SenderAsyncTask(session, recipientEmail, to, subject, message);
         task.execute();
-
-        Intent next = new Intent(this,Principal.class);
-        startActivity(next);
     }
 
-    class RetreiveFeedTask extends AsyncTask<String, Void, String> {
+    /**
+     * AsyncTask to send email
+     */
+    private class SenderAsyncTask extends AsyncTask<String, String, String> {
+
+        private String from, to, subject, message;
+        private ProgressDialog progressDialog;
+        private Session session;
+
+        public SenderAsyncTask(Session session, String from, String to, String subject, String message) {
+            this.session = session;
+            this.from = from;
+            this.to = to;
+            this.subject = subject;
+            this.message = message;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = ProgressDialog.show(RecuperarContra.this, "", getString(R.string.sending_mail), true);
+            progressDialog.setCancelable(false);
+        }
 
         @Override
         protected String doInBackground(String... params) {
-
-            try{
-                Message message = new MimeMessage(session);
-                message.setFrom(new InternetAddress("testfrom354@gmail.com"));
-                message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(rec));
-                message.setSubject(subject);
-                message.setContent(textMessage, "text/html; charset=utf-8");
-                Transport.send(message);
-            } catch(MessagingException e) {
+            try {
+                Message mimeMessage = new MimeMessage(session);
+                mimeMessage.setFrom(new InternetAddress(from));
+                mimeMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
+                mimeMessage.setSubject(subject);
+                mimeMessage.setContent(message, "text/html; charset=utf-8");
+                Transport.send(mimeMessage);
+            } catch (MessagingException e) {
                 e.printStackTrace();
-            } catch(Exception e) {
+                return e.getMessage();
+            } catch (Exception e) {
                 e.printStackTrace();
+                return e.getMessage();
             }
             return null;
         }
 
         @Override
+        protected void onProgressUpdate(String... values) {
+            super.onProgressUpdate(values);
+            progressDialog.setMessage(values[0]);
+        }
+
+        @Override
         protected void onPostExecute(String result) {
-            pdialog.dismiss();
-            reciep.setText("");
-            Toast.makeText(getApplicationContext(), "Message sent", Toast.LENGTH_LONG).show();
+            progressDialog.dismiss();
+            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
         }
     }
-    public void Enviar(View view){
-        /*Intent enviar = new Intent(Intent.ACTION_SENDTO);
-        enviar.setData(Uri.parse("mailto:"));
-        enviar.putExtra(Intent.EXTRA_EMAIL,new String[]{et_correo.getText().toString()});
-        enviar.putExtra(Intent.EXTRA_SUBJECT,"Recuperar Contraseña");
-        enviar.putExtra(Intent.EXTRA_TEXT,"Su contraseña es: ");
-        startActivity(enviar);
-        */
 
-    }
 }
 
