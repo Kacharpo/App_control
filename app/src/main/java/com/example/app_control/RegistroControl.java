@@ -51,7 +51,7 @@ public class RegistroControl extends AppCompatActivity {
 
     public void Aceptar(View view){
 
-        AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this, "registro_control",null,1);
+        AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this, "registro",null,1);
         SQLiteDatabase db = admin.getWritableDatabase();
 
         int id_control = 1;
