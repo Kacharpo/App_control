@@ -2,9 +2,11 @@ package com.example.app_control;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -16,6 +18,17 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.app_control.utils.InputValidation;
+
+import java.util.Properties;
+
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 public class RegistroControl extends AppCompatActivity {
 
@@ -50,67 +63,157 @@ public class RegistroControl extends AppCompatActivity {
 
         sp_tipo.setAdapter(adapter1);
 
-    }
-
-    public void Aceptar(View view){
+        final String recipientEmail = "elpatron.desonora.01@gmail.com";
+        final String recipientPassword = "CortesyAsadero";
+        final String subject = "Codigo de confrimacion";
+        final String message = "Su codigo es: abcd";
 
         AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this, "registro",null,1);
-        SQLiteDatabase db = admin.getWritableDatabase();
 
-        int id_control = 1;
-        String nombre = et_nombre.getText().toString();
-        boolean nombre_b = InputValidation.isValidEditText(et_nombre, getString(R.string.field_is_required));
-        String apellido = et_apellido.getText().toString();
-        boolean apellido_b = InputValidation.isValidEditText(et_apellido, getString(R.string.field_is_required));
-        String fecha = et_fecha.getText().toString();
-        boolean fecha_b = InputValidation.isValidEditText(et_fecha, getString(R.string.field_is_required));
-        String numero = et_numero.getText().toString();
-        boolean numero_b = InputValidation.isValidEditText(et_numero, getString(R.string.field_is_required));
-        String correo = et_correo.getText().toString();
-        boolean correo_b = InputValidation.isValidEditText(et_correo, getString(R.string.field_is_required));
-        String contrasena = et_contrasena.getText().toString();
-        boolean contrasena_b = InputValidation.isValidEditText(et_contrasena, getString(R.string.field_is_required));
-        String confirmar = et_confirmar.getText().toString();
-        boolean confirmar_b = InputValidation.isValidEditText(et_confirmar, getString(R.string.field_is_required));
-        String ruta = et_ruta.getText().toString();
-        boolean ruta_b = InputValidation.isValidEditText(et_ruta, getString(R.string.field_is_required));
-        String licencia = et_licencia.getText().toString();
-        boolean licencia_b = InputValidation.isValidEditText(et_licencia, getString(R.string.field_is_required));
-        String tipo = sp_tipo.getSelectedItem().toString();
-        boolean terminos = rb_terminos.isChecked();
+        Intent aceptar = new Intent(this, ConfirmarCuenta.class);
 
-        if(nombre_b && apellido_b && fecha_b && numero_b && correo_b && contrasena_b && confirmar_b && ruta_b && licencia_b && !tipo.equals("Tipo")){
-            if(contrasena.equals(confirmar)){
-                if(terminos == true){
-                    ContentValues registro = new ContentValues();
-                    registro.put("id_control",id_control);
-                    registro.put("nombre", nombre);
-                    registro.put("apellido", apellido);
-                    registro.put("fecha", fecha);
-                    registro.put("numero", numero);
-                    registro.put("correo", correo);
-                    registro.put("contrasena", contrasena);
-                    registro.put("ruta", ruta);
-                    registro.put("licencia", licencia);
-                    registro.put("tipo", tipo);
-                    db.insert("registro_control",null,registro);
-                    db.close();
-                    Toast.makeText(this, "Registro Exitoso", Toast.LENGTH_SHORT).show();
+        btn_aceptar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-                    Intent aceptar = new Intent(this,RecuperarContra.class);
-                    startActivity(aceptar);
-                }else{
-                    Toast.makeText(this, "Debes aceptar los terminos y condiciones", Toast.LENGTH_SHORT).show();
+                SQLiteDatabase db = admin.getWritableDatabase();
+
+                int id_control = 1;
+                String nombre = et_nombre.getText().toString();
+                boolean nombre_b = InputValidation.isValidEditText(et_nombre, getString(R.string.field_is_required));
+                String apellido = et_apellido.getText().toString();
+                boolean apellido_b = InputValidation.isValidEditText(et_apellido, getString(R.string.field_is_required));
+                String fecha = et_fecha.getText().toString();
+                boolean fecha_b = InputValidation.isValidEditText(et_fecha, getString(R.string.field_is_required));
+                String numero = et_numero.getText().toString();
+                boolean numero_b = InputValidation.isValidEditText(et_numero, getString(R.string.field_is_required));
+                String correo = et_correo.getText().toString();
+                boolean correo_b = InputValidation.isValidEditText(et_correo, getString(R.string.field_is_required));
+                String contrasena = et_contrasena.getText().toString();
+                boolean contrasena_b = InputValidation.isValidEditText(et_contrasena, getString(R.string.field_is_required));
+                String confirmar = et_confirmar.getText().toString();
+                boolean confirmar_b = InputValidation.isValidEditText(et_confirmar, getString(R.string.field_is_required));
+                String ruta = et_ruta.getText().toString();
+                boolean ruta_b = InputValidation.isValidEditText(et_ruta, getString(R.string.field_is_required));
+                String licencia = et_licencia.getText().toString();
+                boolean licencia_b = InputValidation.isValidEditText(et_licencia, getString(R.string.field_is_required));
+                String tipo = sp_tipo.getSelectedItem().toString();
+                boolean terminos = rb_terminos.isChecked();
+
+                if (nombre_b && apellido_b && fecha_b && numero_b && correo_b && contrasena_b && confirmar_b && ruta_b && licencia_b && !tipo.equals("Tipo")) {
+                    if (contrasena.equals(confirmar)) {
+                        if (terminos == true) {
+                            ContentValues registro = new ContentValues();
+                            registro.put("id_control", id_control);
+                            registro.put("nombre", nombre);
+                            registro.put("apellido", apellido);
+                            registro.put("fecha", fecha);
+                            registro.put("numero", numero);
+                            registro.put("correo", correo);
+                            registro.put("contrasena", contrasena);
+                            registro.put("ruta", ruta);
+                            registro.put("licencia", licencia);
+                            registro.put("tipo", tipo);
+                            db.insert("registro_control", null, registro);
+                            db.close();
+                            Toast.makeText(getApplicationContext(), "Registro Exitoso", Toast.LENGTH_SHORT).show();
+
+                            sendEmailWithGmail(
+                                    recipientEmail,
+                                    recipientPassword,
+                                    et_correo.getText().toString(),
+                                    subject,
+                                    message);
+
+                            startActivity(aceptar);
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Debes aceptar los terminos y condiciones", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        et_contrasena.setText("");
+                        contrasena_b = InputValidation.isValidEditText(et_contrasena, getString(R.string.field_is_required));
+                        et_confirmar.setText("");
+                        confirmar_b = InputValidation.isValidEditText(et_confirmar, getString(R.string.field_is_required));
+                        Toast.makeText(getApplicationContext(), "Contraseñas incorrectas", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(getApplicationContext(), "Debes llenar todos los campos", Toast.LENGTH_SHORT).show();
                 }
-            }else {
-                et_contrasena.setText("");
-                contrasena_b = InputValidation.isValidEditText(et_contrasena, getString(R.string.field_is_required));
-                et_confirmar.setText("");
-                confirmar_b = InputValidation.isValidEditText(et_confirmar, getString(R.string.field_is_required));
-                Toast.makeText(this, "Contraseñas incorrectas", Toast.LENGTH_SHORT).show();
             }
-        }else {
-            Toast.makeText(this, "Debes llenar todos los campos", Toast.LENGTH_SHORT).show();
+        });
+
+    }
+
+    private void sendEmailWithGmail(final String recipientEmail, final String recipientPassword,
+                                    String to, String subject, String message) {
+        Properties props = new Properties();
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.socketFactory.port", "465");
+        props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.port", "465");
+
+        Session session = Session.getDefaultInstance(props, new Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(recipientEmail, recipientPassword);
+            }
+        });
+
+        SenderAsyncTask task = new RegistroControl.SenderAsyncTask(session, recipientEmail, to, subject, message);
+        task.execute();
+    }
+
+    private class SenderAsyncTask extends AsyncTask<String, String, String> {
+
+        private String from, to, subject, message;
+        private ProgressDialog progressDialog;
+        private Session session;
+
+        public SenderAsyncTask(Session session, String from, String to, String subject, String message) {
+            this.session = session;
+            this.from = from;
+            this.to = to;
+            this.subject = subject;
+            this.message = message;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = ProgressDialog.show(RegistroControl.this, "", getString(R.string.sending_mail), true);
+            progressDialog.setCancelable(false);
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                Message mimeMessage = new MimeMessage(session);
+                mimeMessage.setFrom(new InternetAddress(from));
+                mimeMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
+                mimeMessage.setSubject(subject);
+                mimeMessage.setContent(message, "text/html; charset=utf-8");
+                Transport.send(mimeMessage);
+            } catch (MessagingException e) {
+                e.printStackTrace();
+                return e.getMessage();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return e.getMessage();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(String... values) {
+            super.onProgressUpdate(values);
+            progressDialog.setMessage(values[0]);
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            progressDialog.dismiss();
+            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
         }
     }
+
 }

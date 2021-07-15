@@ -35,7 +35,7 @@
     <string name="tv_c_rutas">Rutas</string>
     //Maps
     <string name="marker_detail_lating">(%1$.2f,%2$.2f)</string>
-    //
+    //Correo
     <string name="subject">Asunto</string>
     <string name="to">Para</string>
     <string name="message">Mensaje</string>
@@ -48,4 +48,11 @@
     <string name="field_is_required">Campo es requerido</string>
     <string name="warning_message">Se debe utilizar una cuenta de Google y esta debe tener Activado el acceso desde Apps menos seguras</string>
     <string name="sender_data_title">Datos del remitente</string>
+    //Confirmar
+    <string name="tv_c_bienvenido">Bienvenido a Kacharpo</string>
+    <string name="tv_c_codigo">Ingresa el codigo de activacion que mandamos a su email</string>
+    <string name="tv_c_intentos">Numero de intentos restantes: </string>
+    <string name="tv_c_recibir">Da click en el boton reenviar si aun no recibes el correo con el codigo de activacion</string>
+    <string name="btn_c_reenviar">Reenviar</string>
+    <string name="txt_c_codigo">Codigo de confirmacion</string>
 </resources>
