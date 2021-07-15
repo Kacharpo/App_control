@@ -1,6 +1,7 @@
 package com.example.app_control;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 
 import android.os.Bundle;
@@ -51,6 +52,8 @@ public class RecuperarContra extends AppCompatActivity{
         final String subject = "Recuperar contraseña";
         final String message = "Su contraseña es: ";
 
+        Intent aceptar = new Intent(this,Principal.class);
+
         btn_enviar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,10 +64,10 @@ public class RecuperarContra extends AppCompatActivity{
                             et_correo.getText().toString(),
                             subject,
                             message);
+                    startActivity(aceptar);
                 }
             }
         });
-
     }
 
     private void sendEmailWithGmail(final String recipientEmail, final String recipientPassword,

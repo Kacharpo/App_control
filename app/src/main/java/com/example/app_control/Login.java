@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.app_control.utils.InputValidation;
+
 public class Login extends AppCompatActivity {
 
     private EditText et_usuario, et_contrasena,et_correo_r,et_contrasena_r;
@@ -28,9 +30,11 @@ public class Login extends AppCompatActivity {
         SQLiteDatabase db = admin.getWritableDatabase();
 
         String usuario = et_usuario.getText().toString();
+        boolean usuario_b = InputValidation.isValidEditText(et_usuario, getString(R.string.field_is_required));
         String contrasena = et_contrasena.getText().toString();
+        boolean contrasena_b = InputValidation.isValidEditText(et_contrasena, getString(R.string.field_is_required));
 
-        if(!usuario.isEmpty() && !contrasena.isEmpty()){
+        if(usuario_b && contrasena_b){
             Cursor fila = db.rawQuery
                     ("select correo, contrasena from registro_control where id_control =" + 1 ,null);
             if(fila.moveToFirst()) {
