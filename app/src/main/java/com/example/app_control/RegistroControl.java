@@ -70,8 +70,6 @@ public class RegistroControl extends AppCompatActivity {
 
         AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this, "registro",null,1);
 
-        Intent aceptar = new Intent(this, ConfirmarCuenta.class);
-
         btn_aceptar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -125,7 +123,7 @@ public class RegistroControl extends AppCompatActivity {
                                     subject,
                                     message);
 
-                            startActivity(aceptar);
+                            datos();
                         } else {
                             Toast.makeText(getApplicationContext(), "Debes aceptar los terminos y condiciones", Toast.LENGTH_SHORT).show();
                         }
@@ -214,6 +212,12 @@ public class RegistroControl extends AppCompatActivity {
             progressDialog.dismiss();
             Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
         }
+    }
+
+    private void datos(){
+        Intent correo = new Intent(getApplicationContext(),ConfirmarCuenta.class);
+        correo.putExtra("EmailTo",et_correo.getText().toString());
+        startActivity(correo);
     }
 
 }
