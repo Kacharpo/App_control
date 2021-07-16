@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.example.app_control.utils.InputValidation;
 
 import java.util.Properties;
+import java.util.Random;
 
 import javax.mail.Authenticator;
 import javax.mail.Message;
@@ -37,6 +38,7 @@ public class RegistroControl extends AppCompatActivity {
     private Button btn_aceptar;
     private ImageView img_control;
     private RadioButton rb_terminos;
+    private int codigo = codigo(999999);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +68,7 @@ public class RegistroControl extends AppCompatActivity {
         final String recipientEmail = "elpatron.desonora.01@gmail.com";
         final String recipientPassword = "CortesyAsadero";
         final String subject = "Codigo de confrimacion";
-        final String message = "Su codigo es: abcd";
+        final String message = "Su codigo es: "+codigo;
 
         AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this, "registro",null,1);
 
@@ -217,7 +219,16 @@ public class RegistroControl extends AppCompatActivity {
     private void datos(){
         Intent correo = new Intent(getApplicationContext(),ConfirmarCuenta.class);
         correo.putExtra("EmailTo",et_correo.getText().toString());
+        correo.putExtra("Codigo",""+codigo);
         startActivity(correo);
+    }
+
+    private int codigo(int max){
+        Random random = new Random();
+        random.setSeed(System.currentTimeMillis());
+
+        int numero = random.nextInt(max);
+        return numero;
     }
 
 }

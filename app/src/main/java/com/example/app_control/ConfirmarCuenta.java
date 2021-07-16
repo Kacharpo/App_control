@@ -45,8 +45,9 @@ public class ConfirmarCuenta extends AppCompatActivity {
         final String recipientEmail = "elpatron.desonora.01@gmail.com";
         final String recipientPassword = "CortesyAsadero";
         final String subject = "Codigo de confrimacion";
-        final String message = "Su codigo es: abcd";
+        final String message = "Su codigo es: "+ getIntent().getStringExtra("Codigo");
         final String emailto = getIntent().getStringExtra("EmailTo");
+        final String codigo = getIntent().getStringExtra("Codigo");
 
         Intent aceptar = new Intent(this,RecuperarContra.class);
 
@@ -66,8 +67,8 @@ public class ConfirmarCuenta extends AppCompatActivity {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
 
-                    String codigo = et_codigo.getText().toString();
-                    if(codigo.equals("abcd")){
+                    String codigotxt = et_codigo.getText().toString();
+                    if(codigotxt.equals(codigo)){
                         Intent aceptar = new Intent(getApplicationContext(),RecuperarContra.class);
                         startActivity(aceptar);
                     }
