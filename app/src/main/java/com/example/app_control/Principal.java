@@ -3,6 +3,7 @@ package com.example.app_control;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.viewpager.widget.ViewPager;
 
 import android.Manifest;
 import android.content.Context;
@@ -15,11 +16,17 @@ import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.app_control.Controlador.PagerController;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -27,6 +34,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.tabs.TabItem;
+import com.google.android.material.tabs.TabLayout;
 
 import java.io.IOException;
 import java.util.List;
@@ -38,8 +47,17 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
 
     private EditText et_ubicacion;
     private TextView tv_inicio, tv_final,tv_tiempo,tv_conductor, tv_disponibilidad,tv_iniciotxt,
-            tv_finaltxt,tv_tiempotxt,tv_conductortxt, tv_disponibilidadtxt, tv_rutas, tv_ficha, tv_rutastxt;
+            tv_finaltxt,tv_tiempotxt,tv_conductortxt, tv_disponibilidadtxt, tv_rutas, tv_ficha;
     private ImageView img_conductor;
+
+    private ListView lv_rutas;
+    private String rutas [] = {"Inicio","Final","Tiempo","Conductor","Disponibilidad"};
+    private String info_r [] = {"12:00","13:00","1h","Manuel Perez","10 lugares"};
+
+    private ViewPager vp_mostrar;
+    private TabLayout tl_opcion;
+    private TabItem ti_inicio,ti_final,ti_tiempo,ti_conductor,ti_disponibilidad;
+    PagerController pagerAdapter;
 
     private GoogleMap mMap;
     private boolean UbiAct = false;
@@ -65,9 +83,47 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
         tv_disponibilidadtxt = (TextView)findViewById(R.id.tv_c_disponibilidadtxt);
         */
         tv_rutas = (TextView)findViewById(R.id.tv_c_rutas);
-        tv_rutastxt = (TextView)findViewById(R.id.tv_c_rutastxt);
         tv_ficha = (TextView)findViewById(R.id.tv_c_ficha);
+        lv_rutas = (ListView)findViewById(R.id.lv_c_rutas);
+        vp_mostrar = (ViewPager)findViewById(R.id.vp_c_mostrar);
+        tl_opcion = (TabLayout)findViewById(R.id.tl_v_opcion);
+        ti_inicio = (TabItem)findViewById(R.id.ti_c_inicio);
+        ti_final = (TabItem)findViewById(R.id.ti_c_final);
+        ti_tiempo = (TabItem)findViewById(R.id.ti_c_tiempo);
+        ti_conductor = (TabItem)findViewById(R.id.ti_c_conductor);
+        ti_disponibilidad = (TabItem)findViewById(R.id.ti_c_disponibilidad);
 
+        pagerAdapter = new PagerController(getSupportFragmentManager(),tl_opcion.getTabCount());
+        vp_mostrar.setAdapter(pagerAdapter);
+        tl_opcion.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                vp_mostrar.setCurrentItem(tab.getPosition());
+                switch (tab.getPosition()){
+                    default:
+                        pagerAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+        vp_mostrar.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tl_opcion));
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,R.layout.list_item,rutas);
+        lv_rutas.setAdapter(adapter);
+        lv_rutas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getApplicationContext(), lv_rutas.getItemAtPosition(position)+": "+info_r[position], LENGTH_SHORT).show();
+            }
+        });
        // img_conductor = (ImageView)findViewById(R.id.img_c_conductor);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()

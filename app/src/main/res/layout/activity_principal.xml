@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="#F44336"
@@ -24,30 +24,74 @@
         android:id="@+id/tv_c_rutas"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/txt_c_ubicacion"
         android:text="@string/tv_c_rutas"
         android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_c_ubicacion" />
 
-    <TextView
-        android:id="@+id/tv_c_rutastxt"
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tl_v_opcion"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:background="#FFFFFF"
-        android:text="@string/tv_c_rutas"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_c_rutas">
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/ti_c_inicio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Inicio" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/ti_c_final"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Final" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/ti_c_tiempo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tiempo" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/ti_c_conductor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Conductor" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/ti_c_disponibilidad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Disponibilidad" />
+    </com.google.android.material.tabs.TabLayout>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/vp_c_mostrar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/lv_c_rutas"></androidx.viewpager.widget.ViewPager>
+
+    <ListView
+        android:id="@+id/lv_c_rutas"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/tl_v_opcion"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_c_rutas" />
+        app:layout_constraintStart_toStartOf="parent">
+
+    </ListView>
 
     <FrameLayout
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        app:layout_constraintBottom_toTopOf="@+id/tv_c_ficha"
+        android:layout_height="450dp"
+        android:layout_below="@id/vp_c_mostrar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_c_rutastxt">
+        app:layout_constraintStart_toStartOf="parent">
+
 
         <fragment
             android:id="@+id/map"
@@ -56,15 +100,15 @@
             android:layout_height="match_parent">
 
         </fragment>
-
-
     </FrameLayout>
 
     <TextView
         android:id="@+id/tv_c_ficha"
         android:layout_width="match_parent"
         android:layout_height="80dp"
+        android:layout_alignParentBottom="true"
         android:layout_gravity="bottom|right"
+        android:layout_marginBottom="1dp"
         android:background="#FFFFFF"
         android:text="@string/tv_c_ficha"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -72,4 +116,4 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>
