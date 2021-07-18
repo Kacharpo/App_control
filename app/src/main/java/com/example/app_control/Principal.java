@@ -50,9 +50,9 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
             tv_finaltxt,tv_tiempotxt,tv_conductortxt, tv_disponibilidadtxt, tv_rutas, tv_ficha;
     private ImageView img_conductor;
 
-    private ListView lv_rutas;
+    /*private ListView lv_rutas;
     private String rutas [] = {"Inicio","Final","Tiempo","Conductor","Disponibilidad"};
-    private String info_r [] = {"12:00","13:00","1h","Manuel Perez","10 lugares"};
+    private String info_r [] = {"12:00","13:00","1h","Manuel Perez","10 lugares"};*/
 
     private ViewPager vp_mostrar;
     private TabLayout tl_opcion;
@@ -84,7 +84,7 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
         */
         tv_rutas = (TextView)findViewById(R.id.tv_c_rutas);
         tv_ficha = (TextView)findViewById(R.id.tv_c_ficha);
-        lv_rutas = (ListView)findViewById(R.id.lv_c_rutas);
+        //lv_rutas = (ListView)findViewById(R.id.lv_c_rutas);
         vp_mostrar = (ViewPager)findViewById(R.id.vp_c_mostrar);
         tl_opcion = (TabLayout)findViewById(R.id.tl_v_opcion);
         ti_inicio = (TabItem)findViewById(R.id.ti_c_inicio);
@@ -116,14 +116,14 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
             }
         });
         vp_mostrar.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tl_opcion));
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,R.layout.list_item,rutas);
+        /*ArrayAdapter<String> adapter = new ArrayAdapter<>(this,R.layout.list_item,rutas);
         lv_rutas.setAdapter(adapter);
         lv_rutas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(getApplicationContext(), lv_rutas.getItemAtPosition(position)+": "+info_r[position], LENGTH_SHORT).show();
             }
-        });
+        }); */
        // img_conductor = (ImageView)findViewById(R.id.img_c_conductor);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -295,7 +295,20 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
     };
 
     private static final double[][] COR = new double[][]{
-            {19.9543,-99.8441},{19.6395,-98.9121},{20.09833,-99.8269},{18.8657,-99.894},{19.369,-99.7605},{ 19.1586, -99.4886},{ 19.25,-100.017},{18.6807,-100.181}
+            {19.9543,-99.8441},{19.6395,-98.9121},{20.09833,-99.8269},{18.8657,-99.894},{19.369,-99.7605},{ 19.1586, -99.4886},{ 19.25,-100.017},{18.6807,-100.181},
+            {19.1224, -98.7667},{19.9833,-99.1667},{19.2703,-99.5331},{19.431,-99.4025},{19.5562,-99.2675},{19.7968,-99.8765},{19.0206,-98.7783},{19.7233,-98.758},{19.1261,-98.8039},{19.1618,-99.6129},{19.1822,-99.4565},
+            {19.62923,-99.10689},{18.9236,-99.7686},{19.2312,-98.864},{19.7764,-99.2082},{19.67241,-99.17615},{19.26174,-98.89775},{19.84754,-99.47325},{19.2003,-99.5603},{19.5494,-98.8828},
+            {19.4126,-98.9027},{19.5586,-98.8958},{ 19.4208,-98.949},{19.34937,-100.19412},{19.6097,-99.06},{18.95,-98.75},{19.8342,-99.2033},{19.9106,-99.0755},{ 19.3619,-99.3505},
+            {19.5555,-99.4179},{19.31693,-98.89458},{18.8438,-99.6755},{19.2718,-100.268},{19.5689,-99.7669},{19.1796,-99.416},{19.751,-99.0941},{19.9521,-99.5286},{19.8699,-99.0567},{19.5572,-99.6075},
+            {19.7549,-99.9165},{19.0726,-99.5111},{19.0911,-98.8816},{19.2864,-99.511},{18.9446,-99.4954},{18.9446,-99.4954},{ 19.2564,-99.6048},{19.2095,-99.5854},{19.7846,-99.6709},{19.475,-99.2374},
+            {19.4116,-99.0212},{19.717,-99.067},{19.6198,-99.3114},{19.7758,-98.7123},{19.2727,-99.4597},{18.9665,-99.4138},{19.8028,-100.138},{19.6985,-98.7539},{19.1169,-100.295},{19.4203,-99.5593},{19.0392,-98.7936},
+            {19.5622,-98.8578},{ 19.3606,-98.98},{20.2228,-99.8156},{19.146,-99.5819},{ 19.1626,-99.5665},{19.58154,-100.02269},{19.7058,-98.8375},{19.2703,-99.5331},
+            {19.0216,-100.007},{18.8441,-100.018},{20.0154,-99.5288},{18.4878,-100.15},{ 19.7131,-98.9683},{18.9075,-100.151},{19.2028,-98.87},{ 19.8314,-98.8997},{19.9147,-100.004},
+            {19.0444,-100.045},{19.4654,-99.594},{18.95954,-99.59239},{19.1576,-98.8599},{19.0985,-99.5904},{19.7442,-99.1811},{19.6897,-98.8608},{19.5724,-98.8192},{19.0247,-98.8199},
+            {19.70618,-99.23913},{19.908,-99.1457},{18.9285,-99.9356},{19.1316,-99.5003},{19.5126,-98.8798},{19.5914,-98.9131},{19.1125,-99.4346},{19.867,-99.733},{19.2044,-98.8025},{19.539,-99.1933},
+            {18.6158,-100.208},{19.2879,-99.6468},{18.8028,-99.67},{19.685,-99.1281},{19.6456,-99.1689},{19.1925,-100.131},{19.3736,-100.147},{19.72234,-99.46158},{18.96,-99.64},{19.4337,-99.9956},
+            {19.4,-99.533},{19.0728,-100.255},{18.7836,-98.7594},{19.2833, -99.7333},{18.8346,-99.581},{19.7971,-99.0989},{19.64388,-99.21598},{19.2917,-98.9389},{18.9167,-100.4},
+            {19.6115,-100.124},{19.6886,-99.053}
     };
 }
 

@@ -41,48 +41,38 @@
             android:id="@+id/ti_c_inicio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Inicio" />
+            android:text="@string/ti_inicio" />
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/ti_c_final"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Final" />
+            android:text="@string/ti_final" />
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/ti_c_tiempo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tiempo" />
+            android:text="@string/ti_tiempo" />
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/ti_c_conductor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Conductor" />
+            android:text="@string/ti_conductor" />
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/ti_c_disponibilidad"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Disponibilidad" />
+            android:text="@string/ti_disponibilidad" />
     </com.google.android.material.tabs.TabLayout>
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/vp_c_mostrar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_below="@id/lv_c_rutas"></androidx.viewpager.widget.ViewPager>
-
-    <ListView
-        android:id="@+id/lv_c_rutas"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_below="@id/tl_v_opcion"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-    </ListView>
+        android:layout_below="@id/tl_v_opcion"></androidx.viewpager.widget.ViewPager>
 
     <FrameLayout
         android:id="@+id/frameLayout"
@@ -107,8 +97,7 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_alignParentBottom="true"
-        android:layout_gravity="bottom|right"
-        android:layout_marginBottom="1dp"
+        android:layout_gravity="bottom"
         android:background="#FFFFFF"
         android:text="@string/tv_c_ficha"
         app:layout_constraintBottom_toBottomOf="parent"
