@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -46,6 +47,7 @@ import static android.widget.Toast.LENGTH_SHORT;
 
 public class Principal extends AppCompatActivity implements OnMapReadyCallback ,GoogleMap.OnMarkerClickListener,GoogleMap.OnMarkerDragListener, GoogleMap.OnInfoWindowClickListener  {
 
+    private AutoCompleteTextView at_ubicacion;
     private EditText et_ubicacion;
     private TextView tv_inicio, tv_final,tv_tiempo,tv_conductor, tv_disponibilidad,tv_iniciotxt,
             tv_finaltxt,tv_tiempotxt,tv_conductortxt, tv_disponibilidadtxt, tv_rutas, tv_ficha;
@@ -71,7 +73,8 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal);
 
-        et_ubicacion = (EditText)findViewById(R.id.txt_c_ubicacion);
+
+        at_ubicacion = (AutoCompleteTextView)findViewById(R.id.atxt_c_ubicacion);
         /*
         tv_inicio = (TextView)findViewById(R.id.tv_c_inicio);
         tv_final = (TextView)findViewById(R.id.tv_c_final);
@@ -98,6 +101,9 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
         String [] tipo = {"Rutas","Euroban", "Urban", "Combi"};
         ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipo);
         sp_rutas.setAdapter(adapter1);
+
+        final ArrayAdapter<String > adapter2 = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,COUNTRIES);
+        at_ubicacion.setAdapter(adapter2);
 
         pagerAdapter = new PagerController(getSupportFragmentManager(),tl_opcion.getTabCount());
         vp_mostrar.setAdapter(pagerAdapter);
@@ -198,6 +204,42 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
                 Toast.makeText(Principal.this,"GPS Desactivado", LENGTH_SHORT).show();
             }
         } ;
+
+        at_ubicacion.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mMap.clear();
+
+                double lat=0.0,lon=0.0;
+                Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+
+                List<Address> list = null;
+                int j=0;
+                for( int i=0;i<=COUNTRIES.length-1;i++){
+                    if(COUNTRIES[i].equals(at_ubicacion.getText().toString())){
+                        try {
+                            lat = COR[i][0]; lon = COR[i][1];
+                            list = geocoder.getFromLocation(lat,lon , 1);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        j=i;
+                    }
+                }
+
+                LatLng TiempoReal= new LatLng(lat,lon );
+                markerPerso = googleMap.addMarker(new MarkerOptions().position(TiempoReal).draggable(true).title(COUNTRIES[j]));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(TiempoReal));
+                if (!list.isEmpty()) {
+                    Address DirCalle = list.get(0);
+
+                    direccion = DirCalle.getAddressLine(0);
+                    info = direccion;
+                }
+
+            }
+
+        });
 
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,0,0,locationListener);
 
