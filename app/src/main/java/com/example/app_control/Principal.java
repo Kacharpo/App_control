@@ -22,6 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,6 +55,7 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
     private String rutas [] = {"Inicio","Final","Tiempo","Conductor","Disponibilidad"};
     private String info_r [] = {"12:00","13:00","1h","Manuel Perez","10 lugares"};*/
 
+    private Spinner sp_rutas;
     private ViewPager vp_mostrar;
     private TabLayout tl_opcion;
     private TabItem ti_inicio,ti_final,ti_tiempo,ti_conductor,ti_disponibilidad;
@@ -82,7 +84,6 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
         tv_conductortxt = (TextView)findViewById(R.id.tv_c_conductortxt);
         tv_disponibilidadtxt = (TextView)findViewById(R.id.tv_c_disponibilidadtxt);
         */
-        tv_rutas = (TextView)findViewById(R.id.tv_c_rutas);
         tv_ficha = (TextView)findViewById(R.id.tv_c_ficha);
         //lv_rutas = (ListView)findViewById(R.id.lv_c_rutas);
         vp_mostrar = (ViewPager)findViewById(R.id.vp_c_mostrar);
@@ -92,6 +93,11 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
         ti_tiempo = (TabItem)findViewById(R.id.ti_c_tiempo);
         ti_conductor = (TabItem)findViewById(R.id.ti_c_conductor);
         ti_disponibilidad = (TabItem)findViewById(R.id.ti_c_disponibilidad);
+        sp_rutas = (Spinner)findViewById(R.id.sp_c_rutas);
+
+        String [] tipo = {"Rutas","Euroban", "Urban", "Combi"};
+        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipo);
+        sp_rutas.setAdapter(adapter1);
 
         pagerAdapter = new PagerController(getSupportFragmentManager(),tl_opcion.getTabCount());
         vp_mostrar.setAdapter(pagerAdapter);
