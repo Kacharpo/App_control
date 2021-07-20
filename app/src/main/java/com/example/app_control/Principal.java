@@ -16,6 +16,7 @@ import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -72,7 +73,6 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal);
-
 
         at_ubicacion = (AutoCompleteTextView)findViewById(R.id.atxt_c_ubicacion);
         /*
@@ -239,6 +239,103 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
 
             }
 
+        });
+
+        at_ubicacion.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
+
+                    int i = 0, j = 0, p = 0,c=0;
+                    String ubicacion = at_ubicacion.getText().toString(), ubi = "", lat = "", lon = "";
+                    if (!ubicacion.isEmpty()) {//bienestarsocial
+                        for (; i <= at_ubicacion.length() - 1; i++) {
+                            if (!ubicacion.substring(i, i + 1).equals(" ")&&!ubicacion.substring(i, i + 1).equals("+")&&!ubicacion.substring(i, i + 1).equals("#")&&!ubicacion.substring(i, i + 1).equals("(")&&!ubicacion.substring(i, i + 1).equals(")")&&!ubicacion.substring(i, i + 1).equals("/")&&!ubicacion.substring(i, i + 1).equals(";")&&!ubicacion.substring(i, i + 1).equals("*")&&!ubicacion.substring(i, i + 1).equals("N")) {
+                                j++;
+                                ubi = ubi + ubicacion.substring(i, i + 1);
+
+                                if(ubicacion.substring(i, i + 1).equals("."))p++;
+                                if (ubicacion.substring(i, i + 1).equals(",") && c == 0) {
+                                    lat = ubi.substring(0, j - 1);
+                                    ubi = "";
+
+                                }
+                                if(ubicacion.substring(i, i + 1).equals(","))c++;
+
+                                lon = ubi;
+                            }
+                        }
+
+                        int a, b, d,m;
+                        if (!lat.equals("") && !lon.equals("")&&c==1&&p<=2) {
+                            for (a = 0, c = 0,m=0; a <= lat.length() - 1; a++) {
+                                if (lat.substring(a, a + 1).equals(".") ) {
+
+                                    c++;
+
+                                }
+                                if (lat.substring(a, a + 1).equals("-") ) {
+
+                                    m++;
+
+                                }
+                            }
+                            if(m==0){
+                                lat="+"+lat;
+                            }
+                            if(c==0){
+                                lat=lat+".000000";
+                            } else if(c==1){
+                                lat=lat+"000000";
+                            }
+
+                            for (b = 0, d = 0; b <= lon.length() - 1; b++) {
+                                if (lat.substring(b, b + 1).equals(".")){
+                                    d++;
+
+                                }
+                            }
+                            if (c<=1 && d<=1) {
+                                Toast.makeText(getApplicationContext(), "Buscando", LENGTH_SHORT).show();
+
+                                double latD = Double.parseDouble(lat), lonD = Double.parseDouble(lon);
+                                if(latD>0)latD=+latD;
+                                mMap.clear();
+
+                                LatLng Ingresada = new LatLng(latD, lonD);
+                                if(latD>-80&&lonD<80&&lonD>-180&&lonD<180){
+                                    markerPerso = googleMap.addMarker(new MarkerOptions().position(Ingresada).draggable(true).title("Marcador de tu Ubicacion"));
+                                    mMap.moveCamera(CameraUpdateFactory.newLatLng(Ingresada));
+
+                                    Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+                                    List<Address> list = null;
+                                    try {
+                                        list = geocoder.getFromLocation(latD, lonD, 1);
+                                        if (!list.isEmpty()) {
+                                            Address DirCalle = list.get(0);
+
+                                            direccion = DirCalle.getAddressLine(0);
+                                            info = direccion;
+                                        }
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }else{
+                                    Toast.makeText(getApplicationContext(), "Coordenadas invalidas", LENGTH_SHORT).show();
+                                }
+
+                            }
+
+                        }
+
+                        if(at_ubicacion.length()==5){
+
+                        }
+                        // et_edt_Ubi.setText("Coordenadas: "+ lat +" "+lon);
+                    }
+                }
+                return false;
+            }
         });
 
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,0,0,locationListener);

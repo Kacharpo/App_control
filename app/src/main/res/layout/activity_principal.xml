@@ -13,7 +13,9 @@
         android:layout_height="wrap_content"
         android:background="#FFFFFF"
         android:hint="@string/txt_c_ubicacion"
-        android:completionThreshold="1"/>
+        android:completionThreshold="1"
+        android:inputType="textPersonName"
+        android:maxLines="1"/>
 
     <Spinner
         android:id="@+id/sp_c_rutas"
