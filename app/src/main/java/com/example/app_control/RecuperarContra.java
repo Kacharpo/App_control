@@ -46,8 +46,8 @@ public class RecuperarContra extends AppCompatActivity{
         img_recuperar = (ImageView)findViewById(R.id.img_c_recuperar);
 
         //Values received from another Activity (Screen)
-        final String recipientEmail = "elpatron.desonora.01@gmail.com";
-        final String recipientPassword = "CortesyAsadero";
+        final String recipientEmail = "kacharpo.service@gmail.com";
+        final String recipientPassword = "Kacharpo2000";
         final String subject = "Recuperar contraseña";
         final String message = "Su contraseña es: ";
 
@@ -57,12 +57,7 @@ public class RecuperarContra extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 if (InputValidation.isValidEditText(et_correo, getString(R.string.field_is_required))) {
-                    sendEmailWithGmail(
-                            recipientEmail,
-                            recipientPassword,
-                            et_correo.getText().toString(),
-                            subject,
-                            message);
+                   // sendEmailWithGmail(recipientEmail,recipientPassword,et_correo.getText().toString(),subject,message);
                     startActivity(aceptar);
                 }
             }

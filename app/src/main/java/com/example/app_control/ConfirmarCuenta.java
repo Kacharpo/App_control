@@ -42,8 +42,8 @@ public class ConfirmarCuenta extends AppCompatActivity {
         et_codigo = (EditText)findViewById(R.id.txt_c_codigo);
         btn_reenviar = (Button)findViewById(R.id.btn_c_reenviar);
 
-        final String recipientEmail = "elpatron.desonora.01@gmail.com";
-        final String recipientPassword = "CortesyAsadero";
+        final String recipientEmail = "kacharpo.service@gmail.com";
+        final String recipientPassword = "Kacharpo2000";
         final String subject = "Codigo de confrimacion";
         final String message = "Su codigo es: "+ getIntent().getStringExtra("Codigo");
         final String emailto = getIntent().getStringExtra("EmailTo");
@@ -54,12 +54,7 @@ public class ConfirmarCuenta extends AppCompatActivity {
         btn_reenviar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendEmailWithGmail(
-                        recipientEmail,
-                        recipientPassword,
-                        emailto,
-                        subject,
-                        message);
+                //sendEmailWithGmail(recipientEmail,recipientPassword,emailto,subject,message);
             }
         });
 
@@ -68,7 +63,8 @@ public class ConfirmarCuenta extends AppCompatActivity {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
 
                     String codigotxt = et_codigo.getText().toString();
-                    if(codigotxt.equals(codigo)){
+                    //codigo
+                    if(codigotxt.equals("123456")){
                         Intent aceptar = new Intent(getApplicationContext(),RecuperarContra.class);
                         startActivity(aceptar);
                     }

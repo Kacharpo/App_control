@@ -65,8 +65,8 @@ public class RegistroControl extends AppCompatActivity {
 
         sp_tipo.setAdapter(adapter1);
 
-        final String recipientEmail = "elpatron.desonora.01@gmail.com";
-        final String recipientPassword = "CortesyAsadero";
+        final String recipientEmail = "kacharpo.service@gmail.com";
+        final String recipientPassword = "Kacharpo2000";
         final String subject = "Codigo de confrimacion";
         final String message = "Su codigo es: "+codigo;
 
@@ -118,12 +118,7 @@ public class RegistroControl extends AppCompatActivity {
                             db.close();
                             Toast.makeText(getApplicationContext(), "Registro Exitoso", Toast.LENGTH_SHORT).show();
 
-                            sendEmailWithGmail(
-                                    recipientEmail,
-                                    recipientPassword,
-                                    et_correo.getText().toString(),
-                                    subject,
-                                    message);
+                           // sendEmailWithGmail(recipientEmail,recipientPassword, et_correo.getText().toString(),subject,message);
 
                             datos();
                         } else {
