@@ -51,7 +51,7 @@ public class RecuperarContra extends AppCompatActivity{
         final String subject = "Recuperar contraseña";
         final String message = "Su contraseña es: ";
 
-        Intent aceptar = new Intent(this,Principal.class);
+        Intent aceptar = new Intent(this,AlertaActivity.class);
 
         btn_enviar.setOnClickListener(new View.OnClickListener() {
             @Override
