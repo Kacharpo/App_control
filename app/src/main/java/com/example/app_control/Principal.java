@@ -48,7 +48,7 @@ import static android.widget.Toast.LENGTH_SHORT;
 
 public class Principal extends AppCompatActivity implements OnMapReadyCallback ,GoogleMap.OnMarkerClickListener,GoogleMap.OnMarkerDragListener, GoogleMap.OnInfoWindowClickListener  {
 
-    private AutoCompleteTextView at_ubicacion;
+    private AutoCompleteTextView at_ubicacion, at_destino;
     private EditText et_ubicacion;
     private TextView tv_inicio, tv_final,tv_tiempo,tv_conductor, tv_disponibilidad,tv_iniciotxt,
             tv_finaltxt,tv_tiempotxt,tv_conductortxt, tv_disponibilidadtxt, tv_rutas, tv_ficha;
@@ -65,7 +65,7 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
     PagerController pagerAdapter;
 
     private GoogleMap mMap;
-    private boolean UbiAct = false;
+    private boolean UbiAct = false, UbiA=false;
     private Marker markerPerso;
     private String info= "CDMX",direccion ;
 
@@ -75,18 +75,8 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
         setContentView(R.layout.activity_principal);
 
         at_ubicacion = (AutoCompleteTextView)findViewById(R.id.atxt_c_ubicacion);
-        /*
-        tv_inicio = (TextView)findViewById(R.id.tv_c_inicio);
-        tv_final = (TextView)findViewById(R.id.tv_c_final);
-        tv_tiempo = (TextView)findViewById(R.id.tv_c_tiempo);
-        tv_conductor = (TextView)findViewById(R.id.tv_c_conductor);
-        tv_disponibilidad = (TextView)findViewById(R.id.tv_c_disponibilidad);
-        tv_iniciotxt = (TextView)findViewById(R.id.tv_c_iniciotxt);
-        tv_finaltxt = (TextView)findViewById(R.id.tv_c_finaltxt);
-        tv_tiempotxt = (TextView)findViewById(R.id.tv_c_tiempotxt);
-        tv_conductortxt = (TextView)findViewById(R.id.tv_c_conductortxt);
-        tv_disponibilidadtxt = (TextView)findViewById(R.id.tv_c_disponibilidadtxt);
-        */
+        at_destino = (AutoCompleteTextView)findViewById(R.id.atxt_c_destino);
+
         tv_ficha = (TextView)findViewById(R.id.tv_c_ficha);
         //lv_rutas = (ListView)findViewById(R.id.lv_c_rutas);
         vp_mostrar = (ViewPager)findViewById(R.id.vp_c_mostrar);
@@ -104,6 +94,7 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
 
         final ArrayAdapter<String > adapter2 = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,COUNTRIES);
         at_ubicacion.setAdapter(adapter2);
+        at_destino.setAdapter(adapter2);
 
         pagerAdapter = new PagerController(getSupportFragmentManager(),tl_opcion.getTabCount());
         vp_mostrar.setAdapter(pagerAdapter);
@@ -160,22 +151,35 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
 
         if(!mMap.isMyLocationEnabled()){
             LatLng CDMX= new LatLng(19.3168, -99.08671 );
-            mMap.addMarker(new MarkerOptions().position(CDMX).title("Marcador en la CDMX"));
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(CDMX));
+            markerPerso = googleMap.addMarker(new MarkerOptions().position(CDMX).draggable(true).title("Punto de Inicio"));
+            //mMap.moveCamera(CameraUpdateFactory.newLatLng(CDMX));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(CDMX,18),5000,null);
+            UbiA = true;
         }
 
         LocationManager locationManager = (LocationManager) Principal.this.getSystemService(Context.LOCATION_SERVICE);
+        Location loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+        if(loc != null){
+            mMap.clear();
+            LatLng ubi= new LatLng(loc.getLatitude(), loc.getLongitude() );
+            markerPerso = googleMap.addMarker(new MarkerOptions().position(ubi).draggable(true).title("Punto de Inicio"));
+            //mMap.moveCamera(CameraUpdateFactory.newLatLng(ubi));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(ubi,18),5000,null);
+            info = Principal.this.setLocation(loc);
+        }
 
         LocationListener locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-                if(!mMap.isMyLocationEnabled()&&!UbiAct){
+                if(UbiA==true){
                     mMap.clear();
                     LatLng TiempoReal= new LatLng(location.getLatitude(), location.getLongitude() );
-                    markerPerso = googleMap.addMarker(new MarkerOptions().position(TiempoReal).draggable(true).title("Tu ubicacion"));
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(TiempoReal));
+                    markerPerso = googleMap.addMarker(new MarkerOptions().position(TiempoReal).draggable(true).title("Punto de Inicio"));
+                    //mMap.moveCamera(CameraUpdateFactory.newLatLng(TiempoReal));
                     info = Principal.this.setLocation(location);
-                    UbiAct=true;
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(TiempoReal,18),5000,null);
+                    UbiA=false;
                 }
             }
 
@@ -197,6 +201,7 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
             @Override
             public void onProviderEnabled(String provider) {
                 Toast.makeText(Principal.this,"GPS Activado", LENGTH_SHORT).show();
+                UbiAct = true;
             }
 
             @Override
@@ -229,7 +234,7 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
 
                 LatLng TiempoReal= new LatLng(lat,lon );
                 markerPerso = googleMap.addMarker(new MarkerOptions().position(TiempoReal).draggable(true).title(COUNTRIES[j]));
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(TiempoReal));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(TiempoReal,18),5000,null);
                 if (!list.isEmpty()) {
                     Address DirCalle = list.get(0);
 
@@ -305,7 +310,7 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
                                 LatLng Ingresada = new LatLng(latD, lonD);
                                 if(latD>-80&&lonD<80&&lonD>-180&&lonD<180){
                                     markerPerso = googleMap.addMarker(new MarkerOptions().position(Ingresada).draggable(true).title("Marcador de tu Ubicacion"));
-                                    mMap.moveCamera(CameraUpdateFactory.newLatLng(Ingresada));
+                                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(Ingresada,18),5000,null);
 
                                     Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
                                     List<Address> list = null;
@@ -329,6 +334,139 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
                         }
 
                         if(at_ubicacion.length()==5){
+
+                        }
+                        // et_edt_Ubi.setText("Coordenadas: "+ lat +" "+lon);
+                    }
+                }
+                return false;
+            }
+        });
+
+        at_destino.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mMap.clear();
+
+                double lat=0.0,lon=0.0;
+                Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+
+                List<Address> list = null;
+                int j=0;
+                for( int i=0;i<=COUNTRIES.length-1;i++){
+                    if(COUNTRIES[i].equals(at_destino.getText().toString())){
+                        try {
+                            lat = COR[i][0]; lon = COR[i][1];
+                            list = geocoder.getFromLocation(lat,lon , 1);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        j=i;
+                    }
+                }
+
+                LatLng TiempoReal= new LatLng(lat,lon );
+                markerPerso = googleMap.addMarker(new MarkerOptions().position(TiempoReal).draggable(true).title(COUNTRIES[j]));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(TiempoReal,18),5000,null);
+                if (!list.isEmpty()) {
+                    Address DirCalle = list.get(0);
+
+                    direccion = DirCalle.getAddressLine(0);
+                    info = direccion;
+                }
+
+            }
+
+        });
+
+        at_destino.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
+
+                    int i = 0, j = 0, p = 0,c=0;
+                    String ubicacion = at_destino.getText().toString(), ubi = "", lat = "", lon = "";
+                    if (!ubicacion.isEmpty()) {//bienestarsocial
+                        for (; i <= at_destino.length() - 1; i++) {
+                            if (!ubicacion.substring(i, i + 1).equals(" ")&&!ubicacion.substring(i, i + 1).equals("+")&&!ubicacion.substring(i, i + 1).equals("#")&&!ubicacion.substring(i, i + 1).equals("(")&&!ubicacion.substring(i, i + 1).equals(")")&&!ubicacion.substring(i, i + 1).equals("/")&&!ubicacion.substring(i, i + 1).equals(";")&&!ubicacion.substring(i, i + 1).equals("*")&&!ubicacion.substring(i, i + 1).equals("N")) {
+                                j++;
+                                ubi = ubi + ubicacion.substring(i, i + 1);
+
+                                if(ubicacion.substring(i, i + 1).equals("."))p++;
+                                if (ubicacion.substring(i, i + 1).equals(",") && c == 0) {
+                                    lat = ubi.substring(0, j - 1);
+                                    ubi = "";
+
+                                }
+                                if(ubicacion.substring(i, i + 1).equals(","))c++;
+
+                                lon = ubi;
+                            }
+                        }
+
+                        int a, b, d,m;
+                        if (!lat.equals("") && !lon.equals("")&&c==1&&p<=2) {
+                            for (a = 0, c = 0,m=0; a <= lat.length() - 1; a++) {
+                                if (lat.substring(a, a + 1).equals(".") ) {
+
+                                    c++;
+
+                                }
+                                if (lat.substring(a, a + 1).equals("-") ) {
+
+                                    m++;
+
+                                }
+                            }
+                            if(m==0){
+                                lat="+"+lat;
+                            }
+                            if(c==0){
+                                lat=lat+".000000";
+                            } else if(c==1){
+                                lat=lat+"000000";
+                            }
+
+                            for (b = 0, d = 0; b <= lon.length() - 1; b++) {
+                                if (lat.substring(b, b + 1).equals(".")){
+                                    d++;
+
+                                }
+                            }
+                            if (c<=1 && d<=1) {
+                                Toast.makeText(getApplicationContext(), "Buscando", LENGTH_SHORT).show();
+
+                                double latD = Double.parseDouble(lat), lonD = Double.parseDouble(lon);
+                                if(latD>0)latD=+latD;
+                                mMap.clear();
+
+                                LatLng Ingresada = new LatLng(latD, lonD);
+                                if(latD>-80&&lonD<80&&lonD>-180&&lonD<180){
+                                    markerPerso = googleMap.addMarker(new MarkerOptions().position(Ingresada).draggable(true).title("Marcador de tu Ubicacion"));
+                                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(Ingresada,18),5000,null);
+
+                                    Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+                                    List<Address> list = null;
+                                    try {
+                                        list = geocoder.getFromLocation(latD, lonD, 1);
+                                        if (!list.isEmpty()) {
+                                            Address DirCalle = list.get(0);
+
+                                            direccion = DirCalle.getAddressLine(0);
+                                            info = direccion;
+                                        }
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }else{
+                                    Toast.makeText(getApplicationContext(), "Coordenadas invalidas", LENGTH_SHORT).show();
+                                }
+
+                            }
+
+                        }
+
+                        if(at_destino.length()==5){
 
                         }
                         // et_edt_Ubi.setText("Coordenadas: "+ lat +" "+lon);
@@ -397,7 +535,11 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
                     e.printStackTrace();
                 }
             }
-            markerPerso.setTitle("Tu ubicacion");
+            markerPerso.setTitle("Punto de inicio");
+
+            LatLng TiempoReal= new LatLng(markerPerso.getPosition().latitude, markerPerso.getPosition().longitude );
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(TiempoReal));
+
         }
     }
 

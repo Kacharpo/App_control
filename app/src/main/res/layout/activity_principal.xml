@@ -11,17 +11,30 @@
         android:id="@+id/atxt_c_ubicacion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
         android:background="#FFFFFF"
-        android:hint="@string/txt_c_ubicacion"
         android:completionThreshold="1"
+        android:hint="@string/txt_c_ubicacion"
         android:inputType="textPersonName"
-        android:maxLines="1"/>
+        android:maxLines="1" />
+
+    <AutoCompleteTextView
+        android:id="@+id/atxt_c_destino"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/atxt_c_ubicacion"
+        android:layout_marginTop="2dp"
+        android:background="#FFFFFF"
+        android:completionThreshold="1"
+        android:hint="@string/txt_c_destino"
+        android:inputType="textPersonName"
+        android:maxLines="1" />
 
     <Spinner
         android:id="@+id/sp_c_rutas"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/atxt_c_ubicacion" />
+        android:layout_below="@id/atxt_c_destino" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tl_v_opcion"
@@ -69,7 +82,7 @@
     <FrameLayout
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
-        android:layout_height="450dp"
+        android:layout_height="400dp"
         android:layout_below="@id/vp_c_mostrar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -79,7 +92,7 @@
             android:id="@+id/map"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
-            android:layout_height="450dp">
+            android:layout_height="400dp">
 
         </fragment>
     </FrameLayout>
