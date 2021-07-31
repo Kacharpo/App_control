@@ -5,7 +5,7 @@
     <string name="txt_c_apellido">Apellido</string>
     <string name="txt_c_fecha">Fecha de nacimiento</string>
     <string name="txt_c_numero">Numero de celular</string>
-    <string name="txt_c_correo">E-mail</string>
+    <string name="txt_c_correo">Correo</string>
     <string name="txt_c_contrasena">Contraseña</string>
     <string name="txt_c_confirmar">Confirmar contraseña</string>
     <string name="txt_c_ruta">Ruta</string>

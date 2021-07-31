@@ -7,7 +7,9 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -15,6 +17,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -37,10 +40,12 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -53,10 +58,14 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
     private TextView tv_inicio, tv_final,tv_tiempo,tv_conductor, tv_disponibilidad,tv_iniciotxt,
             tv_finaltxt,tv_tiempotxt,tv_conductortxt, tv_disponibilidadtxt, tv_rutas, tv_ficha;
     private ImageView img_conductor;
-
+    private MarkerOptions marker1 = null , marker2 = null;
     /*private ListView lv_rutas;
     private String rutas [] = {"Inicio","Final","Tiempo","Conductor","Disponibilidad"};
     private String info_r [] = {"12:00","13:00","1h","Manuel Perez","10 lugares"};*/
+
+    LatLng TiempoReal= null, TiempoReal2 = null;
+    ArrayList<LatLng> points = null;
+    PolylineOptions lineOptions = null;
 
     private Spinner sp_rutas;
     private ViewPager vp_mostrar;
@@ -66,8 +75,13 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
 
     private GoogleMap mMap;
     private boolean UbiAct = false, UbiA=false;
-    private Marker markerPerso;
+    private Marker markerPerso ,markerPerso2;
     private String info= "CDMX",direccion ;
+
+   Thread reloj;
+   int seg = 0;
+   Handler h = new Handler();
+   boolean isOn = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,26 +146,40 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
     }
 
     @Override
     public void onMapReady(final GoogleMap googleMap) {
         mMap = googleMap;
         int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
-        int permissionCheck2 = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
+        Intent refresh = new Intent(getApplicationContext(),Principal.class);
 
-        if (permissionCheck!= PackageManager.PERMISSION_GRANTED && permissionCheck2!= PackageManager.PERMISSION_GRANTED) {
-            if(ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.ACCESS_FINE_LOCATION)){
-
-            }else{
-                ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
+        if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(getApplicationContext(), "Permiso de ubicacion accedido", LENGTH_SHORT).show();
+        }else {
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
+            try {
+                Thread.sleep(5000);
+                permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+                if(permissionCheck == PackageManager.PERMISSION_GRANTED){
+                    startActivity(refresh);
+                }
+                Thread.sleep(5000);
+                permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+                if(permissionCheck == PackageManager.PERMISSION_GRANTED){
+                    startActivity(refresh);
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-            return;
+            return ;
         }
 
         if(!mMap.isMyLocationEnabled()){
             LatLng CDMX= new LatLng(19.3168, -99.08671 );
-            markerPerso = googleMap.addMarker(new MarkerOptions().position(CDMX).draggable(true).title("Punto de Inicio"));
+            marker1 = new MarkerOptions().position(CDMX).draggable(true).title("Punto de Inicio");
+            markerPerso = googleMap.addMarker(marker1);
             //mMap.moveCamera(CameraUpdateFactory.newLatLng(CDMX));
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(CDMX,18),5000,null);
             UbiA = true;
@@ -163,7 +191,8 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
         if(loc != null){
             mMap.clear();
             LatLng ubi= new LatLng(loc.getLatitude(), loc.getLongitude() );
-            markerPerso = googleMap.addMarker(new MarkerOptions().position(ubi).draggable(true).title("Punto de Inicio"));
+            marker1 = new MarkerOptions().position(ubi).draggable(true).title("Punto de Inicio");
+            markerPerso = googleMap.addMarker(marker1);
             //mMap.moveCamera(CameraUpdateFactory.newLatLng(ubi));
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(ubi,18),5000,null);
             info = Principal.this.setLocation(loc);
@@ -232,8 +261,23 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
                     }
                 }
 
-                LatLng TiempoReal= new LatLng(lat,lon );
-                markerPerso = googleMap.addMarker(new MarkerOptions().position(TiempoReal).draggable(true).title(COUNTRIES[j]));
+
+                points = new ArrayList<LatLng>();
+                lineOptions = new PolylineOptions();
+
+                TiempoReal= new LatLng(lat,lon );
+                marker1 = new MarkerOptions().position(TiempoReal).draggable(true).title("Inicio "+COUNTRIES[j]);
+                markerPerso = googleMap.addMarker(marker1);
+                if(marker2 != null){
+                    markerPerso = googleMap.addMarker(marker2);
+                    points.add(TiempoReal);
+                    points.add(TiempoReal2);
+                    lineOptions.addAll(points);
+                    lineOptions.width(5);
+                    lineOptions.color(Color.GREEN);
+                    mMap.addPolyline(lineOptions);
+                }
+                
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(TiempoReal,18),5000,null);
                 if (!list.isEmpty()) {
                     Address DirCalle = list.get(0);
@@ -307,8 +351,22 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
                                 if(latD>0)latD=+latD;
                                 mMap.clear();
 
+                                points = new ArrayList<LatLng>();
+                                lineOptions = new PolylineOptions();
+
                                 LatLng Ingresada = new LatLng(latD, lonD);
                                 if(latD>-80&&lonD<80&&lonD>-180&&lonD<180){
+                                    marker1 = new MarkerOptions().position(Ingresada).draggable(true).title("Inicio");
+                                    markerPerso = googleMap.addMarker(marker1);
+                                    if(marker2 != null){
+                                        markerPerso = googleMap.addMarker(marker2);
+                                        points.add(Ingresada);
+                                        points.add(TiempoReal2);
+                                        lineOptions.addAll(points);
+                                        lineOptions.width(5);
+                                        lineOptions.color(Color.GREEN);
+                                        mMap.addPolyline(lineOptions);
+                                    }
                                     markerPerso = googleMap.addMarker(new MarkerOptions().position(Ingresada).draggable(true).title("Marcador de tu Ubicacion"));
                                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(Ingresada,18),5000,null);
 
@@ -347,7 +405,6 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 mMap.clear();
-
                 double lat=0.0,lon=0.0;
                 Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
 
@@ -365,9 +422,21 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
                     }
                 }
 
-                LatLng TiempoReal= new LatLng(lat,lon );
-                markerPerso = googleMap.addMarker(new MarkerOptions().position(TiempoReal).draggable(true).title(COUNTRIES[j]));
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(TiempoReal,18),5000,null);
+                points = new ArrayList<LatLng>();
+                lineOptions = new PolylineOptions();
+
+                TiempoReal2= new LatLng(lat,lon );
+                marker2 = new MarkerOptions().position(TiempoReal2).draggable(true).title("Destino "+COUNTRIES[j]);
+                markerPerso = googleMap.addMarker(marker1);
+                markerPerso = googleMap.addMarker(marker2);
+                points.add(TiempoReal);
+                points.add(TiempoReal2);
+                lineOptions.addAll(points);
+                lineOptions.width(5);
+                lineOptions.color(Color.BLUE);
+                mMap.addPolyline(lineOptions);
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(TiempoReal2,18),5000,null);
+
                 if (!list.isEmpty()) {
                     Address DirCalle = list.get(0);
 
@@ -439,10 +508,21 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
                                 double latD = Double.parseDouble(lat), lonD = Double.parseDouble(lon);
                                 if(latD>0)latD=+latD;
                                 mMap.clear();
+                                points = new ArrayList<LatLng>();
+                                lineOptions = new PolylineOptions();
 
                                 LatLng Ingresada = new LatLng(latD, lonD);
                                 if(latD>-80&&lonD<80&&lonD>-180&&lonD<180){
-                                    markerPerso = googleMap.addMarker(new MarkerOptions().position(Ingresada).draggable(true).title("Marcador de tu Ubicacion"));
+                                    marker2 = new MarkerOptions().position(Ingresada).draggable(true).title("Destino");
+                                    markerPerso = googleMap.addMarker(marker1);
+                                    markerPerso = googleMap.addMarker(marker2);
+                                    points.add(TiempoReal);
+                                    points.add(Ingresada);
+                                    lineOptions.addAll(points);
+                                    lineOptions.width(5);
+                                    lineOptions.color(Color.BLUE);
+                                    mMap.addPolyline(lineOptions);
+
                                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(Ingresada,18),5000,null);
 
                                     Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
@@ -483,6 +563,7 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
         googleMap.setOnInfoWindowClickListener(this);
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setZoomControlsEnabled(true);
+
     }
 
     @Override
@@ -578,7 +659,7 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
             "Tepotzotlán","Tequixquiac","Texcaltitlán","Texcalyacac","Texcoco","Tezoyuca","Tianguistenco","Timilpan","Tlalmanalco","Tlalnepantla de Baz",
             "Tlatlaya","Toluca","Tonatico","Tultepec","Tultitlán","Valle de Bravo","Villa de Allende","Villa del Carbón","Villa Guerrero","Villa Victoria",
             "Xonacatlán","Zacazonapan","Zacualpan","Zinacantepec","Zumpahuacán", "Zumpango","Cuautitlán Izcalli","Valle de Chalco Solidaridad","Luvianos",
-            "San José del Rincón","Tonanitla"
+            "San José del Rincón","Tonanitla","Aurrera Express","Hospital Americas"
     };
 
     private static final double[][] COR = new double[][]{
@@ -595,7 +676,7 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
             {19.70618,-99.23913},{19.908,-99.1457},{18.9285,-99.9356},{19.1316,-99.5003},{19.5126,-98.8798},{19.5914,-98.9131},{19.1125,-99.4346},{19.867,-99.733},{19.2044,-98.8025},{19.539,-99.1933},
             {18.6158,-100.208},{19.2879,-99.6468},{18.8028,-99.67},{19.685,-99.1281},{19.6456,-99.1689},{19.1925,-100.131},{19.3736,-100.147},{19.72234,-99.46158},{18.96,-99.64},{19.4337,-99.9956},
             {19.4,-99.533},{19.0728,-100.255},{18.7836,-98.7594},{19.2833, -99.7333},{18.8346,-99.581},{19.7971,-99.0989},{19.64388,-99.21598},{19.2917,-98.9389},{18.9167,-100.4},
-            {19.6115,-100.124},{19.6886,-99.053}
+            {19.6115,-100.124},{19.6886,-99.053},{19.586990,-98.9984},{19.5929,-99.018375}
     };
 }
 

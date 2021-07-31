@@ -20,7 +20,7 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/img_c_control"
+                android:id="@+id/ContentDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="62dp"
                 android:layout_gravity="center"
@@ -29,131 +29,257 @@
                 android:textAlignment="center"
                 tools:srcCompat="@tools:sample/avatars" />
 
-            <EditText
-                android:id="@+id/txt_c_nombre"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txt_c_nombre_l"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:backgroundTint="#F44336"
+                android:backgroundTint="#FF0101"
                 android:ems="10"
                 android:hint="@string/txt_c_nombre"
-                android:inputType="textPersonName"
-                android:textAlignment="center" />
+                app:counterEnabled="true"
+                app:counterMaxLength="20"
 
-            <EditText
-                android:id="@+id/txt_c_apellido"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txt_c_nombre"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:backgroundTint="#FF0101"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:inputType="textPersonName"
+                    android:textAlignment="center"
+                    android:maxLength="20"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txt_c_apellido_l"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:backgroundTint="#F44336"
+                android:layout_marginTop="12dp"
                 android:ems="10"
                 android:hint="@string/txt_c_apellido"
-                android:inputType="textPersonName"
-                android:textAlignment="center" />
+                app:counterEnabled="true"
+                app:counterMaxLength="20"
 
-            <EditText
-                android:id="@+id/txt_c_numero"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txt_c_apellido"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:inputType="textPersonName"
+                    android:textAlignment="center"
+                    android:maxLength="20"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txt_c_numero_l"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:backgroundTint="#F44336"
+                android:layout_marginTop="12dp"
                 android:ems="10"
                 android:hint="@string/txt_c_numero"
-                android:inputType="textPersonName"
-                android:textAlignment="center" />
+                app:counterEnabled="true"
+                app:counterMaxLength="20"
 
-            <EditText
-                android:id="@+id/txt_c_correo"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txt_c_numero"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:textAlignment="center"
+                    android:maxLength="20"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txt_c_correo_l"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:backgroundTint="#F44336"
+                android:layout_marginTop="12dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:ems="10"
-                android:hint="Correo"
-                android:inputType="textPersonName"
-                android:textAlignment="center" />
+                android:hint="@string/txt_c_correo"
+                app:counterEnabled="true"
+                app:counterMaxLength="50"
 
-            <EditText
-                android:id="@+id/txt_c_fecha"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txt_c_correo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableTint="#FF2C2C"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:inputType="textEmailAddress"
+                    android:shadowColor="#3F51B5"
+                    android:textAlignment="center"
+                    android:maxLength="50"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txt_c_fecha_l"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:backgroundTint="#F44336"
+                android:layout_marginTop="12dp"
                 android:ems="10"
                 android:hint="@string/txt_c_fecha"
-                android:inputType="date"
-                android:textAlignment="center" />
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                app:counterEnabled="true"
+                app:counterMaxLength="20"
 
-            <EditText
-                android:id="@+id/txt_c_contrasena"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txt_c_fecha"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:foregroundTint="#00BCD4"
+                    android:gravity="center"
+                    android:inputType="date"
+                    android:textAlignment="center"
+                    android:maxLength="20"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txt_c_contrasena_l"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:backgroundTint="#F44336"
+                android:layout_marginTop="12dp"
                 android:ems="10"
                 android:hint="@string/txt_c_contrasena"
-                android:inputType="textPassword"
-                android:textAlignment="center" />
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                app:counterEnabled="true"
+                app:counterMaxLength="20"
 
-            <EditText
-                android:id="@+id/txt_c_confirmar"
+                app:endIconMode="password_toggle"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txt_c_contrasena"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:inputType="textPassword"
+                    android:textAlignment="center"
+                    android:maxLength="20"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txt_c_confirmar_l"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:backgroundTint="#F44336"
+                android:layout_marginTop="12dp"
                 android:ems="10"
                 android:hint="@string/txt_c_confirmar"
-                android:inputType="textPassword"
-                android:textAlignment="center" />
+                app:counterEnabled="true"
+                app:counterMaxLength="20"
+                app:endIconMode="password_toggle"
 
-            <EditText
-                android:id="@+id/txt_c_ruta"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txt_c_confirmar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:inputType="textPassword"
+                    android:textAlignment="center"
+                    android:maxLength="20"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txt_c_ruta_l"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:backgroundTint="#F44336"
+                android:layout_marginTop="12dp"
                 android:ems="10"
                 android:hint="@string/txt_c_ruta"
-                android:inputType="number"
-                android:textAlignment="center" />
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                app:counterEnabled="true"
+                app:counterMaxLength="20"
 
-            <EditText
-                android:id="@+id/txt_c_licencia"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txt_c_ruta"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:textAlignment="center"
+                    android:maxLength="20"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txt_c_licencia_l"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:backgroundTint="#F44336"
+                android:layout_marginTop="12dp"
                 android:ems="10"
                 android:hint="@string/txt_c_licencia"
-                android:inputType="number"
-                android:textAlignment="center" />
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                app:counterEnabled="true"
+                app:counterMaxLength="20"
+
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txt_c_licencia"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:textAlignment="center"
+                    android:maxLength="20"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <Spinner
-                android:id="@+id/sp_c_tipo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:backgroundTint="#F44336" />
+                    android:id="@+id/sp_c_tipo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:backgroundTint="#F44336" />
 
             <RadioButton
-                android:id="@+id/rb_c_terminos"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/rb_c_terminos" />
+                    android:id="@+id/rb_c_terminos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/rb_c_terminos" />
 
             <Button
-                android:id="@+id/btn_c_aceptar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:backgroundTint="#F44336"
-                android:text="@string/btn_c_aceptar"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                app:cornerRadius="10dp" />
-        </LinearLayout>
+                    android:id="@+id/btn_c_aceptar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:backgroundTint="#F44336"
+                    android:text="@string/btn_c_aceptar"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    app:cornerRadius="10dp" />
+
+    </LinearLayout>
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

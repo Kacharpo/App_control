@@ -1,13 +1,18 @@
 package com.example.app_control;
 
+import androidx.annotation.ColorInt;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -18,6 +23,9 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.app_control.utils.InputValidation;
+import com.google.android.material.textfield.TextInputEditText;
+
+import org.w3c.dom.Text;
 
 import java.util.Properties;
 import java.util.Random;
@@ -54,7 +62,7 @@ public class RegistroControl extends AppCompatActivity {
         et_confirmar = (EditText)findViewById(R.id.txt_c_confirmar);
         et_ruta = (EditText)findViewById(R.id.txt_c_ruta);
         et_licencia = (EditText)findViewById(R.id.txt_c_licencia);
-        img_control = (ImageView)findViewById(R.id.img_c_control);
+        img_control = (ImageView)findViewById(R.id.ContentDescription);
         btn_aceptar = (Button)findViewById(R.id.btn_c_aceptar);
         sp_tipo = (Spinner)findViewById(R.id.sp_c_tipo);
         rb_terminos = (RadioButton)findViewById(R.id.rb_c_terminos);
@@ -80,23 +88,23 @@ public class RegistroControl extends AppCompatActivity {
 
                 int id_control = 1;
                 String nombre = et_nombre.getText().toString();
-                boolean nombre_b = InputValidation.isValidEditText(et_nombre, getString(R.string.field_is_required));
+                boolean nombre_b = InputValidation.isValidEditText(et_nombre,"Campo requerido");
                 String apellido = et_apellido.getText().toString();
-                boolean apellido_b = InputValidation.isValidEditText(et_apellido, getString(R.string.field_is_required));
+                boolean apellido_b = InputValidation.isValidEditText(et_apellido, "Campo requerido");
                 String fecha = et_fecha.getText().toString();
-                boolean fecha_b = InputValidation.isValidEditText(et_fecha, getString(R.string.field_is_required));
+                boolean fecha_b = InputValidation.isValidEditText(et_fecha,"Campo requerido");
                 String numero = et_numero.getText().toString();
-                boolean numero_b = InputValidation.isValidEditText(et_numero, getString(R.string.field_is_required));
+                boolean numero_b = InputValidation.isValidEditText(et_numero, "Campo requerido");
                 String correo = et_correo.getText().toString();
-                boolean correo_b = InputValidation.isValidEditText(et_correo, getString(R.string.field_is_required));
+                boolean correo_b = InputValidation.isValidEditText(et_correo, "Campo requerido");
                 String contrasena = et_contrasena.getText().toString();
-                boolean contrasena_b = InputValidation.isValidEditText(et_contrasena, getString(R.string.field_is_required));
+                boolean contrasena_b = InputValidation.isValidEditText(et_contrasena,"Campo requerido");
                 String confirmar = et_confirmar.getText().toString();
-                boolean confirmar_b = InputValidation.isValidEditText(et_confirmar, getString(R.string.field_is_required));
+                boolean confirmar_b = InputValidation.isValidEditText(et_confirmar,"Campo requerido");
                 String ruta = et_ruta.getText().toString();
-                boolean ruta_b = InputValidation.isValidEditText(et_ruta, getString(R.string.field_is_required));
+                boolean ruta_b = InputValidation.isValidEditText(et_ruta, "Campo requerido");
                 String licencia = et_licencia.getText().toString();
-                boolean licencia_b = InputValidation.isValidEditText(et_licencia, getString(R.string.field_is_required));
+                boolean licencia_b = InputValidation.isValidEditText(et_licencia, "Campo requerido");
                 String tipo = sp_tipo.getSelectedItem().toString();
                 boolean terminos = rb_terminos.isChecked();
 
@@ -118,7 +126,7 @@ public class RegistroControl extends AppCompatActivity {
                             db.close();
                             Toast.makeText(getApplicationContext(), "Registro Exitoso", Toast.LENGTH_SHORT).show();
 
-                           // sendEmailWithGmail(recipientEmail,recipientPassword, et_correo.getText().toString(),subject,message);
+                            sendEmailWithGmail(recipientEmail,recipientPassword, et_correo.getText().toString(),subject,message);
 
                             datos();
                         } else {
@@ -126,9 +134,9 @@ public class RegistroControl extends AppCompatActivity {
                         }
                     } else {
                         et_contrasena.setText("");
-                        contrasena_b = InputValidation.isValidEditText(et_contrasena, getString(R.string.field_is_required));
+                        contrasena_b = InputValidation.isValidEditText(et_contrasena, "!");
                         et_confirmar.setText("");
-                        confirmar_b = InputValidation.isValidEditText(et_confirmar, getString(R.string.field_is_required));
+                        confirmar_b = InputValidation.isValidEditText(et_confirmar, "!");
                         Toast.makeText(getApplicationContext(), "Contraseñas incorrectas", Toast.LENGTH_SHORT).show();
                     }
                 } else {
@@ -136,6 +144,7 @@ public class RegistroControl extends AppCompatActivity {
                 }
             }
         });
+
 
     }
 
