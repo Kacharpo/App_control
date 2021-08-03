@@ -7,34 +7,57 @@
     android:layout_height="match_parent"
     tools:context=".Principal">
 
-    <AutoCompleteTextView
-        android:id="@+id/atxt_c_ubicacion"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/atxt_c_ubicacion_l"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:background="#FFFFFF"
-        android:completionThreshold="1"
-        android:hint="@string/txt_c_ubicacion"
-        android:inputType="textPersonName"
-        android:maxLines="1" />
+        android:layout_marginTop="5dp"
+        android:backgroundTint="#FF0101"
+        android:ems="10"
+        android:gravity="bottom|center"
+        android:hint="@string/txt_c_ubicacion">
 
-    <AutoCompleteTextView
-        android:id="@+id/atxt_c_destino"
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/atxt_c_ubicacion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#FFFFFF"
+            android:completionThreshold="1"
+            android:inputType="textPersonName"
+            android:maxLines="1"
+            android:textSize="14sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/atxt_c_destino_l"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/atxt_c_ubicacion"
+        android:layout_below="@id/atxt_c_ubicacion_l"
         android:layout_marginTop="2dp"
-        android:background="#FFFFFF"
-        android:completionThreshold="1"
-        android:hint="@string/txt_c_destino"
-        android:inputType="textPersonName"
-        android:maxLines="1" />
+        android:backgroundTint="#FF0101"
+        android:ems="10"
+        android:hint="@string/txt_c_destino">
+
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/atxt_c_destino"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/atxt_c_ubicacion_l"
+            android:background="#FFFFFF"
+            android:completionThreshold="1"
+            android:gravity="start"
+            android:inputType="textPersonName"
+            android:maxLines="1"
+            android:textSize="14sp" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Spinner
         android:id="@+id/sp_c_rutas"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/atxt_c_destino" />
+        android:layout_below="@id/atxt_c_destino_l" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tl_v_opcion"

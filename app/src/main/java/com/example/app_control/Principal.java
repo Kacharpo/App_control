@@ -562,8 +562,7 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
         googleMap.setOnMarkerDragListener(this);
         googleMap.setOnInfoWindowClickListener(this);
         mMap.setMyLocationEnabled(true);
-        mMap.getUiSettings().setZoomControlsEnabled(true);
-
+       // mMap.getUiSettings().setZoomControlsEnabled(true);
     }
 
     @Override

@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -84,8 +85,6 @@ public class RegistroControl extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                SQLiteDatabase db = admin.getWritableDatabase();
-
                 int id_control = 1;
                 String nombre = et_nombre.getText().toString();
                 boolean nombre_b = InputValidation.isValidEditText(et_nombre,"Campo requerido");
@@ -111,24 +110,38 @@ public class RegistroControl extends AppCompatActivity {
                 if (nombre_b && apellido_b && fecha_b && numero_b && correo_b && contrasena_b && confirmar_b && ruta_b && licencia_b && !tipo.equals("Tipo")) {
                     if (contrasena.equals(confirmar)) {
                         if (terminos == true) {
-                            ContentValues registro = new ContentValues();
-                            registro.put("id_control", id_control);
-                            registro.put("nombre", nombre);
-                            registro.put("apellido", apellido);
-                            registro.put("fecha", fecha);
-                            registro.put("numero", numero);
-                            registro.put("correo", correo);
-                            registro.put("contrasena", contrasena);
-                            registro.put("ruta", ruta);
-                            registro.put("licencia", licencia);
-                            registro.put("tipo", tipo);
-                            db.insert("registro_control", null, registro);
-                            db.close();
-                            Toast.makeText(getApplicationContext(), "Registro Exitoso", Toast.LENGTH_SHORT).show();
-
-                            sendEmailWithGmail(recipientEmail,recipientPassword, et_correo.getText().toString(),subject,message);
-
-                            datos();
+                            boolean b = false;
+                            for(int i = 0;b == false;i++){
+                                SQLiteDatabase db = admin.getWritableDatabase();
+                                Cursor fila = db.rawQuery("select correo from registro_control where id_control ="+i,null);
+                                if(fila.moveToFirst()){
+                                    if(correo.equals(fila.getString(0))){
+                                        et_correo.setText("");
+                                        correo_b = InputValidation.isValidEditText(et_correo, "Correo registrado");
+                                        b=true;
+                                    }
+                                    db.close();
+                                }
+                                if(!fila.moveToFirst()){
+                                    ContentValues registro = new ContentValues();
+                                    registro.put("id_control", i);
+                                    registro.put("nombre", nombre);
+                                    registro.put("apellido", apellido);
+                                    registro.put("fecha", fecha);
+                                    registro.put("numero", numero);
+                                    registro.put("correo", correo);
+                                    registro.put("contrasena", contrasena);
+                                    registro.put("ruta", ruta);
+                                    registro.put("licencia", licencia);
+                                    registro.put("tipo", tipo);
+                                    db.insert("registro_control", null, registro);
+                                    Toast.makeText(getApplicationContext(), "Registro Exitoso", Toast.LENGTH_SHORT).show();
+                                    sendEmailWithGmail(recipientEmail,recipientPassword, et_correo.getText().toString(),subject,message);
+                                    b = true;
+                                    datos();
+                                    db.close();
+                                }
+                            }
                         } else {
                             Toast.makeText(getApplicationContext(), "Debes aceptar los terminos y condiciones", Toast.LENGTH_SHORT).show();
                         }

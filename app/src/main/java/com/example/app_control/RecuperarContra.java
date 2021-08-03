@@ -61,18 +61,28 @@ public class RecuperarContra extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 if (InputValidation.isValidEditText(et_correo, getString(R.string.field_is_required))) {
-                    SQLiteDatabase db = admin.getWritableDatabase();
 
                     String correo = et_correo.getText().toString();
-                    Cursor fila = db.rawQuery("select contrasena from registro_control where id_control = 1",null);
-                    if(fila.moveToFirst()){
-                        sendEmailWithGmail(recipientEmail,recipientPassword,correo,subject,fila.getString(0));
-                        db.close();
-                    }else{
-                        Toast.makeText(getApplicationContext(), "No existe registro", Toast.LENGTH_SHORT).show();
-                        db.close();
+
+                    boolean b = false;
+                    for(int i = 0;b == false;i++) {
+                        SQLiteDatabase db = admin.getWritableDatabase();
+                        Cursor fila = db.rawQuery("select correo,contrasena from registro_control where id_control =" + i, null);
+                        if (fila.moveToFirst()) {
+                            if (correo.equals(fila.getString(0))) {
+                                sendEmailWithGmail(recipientEmail, recipientPassword, correo, subject, fila.getString(1));
+                                db.close();
+                                b = true;
+                                startActivity(aceptar);
+                            }else{
+                                db.close();
+                            }
+                        } else if (!fila.moveToFirst()) {
+                            et_correo.setText("");
+                            boolean correo_b = InputValidation.isValidEditText(et_correo, "Correo no registrado");
+                            b = true;
+                        }
                     }
-                    startActivity(aceptar);
                 }
             }
         });
