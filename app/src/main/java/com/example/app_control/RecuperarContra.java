@@ -2,6 +2,8 @@ package com.example.app_control;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 
 import android.os.Bundle;
@@ -51,13 +53,25 @@ public class RecuperarContra extends AppCompatActivity{
         final String subject = "Recuperar contraseña";
         final String message = "Su contraseña es: ";
 
+        AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this, "registro",null,1);
+
         Intent aceptar = new Intent(this,AlertaActivity.class);
 
         btn_enviar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (InputValidation.isValidEditText(et_correo, getString(R.string.field_is_required))) {
-                   // sendEmailWithGmail(recipientEmail,recipientPassword,et_correo.getText().toString(),subject,message);
+                    SQLiteDatabase db = admin.getWritableDatabase();
+
+                    String correo = et_correo.getText().toString();
+                    Cursor fila = db.rawQuery("select contrasena from registro_control where id_control = 1",null);
+                    if(fila.moveToFirst()){
+                        sendEmailWithGmail(recipientEmail,recipientPassword,correo,subject,fila.getString(0));
+                        db.close();
+                    }else{
+                        Toast.makeText(getApplicationContext(), "No existe registro", Toast.LENGTH_SHORT).show();
+                        db.close();
+                    }
                     startActivity(aceptar);
                 }
             }
