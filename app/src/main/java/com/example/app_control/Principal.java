@@ -101,15 +101,15 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
         ti_conductor = (TabItem)findViewById(R.id.ti_c_conductor);
         ti_disponibilidad = (TabItem)findViewById(R.id.ti_c_disponibilidad);
         sp_rutas = (Spinner)findViewById(R.id.sp_c_rutas);
-
+        //Array para spinner
         String [] tipo = {"Rutas","Euroban", "Urban", "Combi"};
         ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipo);
         sp_rutas.setAdapter(adapter1);
-
+        //Array para AutoCompliteText
         final ArrayAdapter<String > adapter2 = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,COUNTRIES);
         at_ubicacion.setAdapter(adapter2);
         at_destino.setAdapter(adapter2);
-
+        //PagerController para Fragment
         pagerAdapter = new PagerController(getSupportFragmentManager(),tl_opcion.getTabCount());
         vp_mostrar.setAdapter(pagerAdapter);
         tl_opcion.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -143,18 +143,22 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
         }); */
        // img_conductor = (ImageView)findViewById(R.id.img_c_conductor);
 
+        //SupportMapFragment para uso de GoogleMaps
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
     }
-
+    //Configuracion de Google Maps
     @Override
     public void onMapReady(final GoogleMap googleMap) {
+        //Asigna valor a variable mMap de tipo GoogleMap
         mMap = googleMap;
+        //Permiso de localizacion
         int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+        //Intent para cambio de Activity
         Intent refresh = new Intent(getApplicationContext(),Principal.class);
-
+        //Checar y pedir permiso
         if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
             Toast.makeText(getApplicationContext(), "Permiso de ubicacion accedido", LENGTH_SHORT).show();
         }else {
@@ -175,7 +179,7 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
             }
             return ;
         }
-
+        //Agregar marcador si la ubcacion esta desactivada
         if(!mMap.isMyLocationEnabled()){
             LatLng CDMX= new LatLng(19.3168, -99.08671 );
             marker1 = new MarkerOptions().position(CDMX).draggable(true).title("Punto de Inicio");
@@ -184,10 +188,10 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(CDMX,18),5000,null);
             UbiA = true;
         }
-
+        //LocationManager para utilizar localizacion
         LocationManager locationManager = (LocationManager) Principal.this.getSystemService(Context.LOCATION_SERVICE);
         Location loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
+        //Agregar marcador si la ubicacion esta activada
         if(loc != null){
             mMap.clear();
             LatLng ubi= new LatLng(loc.getLatitude(), loc.getLongitude() );
@@ -197,7 +201,7 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(ubi,18),5000,null);
             info = Principal.this.setLocation(loc);
         }
-
+        //Configuracion de Ubicacion en tiempo real
         LocationListener locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
@@ -238,7 +242,7 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
                 Toast.makeText(Principal.this,"GPS Desactivado", LENGTH_SHORT).show();
             }
         } ;
-
+        //Sobreescribir funcion setOnClicklistener para AutoCompleteText Ubicacion
         at_ubicacion.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -289,7 +293,7 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
             }
 
         });
-
+        //Sobreescribir funcion setOnKeyListener para AutoCompleteText Ubicacion
         at_ubicacion.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -400,7 +404,7 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
                 return false;
             }
         });
-
+        //Sobreescribir funcion setOnItenClickListener para AutoCompleteText Destino
         at_destino.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -447,7 +451,7 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
             }
 
         });
-
+        //Sobreescribir funcion setOnKeyListener para AutoCompleteText Destino
         at_destino.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -555,23 +559,23 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
                 return false;
             }
         });
-
+        //Actualizar ubicacion en tiempo real con uso de Internet
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,0,0,locationListener);
-
+        //Configuracion de interfaz del Google Maps
         googleMap.setOnMarkerClickListener(this);
         googleMap.setOnMarkerDragListener(this);
         googleMap.setOnInfoWindowClickListener(this);
         mMap.setMyLocationEnabled(true);
        // mMap.getUiSettings().setZoomControlsEnabled(true);
     }
-
+    //Mostrar informacion de maracdor
     @Override
     public void onInfoWindowClick(Marker marker) {
         if(marker.equals(markerPerso)){
             Fragmento.newInstance(marker.getTitle(),info).show(getSupportFragmentManager(), null);
         }
     }
-
+    //Mostrar mensaje al dar click en marcador
     @Override
     public boolean onMarkerClick(Marker marker) {
         if(marker.equals(markerPerso)){
@@ -579,12 +583,12 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
         }
         return false;
     }
-
+    //Null
     @Override
     public void onMarkerDragStart(Marker marker) {
 
     }
-
+    //Obtner coordenadas de nueva posicion de marcador
     @Override
     public void onMarkerDrag(Marker marker) {
         if(marker.equals(markerPerso)){
@@ -593,7 +597,7 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
             setTitle(newTitle);
         }
     }
-
+    //Obtner coordenadas de ultima posicion de marcador
     @Override
     public void onMarkerDragEnd(Marker marker) {
         if(marker.equals(markerPerso)){
@@ -622,9 +626,9 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
 
         }
     }
-
+    //Obtener la direccion de la calle a partir de la latitud y la longitud
     public String setLocation(Location loc) {
-        //Obtener la direccion de la calle a partir de la latitud y la longitud
+
         if (!mMap.isMyLocationEnabled()) {
             try {
 
@@ -643,7 +647,7 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
         }
         return direccion;
     }
-
+    //Matriz de lugares para AutoCompliteText
     private static final String[] COUNTRIES = new String[]{
             "Acambay de Ruíz Castañeda","Acolman","Aculco","Almoloya de Alquisiras","Almoloya de Juárez","Almoloya del Río","Amanalco","Amatepec",
             "Amecameca","Apaxco","Atenco","Atizapán","Atizapán de Zaragoza","Atlacomulco","Atlautla","Axapusco","Ayapango","Calimaya","Capulhuac",
@@ -660,7 +664,7 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
             "Xonacatlán","Zacazonapan","Zacualpan","Zinacantepec","Zumpahuacán", "Zumpango","Cuautitlán Izcalli","Valle de Chalco Solidaridad","Luvianos",
             "San José del Rincón","Tonanitla","Aurrera Express","Hospital Americas"
     };
-
+    //Matriz de coordenadas de lugares para AutoCompliteText
     private static final double[][] COR = new double[][]{
             {19.9543,-99.8441},{19.6395,-98.9121},{20.09833,-99.8269},{18.8657,-99.894},{19.369,-99.7605},{ 19.1586, -99.4886},{ 19.25,-100.017},{18.6807,-100.181},
             {19.1224, -98.7667},{19.9833,-99.1667},{19.2703,-99.5331},{19.431,-99.4025},{19.5562,-99.2675},{19.7968,-99.8765},{19.0206,-98.7783},{19.7233,-98.758},{19.1261,-98.8039},{19.1618,-99.6129},{19.1822,-99.4565},
