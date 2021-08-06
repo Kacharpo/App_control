@@ -85,16 +85,38 @@
         app:layout_constraintStart_toEndOf="@+id/btn_ingresar"
         app:layout_constraintTop_toBottomOf="@+id/txt_pass_l" />
 
+<Button
+        android:id="@+id/btnSignIn"
+        android:layout_width="355dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="28dp"
+        android:drawableLeft="@drawable/ic_google"
+        android:onClick="Log_in_firebase"
+        android:paddingStart="40dp"
+        android:paddingEnd="40dp"
+        android:text="Inicia sesión con Google"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+
+        app:backgroundTint="@color/ic_launcher_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.578"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_registro" />
+
+
     <TextView
         android:id="@+id/tv_c_recuperar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="72dp"
+        android:layout_marginTop="36dp"
 
         android:text="¿Olvidó su contraseña?"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_registro" />
+        app:layout_constraintTop_toBottomOf="@+id/btnSignIn" />
 
     <TextView
         android:id="@+id/textView2"
