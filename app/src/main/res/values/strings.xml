@@ -51,8 +51,8 @@
     <string name="sender_data_title">Datos del remitente</string>
     //Confirmar
     <string name="tv_c_bienvenido">Bienvenido a Kacharpo</string>
-    <string name="tv_c_codigo">Ingresa el codigo de activacion que mandamos a su email</string>
-    <string name="tv_c_intentos">Numero de intentos restantes: </string>
+    <string name="tv_c_codigo">Ingresa el codigo de activacion que mandamos a su email. Si rebasas el numero de intentos maximo, te llegara un nuevo codigo de confirmacion automaticamente</string>
+    <string name="tv_c_intentos">Numero de intentos restantes: 5</string>
     <string name="tv_c_recibir">Da click en el boton reenviar si aun no recibes el correo con el codigo de activacion</string>
     <string name="btn_c_reenviar">Reenviar</string>
     <string name="txt_c_codigo">Codigo de confirmacion</string>

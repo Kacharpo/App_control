@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.example.app_control.utils.InputValidation;
 
 import java.util.Properties;
+import java.util.Random;
 
 import javax.mail.Authenticator;
 import javax.mail.Message;
@@ -31,7 +32,10 @@ public class ConfirmarCuenta extends AppCompatActivity {
     private TextView tv_bienvenido,tv_ingresa,tv_intentos,tv_recibir;
     private EditText et_codigo1,et_codigo2,et_codigo3,et_codigo4,et_codigo5,et_codigo6;
     private Button btn_reenviar;
-    String codigo1 = "",codigo2 = "",codigo3 = "",codigo4 = "",codigo5 = "",  codigo6 = "",codigotxt = "";
+    String codigotxt = "";
+    int c = 5,codigon ;
+    String codigo = "";
+    String message = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,17 +54,19 @@ public class ConfirmarCuenta extends AppCompatActivity {
         et_codigo6 = (EditText)findViewById(R.id.txt_c_codigo6);
         btn_reenviar = (Button)findViewById(R.id.btn_c_reenviar);
 
+        codigo = getIntent().getStringExtra("Codigo");
+        message = "Su codigo es: "+ codigo;
         final String recipientEmail = "kacharpo.service@gmail.com";
         final String recipientPassword = "Kacharpo2000";
         final String subject = "Codigo de confrimacion";
-        final String message = "Su codigo es: "+ getIntent().getStringExtra("Codigo");
         final String emailto = getIntent().getStringExtra("EmailTo");
-        final String codigo = getIntent().getStringExtra("Codigo");
 
         btn_reenviar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendEmailWithGmail(recipientEmail,recipientPassword,emailto,subject,message);
+                c=5;
+                tv_intentos.setText("Numero de intentos restantes: "+c);
             }
         });
 
@@ -224,6 +230,16 @@ public class ConfirmarCuenta extends AppCompatActivity {
                         codigotxt = et_codigo1.getText().toString()+""+et_codigo2.getText().toString()+""+et_codigo3.getText().toString()+""+et_codigo4.getText().toString()+""+et_codigo5.getText().toString()+""+et_codigo6.getText().toString();
                         if(codigotxt.equals(codigo)){
                             startActivity(aceptar);
+                        }else{
+                            c--;
+                            if(c<0){
+                                codigon = codigo(999999);
+                                codigo = ""+codigon;
+                                message = "Su codigo es: "+ codigo;
+                                sendEmailWithGmail(recipientEmail,recipientPassword,emailto,subject,message);
+                                c=5;
+                            }
+                            tv_intentos.setText("Numero de intentos restantes: "+c);
                         }
 
                     }
@@ -306,5 +322,12 @@ public class ConfirmarCuenta extends AppCompatActivity {
             progressDialog.dismiss();
             Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
         }
+    }
+    private int codigo(int max){
+        Random random = new Random();
+        random.setSeed(System.currentTimeMillis());
+
+        int numero = random.nextInt(max);
+        return numero;
     }
 }

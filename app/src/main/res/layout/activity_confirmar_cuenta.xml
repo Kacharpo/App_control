@@ -28,6 +28,7 @@
         android:gravity="center"
         android:text="@string/tv_c_codigo" />
 
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/txt_c_codigo1_l"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"

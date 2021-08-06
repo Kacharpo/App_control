@@ -26,9 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -76,7 +74,7 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
     private GoogleMap mMap;
     private boolean UbiAct = false, UbiA=false;
     private Marker markerPerso ,markerPerso2;
-    private String info= "CDMX",direccion ;
+    private String info= "CDMX",info2 = "",direccion ;
 
    Thread reloj;
    int seg = 0;
@@ -164,42 +162,68 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
         }else {
             ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
             try {
-                Thread.sleep(5000);
-                permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
-                if(permissionCheck == PackageManager.PERMISSION_GRANTED){
-                    startActivity(refresh);
-                }
-                Thread.sleep(5000);
-                permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
-                if(permissionCheck == PackageManager.PERMISSION_GRANTED){
-                    startActivity(refresh);
+                for(int e=0;e<=20;e++){
+                    Thread.sleep(500);
+                    permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+                    if(permissionCheck == PackageManager.PERMISSION_GRANTED){
+                        startActivity(refresh);
+                    }
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             return ;
         }
-        //Agregar marcador si la ubcacion esta desactivada
-        if(!mMap.isMyLocationEnabled()){
-            LatLng CDMX= new LatLng(19.3168, -99.08671 );
-            marker1 = new MarkerOptions().position(CDMX).draggable(true).title("Punto de Inicio");
-            markerPerso = googleMap.addMarker(marker1);
-            //mMap.moveCamera(CameraUpdateFactory.newLatLng(CDMX));
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(CDMX,18),5000,null);
-            UbiA = true;
-        }
         //LocationManager para utilizar localizacion
         LocationManager locationManager = (LocationManager) Principal.this.getSystemService(Context.LOCATION_SERVICE);
         Location loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        //Agregar marcador si la ubcacion esta desactivada
+        if(!mMap.isMyLocationEnabled()){
+            TiempoReal= new LatLng(19.3168, -99.08671 );
+            marker1 = new MarkerOptions().position(TiempoReal).draggable(true).title("Punto de Inicio");
+            markerPerso = googleMap.addMarker(marker1);
+            //mMap.moveCamera(CameraUpdateFactory.newLatLng(CDMX));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(TiempoReal,18),5000,null);
+            UbiA = true;
+            Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+
+            List<Address> list;
+            try {
+                list = geocoder.getFromLocation(
+                        markerPerso.getPosition().latitude, markerPerso.getPosition().longitude, 1);
+                if (!list.isEmpty()) {
+                    Address DirCalle = list.get(0);
+
+                    direccion = DirCalle.getAddressLine(0);
+                    info = direccion;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         //Agregar marcador si la ubicacion esta activada
         if(loc != null){
             mMap.clear();
-            LatLng ubi= new LatLng(loc.getLatitude(), loc.getLongitude() );
-            marker1 = new MarkerOptions().position(ubi).draggable(true).title("Punto de Inicio");
+            TiempoReal = new LatLng(loc.getLatitude(), loc.getLongitude() );
+            marker1 = new MarkerOptions().position(TiempoReal).draggable(true).title("Punto de Inicio");
             markerPerso = googleMap.addMarker(marker1);
             //mMap.moveCamera(CameraUpdateFactory.newLatLng(ubi));
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(ubi,18),5000,null);
-            info = Principal.this.setLocation(loc);
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(TiempoReal,18),5000,null);
+            Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+
+            List<Address> list;
+            try {
+                list = geocoder.getFromLocation(
+                        markerPerso.getPosition().latitude, markerPerso.getPosition().longitude, 1);
+                if (!list.isEmpty()) {
+                    Address DirCalle = list.get(0);
+
+                    direccion = DirCalle.getAddressLine(0);
+                    info = direccion;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         //Configuracion de Ubicacion en tiempo real
         LocationListener locationListener = new LocationListener() {
@@ -207,10 +231,23 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
             public void onLocationChanged(Location location) {
                 if(UbiA==true){
                     mMap.clear();
-                    LatLng TiempoReal= new LatLng(location.getLatitude(), location.getLongitude() );
+                    TiempoReal= new LatLng(location.getLatitude(), location.getLongitude() );
                     markerPerso = googleMap.addMarker(new MarkerOptions().position(TiempoReal).draggable(true).title("Punto de Inicio"));
                     //mMap.moveCamera(CameraUpdateFactory.newLatLng(TiempoReal));
-                    info = Principal.this.setLocation(location);
+                    Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+                    List<Address> list;
+                    try {
+                        list = geocoder.getFromLocation(
+                                markerPerso.getPosition().latitude, markerPerso.getPosition().longitude, 1);
+                        if (!list.isEmpty()) {
+                            Address DirCalle = list.get(0);
+
+                            direccion = DirCalle.getAddressLine(0);
+                            info = direccion;
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(TiempoReal,18),5000,null);
                     UbiA=false;
                 }
@@ -273,7 +310,7 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
                 marker1 = new MarkerOptions().position(TiempoReal).draggable(true).title("Inicio "+COUNTRIES[j]);
                 markerPerso = googleMap.addMarker(marker1);
                 if(marker2 != null){
-                    markerPerso = googleMap.addMarker(marker2);
+                    markerPerso2 = googleMap.addMarker(marker2);
                     points.add(TiempoReal);
                     points.add(TiempoReal2);
                     lineOptions.addAll(points);
@@ -363,7 +400,7 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
                                     marker1 = new MarkerOptions().position(Ingresada).draggable(true).title("Inicio");
                                     markerPerso = googleMap.addMarker(marker1);
                                     if(marker2 != null){
-                                        markerPerso = googleMap.addMarker(marker2);
+                                        markerPerso2 = googleMap.addMarker(marker2);
                                         points.add(Ingresada);
                                         points.add(TiempoReal2);
                                         lineOptions.addAll(points);
@@ -432,7 +469,7 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
                 TiempoReal2= new LatLng(lat,lon );
                 marker2 = new MarkerOptions().position(TiempoReal2).draggable(true).title("Destino "+COUNTRIES[j]);
                 markerPerso = googleMap.addMarker(marker1);
-                markerPerso = googleMap.addMarker(marker2);
+                markerPerso2 = googleMap.addMarker(marker2);
                 points.add(TiempoReal);
                 points.add(TiempoReal2);
                 lineOptions.addAll(points);
@@ -445,7 +482,7 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
                     Address DirCalle = list.get(0);
 
                     direccion = DirCalle.getAddressLine(0);
-                    info = direccion;
+                    info2 = direccion;
                 }
 
             }
@@ -519,7 +556,7 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
                                 if(latD>-80&&lonD<80&&lonD>-180&&lonD<180){
                                     marker2 = new MarkerOptions().position(Ingresada).draggable(true).title("Destino");
                                     markerPerso = googleMap.addMarker(marker1);
-                                    markerPerso = googleMap.addMarker(marker2);
+                                    markerPerso2 = googleMap.addMarker(marker2);
                                     points.add(TiempoReal);
                                     points.add(Ingresada);
                                     lineOptions.addAll(points);
@@ -537,7 +574,7 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
                                             Address DirCalle = list.get(0);
 
                                             direccion = DirCalle.getAddressLine(0);
-                                            info = direccion;
+                                            info2 = direccion;
                                         }
                                     } catch (IOException e) {
                                         e.printStackTrace();
@@ -574,11 +611,18 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
         if(marker.equals(markerPerso)){
             Fragmento.newInstance(marker.getTitle(),info).show(getSupportFragmentManager(), null);
         }
+        if(marker.equals(markerPerso2)){
+
+            Fragmento.newInstance(marker.getTitle(),info2).show(getSupportFragmentManager(), null);
+        }
     }
     //Mostrar mensaje al dar click en marcador
     @Override
     public boolean onMarkerClick(Marker marker) {
         if(marker.equals(markerPerso)){
+            Toast.makeText(this,"Manten apretado para mover ubicacion",Toast.LENGTH_LONG).show();
+        }
+        if(marker.equals(markerPerso2)){
             Toast.makeText(this,"Manten apretado para mover ubicacion",Toast.LENGTH_LONG).show();
         }
         return false;
@@ -595,6 +639,27 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
             Toast.makeText(this,"Posicion", LENGTH_SHORT).show();
             String newTitle = String.format(Locale.getDefault(), getString(R.string.marker_detail_lating), marker.getPosition().latitude, marker.getPosition().longitude);
             setTitle(newTitle);
+            markerPerso.setTitle("Punto de Inicio");
+            TiempoReal= new LatLng(markerPerso.getPosition().latitude, markerPerso.getPosition().longitude );
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(TiempoReal));
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        if(marker.equals(markerPerso2)){
+            Toast.makeText(this,"Posicion", LENGTH_SHORT).show();
+            String newTitle = String.format(Locale.getDefault(), getString(R.string.marker_detail_lating), marker.getPosition().latitude, marker.getPosition().longitude);
+            setTitle(newTitle);
+            markerPerso2.setTitle("Punto de Destino");
+            TiempoReal2= new LatLng(markerPerso2.getPosition().latitude, markerPerso2.getPosition().longitude );
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(TiempoReal2));
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
     //Obtner coordenadas de ultima posicion de marcador
@@ -619,33 +684,39 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
                     e.printStackTrace();
                 }
             }
+
             markerPerso.setTitle("Punto de inicio");
 
-            LatLng TiempoReal= new LatLng(markerPerso.getPosition().latitude, markerPerso.getPosition().longitude );
+            TiempoReal= new LatLng(markerPerso.getPosition().latitude, markerPerso.getPosition().longitude );
             mMap.moveCamera(CameraUpdateFactory.newLatLng(TiempoReal));
 
         }
-    }
-    //Obtener la direccion de la calle a partir de la latitud y la longitud
-    public String setLocation(Location loc) {
-
-        if (!mMap.isMyLocationEnabled()) {
-            try {
-
+        if(marker.equals(markerPerso2)){
+            setTitle(R.string.app_name);
+            if(markerPerso2.getPosition().longitude !=0.0 && markerPerso2.getPosition().latitude !=0.0) {
                 Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-                List<Address> list = geocoder.getFromLocation(
-                        loc.getLatitude(), loc.getLongitude(), 1);
-                if (!list.isEmpty()) {
-                    Address DirCalle = list.get(0);
 
-                    direccion = DirCalle.getAddressLine(0);
+                List<Address> list;
+                try {
+                    list = geocoder.getFromLocation(
+                            markerPerso2.getPosition().latitude, markerPerso2.getPosition().longitude, 1);
+                    if (!list.isEmpty()) {
+                        Address DirCalle = list.get(0);
+
+                        direccion = DirCalle.getAddressLine(0);
+                        info2 = direccion;
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-
-            } catch (IOException e) {
-                e.printStackTrace();
             }
+
+            markerPerso2.setTitle("Punto de Destino");
+
+            TiempoReal2 = new LatLng(markerPerso2.getPosition().latitude, markerPerso2.getPosition().longitude );
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(TiempoReal2));
+
         }
-        return direccion;
     }
     //Matriz de lugares para AutoCompliteText
     private static final String[] COUNTRIES = new String[]{
