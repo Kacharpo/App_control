@@ -97,6 +97,8 @@ private FirebaseAuth mAuth;
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             //FirebaseUser user = mAuth.getCurrentUser();
+                            Intent a = new Intent(getApplicationContext(), Principal.class);
+                            startActivity(a);
 //Iniciar DASHBOARD u otra actividad luego del SigIn Exitoso
                         } else {
                             // If sign in fails, display a message to the user.
