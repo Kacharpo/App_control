@@ -3,8 +3,14 @@ package com.example.app_control;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import android.net.Uri;
+import android.widget.Button;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
@@ -51,6 +57,7 @@ import static android.widget.Toast.LENGTH_SHORT;
 
 public class Principal extends AppCompatActivity implements OnMapReadyCallback ,GoogleMap.OnMarkerClickListener,GoogleMap.OnMarkerDragListener, GoogleMap.OnInfoWindowClickListener  {
 
+    private Button btn_alerta;
     private AutoCompleteTextView at_ubicacion, at_destino;
     private EditText et_ubicacion;
     private TextView tv_inicio, tv_final,tv_tiempo,tv_conductor, tv_disponibilidad,tv_iniciotxt,
@@ -81,6 +88,9 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
    Handler h = new Handler();
    boolean isOn = false;
 
+   private FragmentTransaction transaction;
+   private Fragment fragmentAlerta,fragmentBlank;
+   private boolean f = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,6 +109,8 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
         ti_conductor = (TabItem)findViewById(R.id.ti_c_conductor);
         ti_disponibilidad = (TabItem)findViewById(R.id.ti_c_disponibilidad);
         sp_rutas = (Spinner)findViewById(R.id.sp_c_rutas);
+        btn_alerta = (Button)findViewById(R.id.btn_c_alerta);
+
         //Array para spinner
         String [] tipo = {"Rutas","Euroban", "Urban", "Combi"};
         ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipo);
@@ -146,6 +158,37 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        fragmentAlerta = new AlertaFragment();
+        fragmentBlank = new Blank();
+        btn_alerta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(f==false){
+                    transaction = getSupportFragmentManager().beginTransaction().add(R.id.fm_c_alerta,fragmentAlerta);
+                    f = true;
+                    transaction.addToBackStack(null);
+                   // init();
+                }else if(f==true){
+                    transaction=getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.fm_c_alerta,fragmentBlank);
+                    f = false;
+                }
+                transaction.commit();
+                }
+            });
+
+    }
+
+    List<ListElement> elements;
+    public void init(){
+        /*elements = new ArrayList<>();
+        elements.add(new ListElement(R.drawable.ic_stat_asaltante,"Asaltante"));
+        elements.add(new ListElement(R.drawable.ic_stat_inundacion,"Inundacion"));
+        ListAdapter listAdapter = new ListAdapter(elements,this);
+        RecyclerView recyclerView = findViewById(R.id.rv);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(listAdapter);*/
     }
     //Configuracion de Google Maps
     @Override
@@ -752,5 +795,6 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
             {19.4,-99.533},{19.0728,-100.255},{18.7836,-98.7594},{19.2833, -99.7333},{18.8346,-99.581},{19.7971,-99.0989},{19.64388,-99.21598},{19.2917,-98.9389},{18.9167,-100.4},
             {19.6115,-100.124},{19.6886,-99.053},{19.586990,-98.9984},{19.5929,-99.018375}
     };
+
 }
 

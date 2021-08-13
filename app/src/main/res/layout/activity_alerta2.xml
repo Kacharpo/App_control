@@ -30,12 +30,13 @@
         android:layout_marginBottom="42dp"
         android:background="@color/principal"
         android:text="Mensaje" />
+
     <ImageView
         android:id="@+id/imageViewBuzon"
         android:layout_width="34dp"
         android:layout_height="34dp"
-        android:layout_marginTop="150dp"
         android:layout_marginLeft="100dp"
+        android:layout_marginTop="150dp"
         app:srcCompat="@drawable/ic_stat_buzon" />
 
     <Button
