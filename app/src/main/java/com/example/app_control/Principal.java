@@ -179,7 +179,7 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
 
     }
 
-    List<ListElement> elements;
+    //List<ListElement> elements;
     public void init(){
         /*elements = new ArrayList<>();
         elements.add(new ListElement(R.drawable.ic_stat_asaltante,"Asaltante"));
