@@ -20,7 +20,7 @@
         android:theme="@style/Theme.App_control">
         <activity android:name=".ConfirmarCuenta"/>
         <activity android:name=".Log_in"/>
-
+        <activity android:name=".BienvenidoActivity"/>
         <activity android:name=".Principal" >
 
         </activity>
