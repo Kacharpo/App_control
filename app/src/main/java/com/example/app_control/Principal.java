@@ -141,7 +141,11 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
             public void onTabSelected(TabLayout.Tab tab) {
                 vp_mostrar.setCurrentItem(tab.getPosition());
                 switch (tab.getPosition()){
+                    case 0:
+                        vp_mostrar.setVisibility(View.INVISIBLE);
+                        break;
                     default:
+                        vp_mostrar.setVisibility(View.VISIBLE);
                         pagerAdapter.notifyDataSetChanged();
                 }
             }

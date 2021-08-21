@@ -121,20 +121,18 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_below="@id/tl_v_opcion"
-        tools:ignore="SpeakableTextPresentCheck"></androidx.viewpager.widget.ViewPager>
+        android:visibility="invisible"
+        tools:ignore="SpeakableTextPresentCheck">
+
+    </androidx.viewpager.widget.ViewPager>
 
     <TextView
         android:id="@+id/tv_c_ficha"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="100dp"
         android:layout_alignParentBottom="true"
-        android:layout_gravity="bottom"
         android:background="#FFFFFF"
-        android:text="@string/tv_c_ficha"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:text="@string/tv_c_ficha" />
 
     <Button
         android:id="@+id/btn_c_alerta"
@@ -158,6 +156,7 @@
         android:layout_marginBottom="0dp">
 
     </FrameLayout>
+
 
     <FrameLayout
         android:id="@+id/fm_c_alerta"
