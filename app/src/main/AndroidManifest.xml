@@ -21,9 +21,14 @@
         <activity android:name=".ConfirmarCuenta"/>
         <activity android:name=".Log_in"/>
         <activity android:name=".BienvenidoActivity"/>
-        <activity android:name=".Principal" >
+        <activity android:name=".Principal"
+            android:label="@string/title_activity_principal_menu"
+            android:theme="@style/Theme.App_control.NoActionBar"/>
+        <activity
+            android:name=".PrincipalMenuActivity"
+            android:label="@string/title_activity_principal_menu"
+            android:theme="@style/Theme.App_control.NoActionBar"></activity>
 
-        </activity>
         <activity android:name=".RecuperarContra" />
         <activity android:name=".RegistroControl" />
 

@@ -3,12 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/drawable/border_set.xml" value="0.1" />
         <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/layout/activity_alerta2.xml" value="0.25" />
         <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/layout/activity_bienvenido.xml" value="0.1" />
         <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/layout/activity_log_in.xml" value="0.11413043478260869" />
         <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/layout/activity_principal.xml" value="0.22" />
         <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/layout/activity_registro_control.xml" value="0.11413043478260869" />
         <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/layout/alerta_fragment.xml" value="0.11413043478260869" />
+        <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/layout/content_principal_menu.xml" value="0.1" />
         <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/layout/fragment_alerta.xml" value="0.25" />
         <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/layout/fragment_alerta_asaltante.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/layout/fragment_alerta_asistencia.xml" value="0.20416666666666666" />
@@ -21,10 +23,18 @@
         <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/layout/fragment_blank.xml" value="0.11594202898550725" />
         <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/layout/fragment_blank1.xml" value="0.13333333333333333" />
         <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/layout/fragment_conductor.xml" value="0.11413043478260869" />
+        <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/layout/fragment_configuracion.xml" value="0.1" />
+        <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/layout/fragment_mensaje.xml" value="0.1" />
+        <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/layout/fragment_misviajes.xml" value="0.1" />
         <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/layout/fragment_primer.xml" value="0.19947916666666668" />
         <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/layout/fragment_segundo.xml" value="0.19947916666666668" />
         <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/layout/fragment_tercer.xml" value="0.25" />
         <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/layout/list_element.xml" value="0.13333333333333333" />
+        <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/layout/nav_header_principal_menu.xml" value="0.5" />
+        <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/menu/activity_main_drawer.xml" value="0.1" />
+        <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/menu/principal_menu.xml" value="0.1" />
+        <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/mipmap-anydpi-v26/ic_launcher_logo.xml" value="0.1" />
+        <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/mipmap-anydpi-v26/ic_launcher_logo_round.xml" value="0.1" />
       </map>
     </option>
   </component>
