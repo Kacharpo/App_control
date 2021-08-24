@@ -28,7 +28,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 public class Log_in extends AppCompatActivity {
-    private EditText et_usuario, et_contrasena;
+    private EditText et_usuario, et_contrasena,et1,et2;
     private TextView tv_recuperar;
 private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
@@ -41,6 +41,11 @@ private FirebaseAuth mAuth;
         et_usuario = (EditText)findViewById(R.id.txt_c_usr);
         et_contrasena = (EditText)findViewById(R.id.txt_c_pass);
         tv_recuperar = (TextView)findViewById(R.id.tv_c_recuperar);
+//habilitamos para que se pueda visualizar el action bar
+    getSupportActionBar().setDisplayShowHomeEnabled(true);
+    //Indicamos donde esta la imagen para el action bar
+    getSupportActionBar().setIcon(R.drawable.ic_launcher_foreground);
+    //emperejamos las variable con el xml editText usuario y password
 
         tv_recuperar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,7 +102,7 @@ private FirebaseAuth mAuth;
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             //FirebaseUser user = mAuth.getCurrentUser();
-                            Intent a = new Intent(getApplicationContext(), Principal.class);
+                            Intent a = new Intent(getApplicationContext(), PrincipalMenuActivity.class);
                             startActivity(a);
 //Iniciar DASHBOARD u otra actividad luego del SigIn Exitoso
                         } else {
@@ -144,7 +149,7 @@ private FirebaseAuth mAuth;
                 Cursor fila = db.rawQuery("select correo,contrasena from registro_control where id_control =" + i, null);
                 if (fila.moveToFirst()) {
                     if (usuario.equals(fila.getString(0)) && contrasena.equals(fila.getString(1))) {
-                        Intent a = new Intent(getApplicationContext(), Principal.class);
+                        Intent a = new Intent(getApplicationContext(), PrincipalMenuActivity.class);
                         startActivity(a);
                         b = true;
                         finish();
