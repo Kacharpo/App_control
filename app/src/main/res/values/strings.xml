@@ -65,6 +65,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     //Fragment
     <string name="tv_alertas">Alertas</string>
+    <string name="tv_calle1">Calle 1</string>
+    <string name="tv_calle2">Calle 2</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     //Barra

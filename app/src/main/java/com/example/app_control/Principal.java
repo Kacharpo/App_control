@@ -110,7 +110,7 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal);
 
-        at_ubicacion = (AutoCompleteTextView)findViewById(R.id.atxt_c_ubicacion);
+        at_ubicacion = (AutoCompleteTextView)findViewById(R.id.atxt_ca_calle1);
         at_destino = (AutoCompleteTextView)findViewById(R.id.atxt_c_destino);
 
         tv_ficha = (TextView)findViewById(R.id.tv_c_ficha);

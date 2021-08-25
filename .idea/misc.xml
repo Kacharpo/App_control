@@ -3,7 +3,18 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/drawable-anydpi-v24/ic_stat_asientorojo.xml" value="0.1" />
+        <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/drawable-anydpi-v24/ic_stat_asientoverde.xml" value="0.1" />
+        <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/drawable-mdpi/ic_launcher_background.xml" value="0.1" />
+        <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/drawable-mdpi/ic_launcher_foreground.xml" value="0.1" />
+        <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/drawable-v24/ic_launcher_round_foreground.xml" value="0.1" />
         <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/drawable/border_set.xml" value="0.1" />
+        <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/drawable/ic_launcher_background.xml" value="0.19166666666666668" />
+        <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.1" />
+        <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/drawable/ic_launcher_logo_background.xml" value="0.1" />
+        <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/drawable/ic_stat_mensajes.xml" value="0.1" />
+        <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/drawable/ic_stat_viajes.xml" value="0.1" />
+        <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/drawable/side_nav_bar.xml" value="0.1" />
         <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/layout/activity_alerta2.xml" value="0.25" />
         <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/layout/activity_bienvenido.xml" value="0.1" />
         <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/layout/activity_log_in.xml" value="0.11413043478260869" />
@@ -34,8 +45,9 @@
         <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/layout/fragment_tercer.xml" value="0.25" />
         <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/layout/list_element.xml" value="0.13333333333333333" />
         <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/layout/nav_header_principal_menu.xml" value="0.22" />
-        <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/menu/activity_main_drawer.xml" value="0.1" />
+        <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/menu/activity_main_drawer.xml" value="0.25" />
         <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/menu/principal_menu.xml" value="0.1" />
+        <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1" />
         <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/mipmap-anydpi-v26/ic_launcher_logo.xml" value="0.1" />
         <entry key="..\:/Users/tona2/StudioProjects/App_control/app/src/main/res/mipmap-anydpi-v26/ic_launcher_logo_round.xml" value="0.1" />
       </map>

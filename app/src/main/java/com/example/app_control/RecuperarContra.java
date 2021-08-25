@@ -73,7 +73,7 @@ public class RecuperarContra extends AppCompatActivity{
                                 sendEmailWithGmail(recipientEmail, recipientPassword, correo, subject, fila.getString(1));
                                 db.close();
                                 b = true;
-                                startActivity(aceptar);
+                                //startActivity(aceptar);
                             }else{
                                 db.close();
                             }

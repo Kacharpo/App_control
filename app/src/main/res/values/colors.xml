@@ -9,4 +9,6 @@
     <color name="colorAccent">#D81B60</color>
     <color name="colorBlancoTransparente">#CCCCCC</color>
     <color name="colorBlanco">#FFFFFF</color>
+    <color name="red">#F42F2F</color>
+    <color name="green">#F42F2F</color>
 </resources>
