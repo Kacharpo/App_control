@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:dist="http://schemas.android.com/apk/distribution"
+    package="com.example.app_control"
+    >
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.hardware.location.gps" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <dist:module dist:instant="true" />
+
+    <application
+        android:allowBackup="true"
+
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.App_control">
+        <activity android:name=".ConfirmarCuenta"/>
+        <activity android:name=".Log_in"/>
+        <activity android:name=".BienvenidoActivity"/>
+        <activity android:name=".Principal" >
+
+        </activity>
+        <activity
+            android:name=".PrincipalMenuActivity"
+            android:label="@string/title_activity_principal_menu"
+            android:theme="@style/Theme.App_control.NoActionBar"></activity>
+        <activity android:name=".RecuperarContra" />
+        <activity android:name=".RegistroControl" />
+
+        <activity android:name=".AlertaActivity" />
+        <activity android:name=".DisponibilidadActivity" />
+        <activity android:name=".Mensaje" />
+        <activity android:name=".Splash" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDc-RTZCRzOWBS8r2v30SndwK9CzYv3Tew" />
+    </application>
+
+</manifest>
