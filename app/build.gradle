@@ -4,8 +4,7 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.3"
+    compileSdk 30
 
     defaultConfig {
         applicationId "com.example.app_control"
@@ -49,7 +48,12 @@ android {
         implementation 'androidx.navigation:navigation-ui:2.3.5'
         implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'
         implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
+        implementation platform('com.google.firebase:firebase-bom:26.8.0')
+        //Realtime datbase
+
         testImplementation 'junit:junit:4.+'
+        implementation 'com.google.firebase:firebase-database:19.2.1'
+        implementation 'com.google.firebase:firebase-storage:19.1.1'
         androidTestImplementation 'androidx.test.ext:junit:1.1.2'
         androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     }

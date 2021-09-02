@@ -7,24 +7,24 @@
 
     <fragment
         android:id="@+id/principalFragment"
-        android:name="com.example.app_usuario.menu.PrincipalFragment"
+        android:name="com.example.app_control.menu.PrincipalFragment"
         android:label="Principal"
         tools:layout="@layout/fragment_principal" />
 
     <fragment
         android:id="@+id/viajesFragment"
-        android:name="com.example.app_usuario.menu.MisviajesFragment"
+        android:name="com.example.app_control.menu.MisviajesFragment"
         android:label="Mis viajes"
         tools:layout="@layout/fragment_misviajes" />
 
     <fragment
         android:id="@+id/configuracionFragment"
-        android:name="com.example.app_usuario.menu.ConfiguracionFragment"
+        android:name="com.example.app_control.menu.ConfiguracionFragment"
         android:label="Configuracion"
         tools:layout="@layout/fragment_configuracion" />
     <fragment
         android:id="@+id/mensajeFragment"
-        android:name="com.example.app_usuario.menu.MensajeFragment"
+        android:name="com.example.app_control.menu.MensajeFragment"
         android:label="Mensajes"
         tools:layout="@layout/fragment_mensaje" />
 </navigation>
