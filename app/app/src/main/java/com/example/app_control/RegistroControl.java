@@ -63,7 +63,7 @@ public class RegistroControl extends AppCompatActivity {
         et_confirmar = (EditText)findViewById(R.id.txt_c_confirmar);
         et_ruta = (EditText)findViewById(R.id.txt_c_ruta);
         et_licencia = (EditText)findViewById(R.id.txt_c_licencia);
-        img_control = (ImageView)findViewById(R.id.ContentDescription);
+        img_control = (ImageView)findViewById(R.id.img_perfil);
         btn_aceptar = (Button)findViewById(R.id.btn_c_aceptar);
         sp_tipo = (Spinner)findViewById(R.id.sp_c_tipo);
         rb_terminos = (RadioButton)findViewById(R.id.rb_c_terminos);

@@ -14,6 +14,7 @@ import  android.widget.Toast ;
 
 import androidx.annotation.NonNull;
 
+import com.example.app_control.Registro.RegistroControl;
 import com.example.app_control.utils.InputValidation;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;

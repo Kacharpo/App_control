@@ -28,7 +28,7 @@
             android:theme="@style/Theme.App_control.NoActionBar"></activity>
 
         <activity android:name=".RecuperarContra" />
-        <activity android:name=".RegistroControl" />
+        <activity android:name=".Registro.RegistroControl" />
 
         <activity android:name=".AlertaActivity" />
         <activity android:name=".DisponibilidadActivity" />

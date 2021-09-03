@@ -1,19 +1,16 @@
-package com.example.app_control;
+package com.example.app_control.Registro;
 
-import androidx.annotation.ColorInt;
-import androidx.annotation.RequiresApi;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -23,11 +20,18 @@ import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.app_control.AdminSQLiteOpenHelper;
+import com.example.app_control.ConfirmarCuenta;
+import com.example.app_control.R;
 import com.example.app_control.utils.InputValidation;
-import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
-import org.w3c.dom.Text;
-
+import java.io.File;
+import java.io.IOException;
 import java.util.Properties;
 import java.util.Random;
 
@@ -41,6 +45,15 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 public class RegistroControl extends AppCompatActivity {
+
+    //Crear variables
+    private String modelName;
+    StorageReference storageRef;
+    ProgressDialog progressDialog;
+
+    DaoRegistro dao;
+    boolean isLoading=false;
+    String key ="1";
 
     private Spinner sp_tipo;
     private EditText et_nombre, et_apellido, et_fecha,et_numero , et_correo, et_contrasena, et_confirmar, et_ruta, et_licencia;
@@ -63,7 +76,7 @@ public class RegistroControl extends AppCompatActivity {
         et_confirmar = (EditText)findViewById(R.id.txt_c_confirmar);
         et_ruta = (EditText)findViewById(R.id.txt_c_ruta);
         et_licencia = (EditText)findViewById(R.id.txt_c_licencia);
-        img_control = (ImageView)findViewById(R.id.ContentDescription);
+        img_control = (ImageView)findViewById(R.id.img_perfil);
         btn_aceptar = (Button)findViewById(R.id.btn_c_aceptar);
         sp_tipo = (Spinner)findViewById(R.id.sp_c_tipo);
         rb_terminos = (RadioButton)findViewById(R.id.rb_c_terminos);
@@ -123,18 +136,17 @@ public class RegistroControl extends AppCompatActivity {
                                     db.close();
                                 }
                                 if(!fila.moveToFirst()){
-                                    ContentValues registro = new ContentValues();
-                                    registro.put("id_control", i);
-                                    registro.put("nombre", nombre);
-                                    registro.put("apellido", apellido);
-                                    registro.put("fecha", fecha);
-                                    registro.put("numero", numero);
-                                    registro.put("correo", correo);
-                                    registro.put("contrasena", contrasena);
-                                    registro.put("ruta", ruta);
-                                    registro.put("licencia", licencia);
-                                    registro.put("tipo", tipo);
-                                    db.insert("registro_control", null, registro);
+                                    //Conexion con Firebase
+                                    RegistroConstructor emp = new RegistroConstructor(key,nombre, apellido, fecha,numero , correo, contrasena, ruta, licencia);
+
+                                    dao.add(emp).addOnSuccessListener(suc ->
+                                    {
+                                        Toast.makeText(getApplicationContext(), "Record is inserted", Toast.LENGTH_SHORT).show();
+                                    }).addOnFailureListener(er ->
+                                    {
+                                        Toast.makeText(getApplicationContext(), "" + er.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+
                                     Toast.makeText(getApplicationContext(), "Registro Exitoso", Toast.LENGTH_SHORT).show();
                                     sendEmailWithGmail(recipientEmail,recipientPassword, et_correo.getText().toString(),subject,message);
                                     b = true;
@@ -157,7 +169,39 @@ public class RegistroControl extends AppCompatActivity {
                 }
             }
         });
-
+        //Mensaje para cargar proceso
+        progressDialog = new ProgressDialog(RegistroControl.this);
+        progressDialog.setMessage("Fetching image...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        modelName = "Perfil.jpg";
+        //Conexion con Firebase Storage
+        FirebaseStorage mFirebaseStorage = FirebaseStorage.getInstance();
+        try{
+            storageRef = mFirebaseStorage.getReference("Imagen/"+modelName);
+            File localfile = File.createTempFile("tempfile",".jpg");
+            storageRef.getFile(localfile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    if(progressDialog.isShowing()){
+                        progressDialog.dismiss();
+                    }
+                    Bitmap bitmap = BitmapFactory.decodeFile(localfile.getAbsolutePath());
+                    //binding.imgLpWallpaper.setImageBitmap(bitmap);
+                    img_control.setImageBitmap(bitmap);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    if(progressDialog.isShowing()){
+                        progressDialog.dismiss();
+                    }
+                    Toast.makeText(getApplicationContext(), "Faileed", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }catch (IOException e){
+            e.printStackTrace();
+        }
 
     }
 
@@ -234,7 +278,7 @@ public class RegistroControl extends AppCompatActivity {
     }
 
     private void datos(){
-        Intent correo = new Intent(getApplicationContext(),ConfirmarCuenta.class);
+        Intent correo = new Intent(getApplicationContext(), ConfirmarCuenta.class);
         correo.putExtra("EmailTo",et_correo.getText().toString());
         correo.putExtra("Codigo",""+codigo);
         startActivity(correo);
