@@ -27,8 +27,6 @@ public class PagerController extends FragmentPagerAdapter {
             case 2:
                 return new Tiempo();
             case 3:
-                return new Conductor();
-            case 4:
                 return new Disponibilidad();
             default:
                 return null;

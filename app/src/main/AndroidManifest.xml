@@ -24,7 +24,13 @@
         <activity
             android:name=".PrincipalMenuActivity"
             android:label="@string/title_activity_principal_menu"
-            android:theme="@style/Theme.App_control.NoActionBar"></activity>
+            android:theme="@style/Theme.App_control.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <activity android:name=".RecuperarContra" />
         <activity android:name=".Registro.RegistroControl" />
@@ -33,11 +39,7 @@
         <activity android:name=".DisponibilidadActivity" />
         <activity android:name=".Mensaje" />
         <activity android:name=".Splash" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <meta-data
             android:name="com.google.android.geo.API_KEY"

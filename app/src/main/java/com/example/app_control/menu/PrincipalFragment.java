@@ -205,7 +205,6 @@ public class PrincipalFragment extends Fragment implements OnMapReadyCallback ,G
         ti_inicio = (TabItem)v.findViewById(R.id.ti_c_inicio);
         ti_final = (TabItem)v.findViewById(R.id.ti_c_final);
         ti_tiempo = (TabItem)v.findViewById(R.id.ti_c_tiempo);
-        ti_conductor = (TabItem)v.findViewById(R.id.ti_c_conductor);
         ti_disponibilidad = (TabItem)v.findViewById(R.id.ti_c_disponibilidad);
         sp_rutas = (Spinner)v.findViewById(R.id.sp_c_rutas);
         btn_alerta = (Button)v.findViewById(R.id.btn_c_alerta);
