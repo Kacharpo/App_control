@@ -1,6 +1,5 @@
 package com.example.app_control.Registro;
 
-import com.example.app_control.Merch.MerchConstructor;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;

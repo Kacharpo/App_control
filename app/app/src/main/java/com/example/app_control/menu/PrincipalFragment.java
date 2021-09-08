@@ -50,7 +50,6 @@ import com.example.app_control.Alertas.AlertaTrafico;
 import com.example.app_control.Blank;
 import com.example.app_control.Controlador.PagerController;
 import com.example.app_control.Fragmento;
-import com.example.app_control.Principal;
 import com.example.app_control.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;

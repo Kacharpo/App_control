@@ -50,11 +50,13 @@ android {
         implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
         implementation platform('com.google.firebase:firebase-bom:26.8.0')
         //Realtime datbase
-
+        implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
         testImplementation 'junit:junit:4.+'
-        implementation 'com.google.firebase:firebase-database:19.2.1'
-        implementation 'com.google.firebase:firebase-storage:19.1.1'
+        implementation 'com.google.firebase:firebase-database:20.0.1'
+        implementation 'com.google.firebase:firebase-storage:20.0.0'
         androidTestImplementation 'androidx.test.ext:junit:1.1.2'
         androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+        implementation 'com.firebaseui:firebase-ui-database:8.0.0'
+
     }
 }

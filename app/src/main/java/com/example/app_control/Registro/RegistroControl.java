@@ -5,8 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -20,7 +18,6 @@ import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.app_control.AdminSQLiteOpenHelper;
 import com.example.app_control.ConfirmarCuenta;
 import com.example.app_control.R;
 import com.example.app_control.utils.InputValidation;
@@ -51,8 +48,7 @@ public class RegistroControl extends AppCompatActivity {
     StorageReference storageRef;
     ProgressDialog progressDialog;
 
-    DaoRegistro dao;
-    boolean isLoading=false;
+    DaoRegistro dao = new DaoRegistro();
     String key ="1";
 
     private Spinner sp_tipo;
@@ -92,7 +88,7 @@ public class RegistroControl extends AppCompatActivity {
         final String subject = "Codigo de confrimacion";
         final String message = "Su codigo es: "+codigo;
 
-        AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this, "registro",null,1);
+        //AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this, "registro",null,1);
 
         btn_aceptar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,37 +119,19 @@ public class RegistroControl extends AppCompatActivity {
                 if (nombre_b && apellido_b && fecha_b && numero_b && correo_b && contrasena_b && confirmar_b && ruta_b && licencia_b && !tipo.equals("Tipo")) {
                     if (contrasena.equals(confirmar)) {
                         if (terminos == true) {
-                            boolean b = false;
-                            for(int i = 0;b == false;i++){
-                                SQLiteDatabase db = admin.getWritableDatabase();
-                                Cursor fila = db.rawQuery("select correo from registro_control where id_control ="+i,null);
-                                if(fila.moveToFirst()){
-                                    if(correo.equals(fila.getString(0))){
-                                        et_correo.setText("");
-                                        correo_b = InputValidation.isValidEditText(et_correo, "Correo registrado");
-                                        b=true;
-                                    }
-                                    db.close();
-                                }
-                                if(!fila.moveToFirst()){
-                                    //Conexion con Firebase
-                                    RegistroConstructor emp = new RegistroConstructor(key,nombre, apellido, fecha,numero , correo, contrasena, ruta, licencia);
+                            RegistroConstructor emp = new RegistroConstructor(key,nombre, apellido, fecha,numero , correo, contrasena, ruta, licencia);
+                            dao.add(emp).addOnSuccessListener(suc ->
+                            {
+                                Toast.makeText(getApplicationContext(), "Record is inserted", Toast.LENGTH_SHORT).show();
+                            }).addOnFailureListener(er ->
+                            {
+                                Toast.makeText(getApplicationContext(), "" + er.getMessage(), Toast.LENGTH_SHORT).show();
+                            });
 
-                                    dao.add(emp).addOnSuccessListener(suc ->
-                                    {
-                                        Toast.makeText(getApplicationContext(), "Record is inserted", Toast.LENGTH_SHORT).show();
-                                    }).addOnFailureListener(er ->
-                                    {
-                                        Toast.makeText(getApplicationContext(), "" + er.getMessage(), Toast.LENGTH_SHORT).show();
-                                    });
+                            Toast.makeText(getApplicationContext(), "Registro Exitoso", Toast.LENGTH_SHORT).show();
 
-                                    Toast.makeText(getApplicationContext(), "Registro Exitoso", Toast.LENGTH_SHORT).show();
-                                    sendEmailWithGmail(recipientEmail,recipientPassword, et_correo.getText().toString(),subject,message);
-                                    b = true;
-                                    datos();
-                                    db.close();
-                                }
-                            }
+                            sendEmailWithGmail(recipientEmail,recipientPassword, et_correo.getText().toString(),subject,message);
+                            datos();
                         } else {
                             Toast.makeText(getApplicationContext(), "Debes aceptar los terminos y condiciones", Toast.LENGTH_SHORT).show();
                         }

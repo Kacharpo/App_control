@@ -81,4 +81,8 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+    //Facebook
+    <string name="facebook_app_id">1577550875924576</string>
+    <string name="fb_login_protocol_scheme">fb269823724953921</string>
+
 </resources>

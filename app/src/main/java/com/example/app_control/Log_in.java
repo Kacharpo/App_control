@@ -1,21 +1,25 @@
 package  com.example.app_control ;
 
-import  androidx.appcompat.app.AppCompatActivity ;
-
-import  android.content.Intent ;
-import  android.database.Cursor ;
-import  android.database.sqlite.SQLiteDatabase ;
-import  android.os.Bundle ;
-import android.util.Log;
-import  android.view.View ;
-import  android.widget.EditText ;
-import android.widget.TextView;
-import  android.widget.Toast ;
-
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.app_control.Registro.RegistroControl;
 import com.example.app_control.utils.InputValidation;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -27,35 +31,38 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+
 
 public class Log_in extends AppCompatActivity {
-    private EditText et_usuario, et_contrasena,et1,et2;
-    private TextView tv_recuperar;
-private FirebaseAuth mAuth;
+    private EditText et_usuario, et_contrasena;
+    private CallbackManager callbackManager;
+    private LoginButton loginButton;
+    private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
     int RC_SIGN_IN = 1;
-    String TAG = "GoogleSignIn";    
-@Override
+    String TAG = "GoogleSignIn";
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
-        et_usuario = (EditText)findViewById(R.id.txt_c_usr);
-        et_contrasena = (EditText)findViewById(R.id.txt_c_pass);
-        tv_recuperar = (TextView)findViewById(R.id.tv_c_recuperar);
-//habilitamos para que se pueda visualizar el action bar
-    getSupportActionBar().setDisplayShowHomeEnabled(true);
-    //Indicamos donde esta la imagen para el action bar
-    getSupportActionBar().setIcon(R.drawable.ic_launcher_foreground);
-    //emperejamos las variable con el xml editText usuario y password
+        et_usuario = (EditText)findViewById(R.id.txt_usr);
+        et_contrasena = (EditText)findViewById(R.id.txt_pass);
 
-        tv_recuperar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                recuperar_contra();
-            }
-        });
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
+        if(isLoggedIn){
+            Toast toast1 =
+                    Toast.makeText(getApplicationContext(),
+                            "Sesion iniciada con facebook : "+accessToken, Toast.LENGTH_SHORT);
 
-	// Configurar Google Sign In
+            toast1.show();
+            Intent a = new Intent(getApplicationContext(), PrincipalMenuActivity.class);
+            startActivity(a);
+        }
+
+        // Configurar Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -66,10 +73,55 @@ private FirebaseAuth mAuth;
         // Inicializar Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
+        callbackManager = CallbackManager.Factory.create();
+
+
+        loginButton = (LoginButton) findViewById(R.id.login_button);
+        loginButton.setReadPermissions("email");
+
+        // Callback registration
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+
+                Toast toast1 =
+                        Toast.makeText(getApplicationContext(),
+                                "Log in exitoso !", Toast.LENGTH_SHORT);
+
+                toast1.show();
+                Intent a = new Intent(getApplicationContext(), PrincipalMenuActivity.class);
+                startActivity(a);
+
+            }
+
+            @Override
+            public void onCancel() {
+                Toast toast1 =
+                        Toast.makeText(getApplicationContext(),
+                                "Cancelado", Toast.LENGTH_SHORT);
+
+                toast1.show();
+            }
+
+            @Override
+            public void onError(FacebookException exception) {
+                Toast toast1 =
+                        Toast.makeText(getApplicationContext(),
+                                "Error : "+exception, Toast.LENGTH_SHORT);
+
+                toast1.show();
+                Log.d("debug ", "Error : "+exception);
+            }
+        });
+
     }
 
-@Override
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
         //Resultado devuelto al iniciar el Intent de GoogleSignInApi.getSignInIntent (...);
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
@@ -114,7 +166,8 @@ private FirebaseAuth mAuth;
                     }
                 });
     }
- public void Log_in_firebase(View view) {
+
+    public void Log_in_firebase(View view) {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         //Intent i = new Intent(mGoogleSignInClient.getApplicationContext(), Registro_conductor.class);
         //startActivity(i);
@@ -124,19 +177,20 @@ private FirebaseAuth mAuth;
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
+
     public void registro(View view){
         Intent i = new Intent(Log_in.this, RegistroControl.class);
         startActivity(i);
         finish();
     }
-    public void recuperar_contra(){
+    public void recuperar_contra(View view){
         Intent i = new Intent(Log_in.this, RecuperarContra.class);
         startActivity(i);
         finish();
     }
-
     public void ingresar(View view){
         AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this, "registro",null,1);
+        SQLiteDatabase db = admin.getWritableDatabase();
 
         String usuario = et_usuario.getText().toString();
         boolean usuario_b = InputValidation.isValidEditText(et_usuario, getString(R.string.field_is_required));
@@ -144,29 +198,22 @@ private FirebaseAuth mAuth;
         boolean contrasena_b = InputValidation.isValidEditText(et_contrasena, getString(R.string.field_is_required));
 
         if(usuario_b && contrasena_b){
-            boolean b = false;
-            for(int i = 0;b == false;i++) {
-                SQLiteDatabase db = admin.getWritableDatabase();
-                Cursor fila = db.rawQuery("select correo,contrasena from registro_control where id_control =" + i, null);
-                if (fila.moveToFirst()) {
-                    if (usuario.equals(fila.getString(0)) && contrasena.equals(fila.getString(1))) {
-                        Intent a = new Intent(getApplicationContext(), PrincipalMenuActivity.class);
-                        startActivity(a);
-                        b = true;
-                        finish();
-                    } else if(usuario.equals(fila.getString(0)) && !contrasena.equals(fila.getString(1))) {
-                        b = true;
-                        Toast.makeText(this, "Contraseña incorrecta", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    b = true;
-                    Toast.makeText(this, "Usuario incorrecto", Toast.LENGTH_SHORT).show();
+            Cursor fila = db.rawQuery
+                    ("select correo, contrasena from registro_control where correo = '"+usuario+"' and contrasena = '"+contrasena+"'" ,null);
+            if(fila.moveToFirst()) {
+                if(usuario.equals(fila.getString(0)) && contrasena.equals(fila.getString(1))){
+                    Intent i = new Intent(Log_in.this, PrincipalMenuActivity.class);
+                    startActivity(i);
+                    finish();
+                }else{
+                    Toast.makeText(this, "Usuario y/o Contraseña incorrectos", Toast.LENGTH_SHORT).show();
                 }
-                db.close();
+            }else {
+                Toast.makeText(this, "No exite el registro", Toast.LENGTH_SHORT).show();
             }
+            db.close();
         }else {
             Toast.makeText(this, "Debes llenar todos los campos", Toast.LENGTH_SHORT).show();
         }
     }
-
 }

@@ -50,7 +50,7 @@ import com.example.app_control.Alertas.AlertaTrafico;
 import com.example.app_control.Blank;
 import com.example.app_control.Controlador.PagerController;
 import com.example.app_control.Fragmento;
-import com.example.app_control.Principal;
+import com.example.app_control.PrincipalMenuActivity;
 import com.example.app_control.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -518,7 +518,7 @@ public class PrincipalFragment extends Fragment implements OnMapReadyCallback ,G
         //Permiso de localizacion
         int permissionCheck = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION);
         //Intent para cambio de Activity
-        Intent refresh = new Intent(getActivity().getApplicationContext(), Principal.class);
+        Intent refresh = new Intent(getActivity().getApplicationContext(), PrincipalMenuActivity.class);
         //Checar y pedir permiso
         if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
             Toast.makeText(getActivity().getApplicationContext(), "Permiso de ubicacion accedido", LENGTH_SHORT).show();
