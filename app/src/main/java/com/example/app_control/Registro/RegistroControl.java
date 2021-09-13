@@ -1,13 +1,16 @@
 package com.example.app_control.Registro;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -21,11 +24,15 @@ import android.widget.Toast;
 import com.example.app_control.ConfirmarCuenta;
 import com.example.app_control.R;
 import com.example.app_control.utils.InputValidation;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Properties;
 import java.util.Random;
 
@@ -56,13 +63,16 @@ public class RegistroControl extends AppCompatActivity {
     private int codigo = codigo(999999);
 
     Button btn_Camara,btn_Subir;
-    ImageView imgView;
     int foto = 0,n=0;
     StorageReference nStorage;
     int CAMARA_INTENT=1;
     int GALLERY_INTENT=2;
     String[] SUBIDAS = new String[100];
 
+    Thread reloj;
+    int seg = 0;
+    Handler h = new Handler();
+    boolean isOn = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,7 +93,6 @@ public class RegistroControl extends AppCompatActivity {
         rb_terminos = (RadioButton)findViewById(R.id.rb_c_terminos);
         btn_Camara = findViewById(R.id.btn_c_camara);
         btn_Subir = findViewById(R.id.btn_c_subir);
-        imgView = findViewById(R.id.img_perfil);
 
         String [] tipo = {"Tipo","Euroban", "Urban", "Combi"};
 
@@ -285,25 +294,63 @@ public class RegistroControl extends AppCompatActivity {
         if ((requestCode == CAMARA_INTENT && resultCode == RESULT_OK ) ) {
             Bundle extras = data.getExtras();
             Bitmap imgBitmap = (Bitmap) extras.get("data");
-            imgView.setImageBitmap(imgBitmap);
+            img_control.setImageBitmap(imgBitmap);
             foto = 1;
             Toast.makeText(getApplicationContext(), "Camara", Toast.LENGTH_SHORT).show();
         }
         if((requestCode == GALLERY_INTENT && resultCode == RESULT_OK )){
             Toast.makeText(getApplicationContext(), "SUbida", Toast.LENGTH_SHORT).show();
             Uri uri = data.getData();
-
-            StorageReference filePath = nStorage.child("Perfil").child(uri.getLastPathSegment());
+            modelName = ""+uri.getLastPathSegment()+".jpg";
+            StorageReference filePath = nStorage.child("Perfil").child(modelName);
 
             filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    SUBIDAS[n] = ""+uri.getLastPathSegment()+"";
+                    SUBIDAS[n] = modelName;
                     Toast.makeText(getApplicationContext(), "Imagen Subida "+ SUBIDAS[n]+"", Toast.LENGTH_SHORT).show();
-                    n++;
                     foto = 1;
                 }
             });
+
+            //Mensaje para cargar proceso
+            progressDialog = new ProgressDialog(RegistroControl.this);
+            progressDialog.setMessage("Fetching image...");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            //Conexion con Firebase Storage
+            FirebaseStorage mFirebaseStorage = FirebaseStorage.getInstance();
+            try{
+                storageRef = mFirebaseStorage.getReference("Perfil/"+modelName+"");
+                File localfile = File.createTempFile("tempfile",".jpg");
+                storageRef.getFile(localfile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                        if(progressDialog.isShowing()){
+                            progressDialog.dismiss();
+                        }
+                        Bitmap bitmap = BitmapFactory.decodeFile(localfile.getAbsolutePath());
+                        //binding.imgLpWallpaper.setImageBitmap(bitmap);
+                        img_control.setImageBitmap(bitmap);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        if(progressDialog.isShowing()){
+                            progressDialog.dismiss();
+                        }
+                        Toast.makeText(getApplicationContext(), "Faileed", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+            n++;
         }
     }
 
