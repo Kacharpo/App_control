@@ -2,15 +2,29 @@ package com.example.app_control.Registro;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -31,8 +45,13 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Properties;
 import java.util.Random;
 
@@ -44,6 +63,8 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+
+import kotlin.jvm.internal.Intrinsics;
 
 public class RegistroControl extends AppCompatActivity {
 
@@ -62,17 +83,24 @@ public class RegistroControl extends AppCompatActivity {
     private RadioButton rb_terminos;
     private int codigo = codigo(999999);
 
-    Button btn_Camara,btn_Subir;
+    CardView cv_Camara,cv_Subir;
     int foto = 0,n=0;
     StorageReference nStorage;
+    int INTENT = 0;
     int CAMARA_INTENT=1;
     int GALLERY_INTENT=2;
     String[] SUBIDAS = new String[100];
+    Uri uri;
+    StorageReference filePath;
+    int PCAMARA =100;
+    int TAKE = 101;
+    int WRITE = 200;
+    Bitmap imgBitmap;
+    private Bitmap bitmap;
+    private Uri photo;
+    Intent var1;
 
-    Thread reloj;
-    int seg = 0;
-    Handler h = new Handler();
-    boolean isOn = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,8 +119,8 @@ public class RegistroControl extends AppCompatActivity {
         btn_aceptar = (Button)findViewById(R.id.btn_c_aceptar);
         sp_tipo = (Spinner)findViewById(R.id.sp_c_tipo);
         rb_terminos = (RadioButton)findViewById(R.id.rb_c_terminos);
-        btn_Camara = findViewById(R.id.btn_c_camara);
-        btn_Subir = findViewById(R.id.btn_c_subir);
+        cv_Camara = findViewById(R.id.cv_c_c);
+        cv_Subir = findViewById(R.id.cv_c_s);
 
         String [] tipo = {"Tipo","Euroban", "Urban", "Combi"};
 
@@ -150,6 +178,15 @@ public class RegistroControl extends AppCompatActivity {
                                 for(int i=0;i<n;i++){
                                     Toast.makeText(getApplicationContext(), ""+SUBIDAS[i]+"", Toast.LENGTH_SHORT).show();
                                 }
+                                if(INTENT==CAMARA_INTENT){
+                                    Toast.makeText(getApplicationContext(), "Subida Camara", Toast.LENGTH_SHORT).show();
+                                    filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                        @Override
+                                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                            Toast.makeText(getApplicationContext(), "Imagen Subida "+ modelName+"", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
                                 sendEmailWithGmail(recipientEmail,recipientPassword, et_correo.getText().toString(),subject,message);
                                 datos();
                             }else{
@@ -171,21 +208,28 @@ public class RegistroControl extends AppCompatActivity {
             }
         });
 
-        btn_Camara.setOnClickListener(new View.OnClickListener() {
+        cv_Camara.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                abrirCamara();
+
+               checkPermissionCamera();
             }
+
         });
 
-        btn_Subir.setOnClickListener(new View.OnClickListener() {
+        cv_Subir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 abrirAlbum();
             }
         });
 
+        if(ActivityCompat.checkSelfPermission(this,Manifest.permission.CAMERA)==PackageManager.PERMISSION_DENIED){
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.CAMERA},PCAMARA);
+        }
+
         nStorage = FirebaseStorage.getInstance().getReference();
+        img_control.setImageResource(R.drawable.perfil);
     }
 
     private void sendEmailWithGmail(final String recipientEmail, final String recipientPassword,
@@ -276,9 +320,18 @@ public class RegistroControl extends AppCompatActivity {
     }
 
     private void abrirCamara(){
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if(intent.resolveActivity(getPackageManager()) != null){
-            startActivityForResult(intent,CAMARA_INTENT);
+        var1 = new Intent("android.media.action.IMAGE_CAPTURE");
+        boolean var2 = false;
+        boolean var3 = false;
+        boolean var5 = false;
+        this.photo = this.takeAndSavePicture();
+
+        if (var1.resolveActivity(this.getPackageManager()) != null) {
+            boolean var7 = false;
+            boolean var8 = false;
+            boolean var10 = false;
+            var1.putExtra("output", (Parcelable)this.photo);
+            this.startActivityForResult(var1, CAMARA_INTENT);
         }
 
     }
@@ -292,17 +345,22 @@ public class RegistroControl extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if ((requestCode == CAMARA_INTENT && resultCode == RESULT_OK ) ) {
-            Bundle extras = data.getExtras();
-            Bitmap imgBitmap = (Bitmap) extras.get("data");
-            img_control.setImageBitmap(imgBitmap);
-            foto = 1;
-            Toast.makeText(getApplicationContext(), "Camara", Toast.LENGTH_SHORT).show();
+            if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+
+                imgBitmap = BitmapFactory.decodeFile(modelName);
+                img_control.setImageBitmap(imgBitmap);
+                foto = 1;
+                Toast.makeText(getApplicationContext(), "Camara 28", Toast.LENGTH_SHORT).show();
+                INTENT=CAMARA_INTENT;
+            }else {
+                abrirAlbum();
+            }
         }
-        if((requestCode == GALLERY_INTENT && resultCode == RESULT_OK )){
+            if((requestCode == GALLERY_INTENT && resultCode == RESULT_OK )){
             Toast.makeText(getApplicationContext(), "SUbida", Toast.LENGTH_SHORT).show();
-            Uri uri = data.getData();
+            uri = data.getData();
             modelName = ""+uri.getLastPathSegment()+".jpg";
-            StorageReference filePath = nStorage.child("Perfil").child(modelName);
+            filePath = nStorage.child("Perfil").child(modelName);
 
             filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
@@ -319,7 +377,7 @@ public class RegistroControl extends AppCompatActivity {
             progressDialog.setCancelable(false);
             progressDialog.show();
             try {
-                Thread.sleep(1000);
+                Thread.sleep(2000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -351,7 +409,147 @@ public class RegistroControl extends AppCompatActivity {
                 e.printStackTrace();
             }
             n++;
+            INTENT=GALLERY_INTENT;
         }
+    }
+
+    private File createImage() throws IOException{
+        File imagen=null;
+        if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+            String nombre = "foto_";
+            File directorio = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+            imagen = File.createTempFile(nombre,".jpg",directorio);
+            modelName=imagen.getAbsolutePath();
+        }
+        return imagen;
+    }
+
+    private final Uri takeAndSavePicture() {
+        OutputStream fos = (OutputStream)null;
+        File file = (File)null;
+        Uri uri = (Uri)null;
+        String fileName;
+        boolean var9;
+        if (Build.VERSION.SDK_INT >= 29) {
+            ContentResolver resolver = this.getContentResolver();
+            fileName = System.currentTimeMillis() + "Image_Example";
+            ContentValues var7 = new ContentValues();
+            boolean var8 = false;
+            var9 = false;
+            boolean var11 = false;
+            var7.put("_display_name", fileName);
+            var7.put("mime_type", "image/jpeg");
+            var7.put("relative_path", "Pictures/MyApp");
+            var7.put("is_pending", 1);
+            uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, var7);
+
+            try {
+                OutputStream var10000;
+                if (uri != null) {
+                    var8 = false;
+                    var9 = false;
+                    var11 = false;
+                    var10000 = resolver.openOutputStream(uri);
+                } else {
+                    var10000 = null;
+                }
+
+                fos = var10000;
+            } catch (FileNotFoundException var14) {
+                var14.printStackTrace();
+            }
+
+            var7.clear();
+            var7.put("is_pending", 0);
+            if (uri != null) {
+                resolver.update(uri, var7, (String)null, (String[])null);
+            }
+        } else {
+            String imageDir = String.valueOf(this.getExternalFilesDir(Environment.DIRECTORY_PICTURES));
+            fileName = System.currentTimeMillis() + ".jpg";
+            file = new File(imageDir, fileName);
+
+            try {
+                fos = (OutputStream)(new FileOutputStream(file));
+            } catch (FileNotFoundException var13) {
+                var13.printStackTrace();
+            }
+        }
+
+        boolean var19;
+        label60: {
+            Bitmap var18 = this.bitmap;
+            if (var18 != null) {
+                if (var18.compress(Bitmap.CompressFormat.JPEG, 100, fos)) {
+                    var19 = true;
+                    break label60;
+                }
+            }
+            var19 = false;
+        }
+
+        boolean save = var19;
+        if (save) {
+            Toast.makeText(getApplicationContext(), "Picture save successfully", Toast.LENGTH_SHORT).show();        }
+
+        if (fos != null) {
+            boolean var6 = false;
+            boolean var17 = false;
+            var9 = false;
+            try {
+                fos.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (fos != null) {
+            try {
+                fos.flush();
+                fos.close();
+            } catch (IOException var12) {
+                var12.printStackTrace();
+            }
+        }
+
+        if (file != null) {
+            MediaScannerConnection.scanFile((Context)this, new String[]{file.toString()}, (String[])null, (MediaScannerConnection.OnScanCompletedListener)null);
+        }
+
+        return uri;
+    }
+
+    private final void checkPermissionCamera() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (ContextCompat.checkSelfPermission((Context)this, "android.permission.CAMERA") != 0) {
+                ActivityCompat.requestPermissions((Activity)this, new String[]{"android.permission.CAMERA"}, 100);
+            } else {
+                abrirCamara();
+            }
+        } else {
+            abrirCamara();
+        }
+
+    }
+
+    public void onRequestPermissionsResult(int requestCode, @NotNull String[] permissions, @NotNull int[] grantResults) {
+        Intrinsics.checkNotNullParameter(permissions, "permissions");
+        Intrinsics.checkNotNullParameter(grantResults, "grantResults");
+        if (requestCode == 100) {
+            boolean var5 = false;
+            boolean var7 = false;
+            if (grantResults.length != 0 && grantResults[0] == 0) {
+                //this.abrirCamara();
+            } else {
+                Toast.makeText(getApplicationContext(), "Camera Permission is Required to Use camera.", Toast.LENGTH_SHORT).show();            }
+        }
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
 }
