@@ -93,8 +93,6 @@ public class RegistroControl extends AppCompatActivity {
     Uri uri;
     StorageReference filePath;
     int PCAMARA =100;
-    int TAKE = 101;
-    int WRITE = 200;
     Bitmap imgBitmap;
     private Bitmap bitmap;
     private Uri photo;
@@ -321,16 +319,10 @@ public class RegistroControl extends AppCompatActivity {
 
     private void abrirCamara(){
         var1 = new Intent("android.media.action.IMAGE_CAPTURE");
-        boolean var2 = false;
-        boolean var3 = false;
-        boolean var5 = false;
-        this.photo = this.takeAndSavePicture();
+        photo = takeAndSavePicture();
 
         if (var1.resolveActivity(this.getPackageManager()) != null) {
-            boolean var7 = false;
-            boolean var8 = false;
-            boolean var10 = false;
-            var1.putExtra("output", (Parcelable)this.photo);
+            var1.putExtra("output", (Parcelable)photo);
             this.startActivityForResult(var1, CAMARA_INTENT);
         }
 
@@ -425,30 +417,23 @@ public class RegistroControl extends AppCompatActivity {
     }
 
     private final Uri takeAndSavePicture() {
-        OutputStream fos = (OutputStream)null;
-        File file = (File)null;
-        Uri uri = (Uri)null;
+        OutputStream fos = null;
+        File file = null;
+        Uri uri = null;
         String fileName;
-        boolean var9;
         if (Build.VERSION.SDK_INT >= 29) {
             ContentResolver resolver = this.getContentResolver();
-            fileName = System.currentTimeMillis() + "Image_Example";
+            fileName = "Image_Profile"+System.currentTimeMillis() ;
             ContentValues var7 = new ContentValues();
-            boolean var8 = false;
-            var9 = false;
-            boolean var11 = false;
             var7.put("_display_name", fileName);
             var7.put("mime_type", "image/jpeg");
-            var7.put("relative_path", "Pictures/MyApp");
+            var7.put("relative_path", "Pictures/");
             var7.put("is_pending", 1);
             uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, var7);
 
             try {
                 OutputStream var10000;
                 if (uri != null) {
-                    var8 = false;
-                    var9 = false;
-                    var11 = false;
                     var10000 = resolver.openOutputStream(uri);
                 } else {
                     var10000 = null;
@@ -493,9 +478,6 @@ public class RegistroControl extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Picture save successfully", Toast.LENGTH_SHORT).show();        }
 
         if (fos != null) {
-            boolean var6 = false;
-            boolean var17 = false;
-            var9 = false;
             try {
                 fos.flush();
             } catch (IOException e) {
@@ -541,8 +523,6 @@ public class RegistroControl extends AppCompatActivity {
         Intrinsics.checkNotNullParameter(permissions, "permissions");
         Intrinsics.checkNotNullParameter(grantResults, "grantResults");
         if (requestCode == 100) {
-            boolean var5 = false;
-            boolean var7 = false;
             if (grantResults.length != 0 && grantResults[0] == 0) {
                 //this.abrirCamara();
             } else {
