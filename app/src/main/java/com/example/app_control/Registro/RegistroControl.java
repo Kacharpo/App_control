@@ -337,7 +337,7 @@ public class RegistroControl extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if ((requestCode == CAMARA_INTENT && resultCode == RESULT_OK ) ) {
-            if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+            /*if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
 
                 imgBitmap = BitmapFactory.decodeFile(modelName);
                 img_control.setImageBitmap(imgBitmap);
@@ -345,8 +345,9 @@ public class RegistroControl extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Camara 28", Toast.LENGTH_SHORT).show();
                 INTENT=CAMARA_INTENT;
             }else {
-                abrirAlbum();
-            }
+
+            } Uri */
+            abrirAlbum();
         }
             if((requestCode == GALLERY_INTENT && resultCode == RESULT_OK )){
             Toast.makeText(getApplicationContext(), "SUbida", Toast.LENGTH_SHORT).show();
