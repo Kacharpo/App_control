@@ -97,7 +97,7 @@ public class RegistroControl extends AppCompatActivity {
     private Bitmap bitmap;
     private Uri photo;
     Intent var1;
-
+    String fileName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -211,6 +211,7 @@ public class RegistroControl extends AppCompatActivity {
             public void onClick(View view) {
 
                checkPermissionCamera();
+
             }
 
         });
@@ -337,17 +338,57 @@ public class RegistroControl extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if ((requestCode == CAMARA_INTENT && resultCode == RESULT_OK ) ) {
-            /*if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+           // if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+            //Bundle extras = data.getExtras();
+                // imgBitmap = (Bitmap) extras.get("data") ;
 
-                imgBitmap = BitmapFactory.decodeFile(modelName);
-                img_control.setImageBitmap(imgBitmap);
-                foto = 1;
-                Toast.makeText(getApplicationContext(), "Camara 28", Toast.LENGTH_SHORT).show();
-                INTENT=CAMARA_INTENT;
-            }else {
+            filePath = nStorage.child("Perfil").child(fileName);
 
-            } Uri */
-            abrirAlbum();
+            filePath.putFile(photo).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    SUBIDAS[n] = fileName;
+                    Toast.makeText(getApplicationContext(), "Imagen Subida "+ SUBIDAS[n]+"", Toast.LENGTH_SHORT).show();
+                    foto = 1;
+                }
+            });
+
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            //Conexion con Firebase Storage
+            FirebaseStorage mFirebaseStorage = FirebaseStorage.getInstance();
+            try{
+                storageRef = mFirebaseStorage.getReference("Perfil/"+fileName+"");
+                File localfile = File.createTempFile("tempfile",".jpg");
+                storageRef.getFile(localfile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+
+                        Bitmap bitmap = BitmapFactory.decodeFile(localfile.getAbsolutePath());
+                        //binding.imgLpWallpaper.setImageBitmap(bitmap);
+                        img_control.setImageBitmap(bitmap);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                        Toast.makeText(getApplicationContext(), "Faileed", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+            n++;
+            INTENT=CAMARA_INTENT;
+
+            // }else {
+
+           // } Uri
+          //  abrirAlbum();
+
         }
             if((requestCode == GALLERY_INTENT && resultCode == RESULT_OK )){
             Toast.makeText(getApplicationContext(), "SUbida", Toast.LENGTH_SHORT).show();
@@ -421,10 +462,10 @@ public class RegistroControl extends AppCompatActivity {
         OutputStream fos = null;
         File file = null;
         Uri uri = null;
-        String fileName;
+
         if (Build.VERSION.SDK_INT >= 29) {
             ContentResolver resolver = this.getContentResolver();
-            fileName = "Image_Profile"+System.currentTimeMillis() ;
+            fileName = "Image_Profile"+System.currentTimeMillis() +".jpg";
             ContentValues var7 = new ContentValues();
             var7.put("_display_name", fileName);
             var7.put("mime_type", "image/jpeg");
