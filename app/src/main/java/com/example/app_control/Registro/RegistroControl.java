@@ -26,6 +26,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -38,8 +39,12 @@ import android.widget.Toast;
 import com.example.app_control.ConfirmarCuenta;
 import com.example.app_control.R;
 import com.example.app_control.utils.InputValidation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -98,6 +103,7 @@ public class RegistroControl extends AppCompatActivity {
     private Uri photo;
     Intent var1;
     String fileName;
+    FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,6 +169,7 @@ public class RegistroControl extends AppCompatActivity {
                     if (contrasena.equals(confirmar)) {
                         if (terminos == true) {
                             if(foto==1){
+
                                 RegistroConstructor emp = new RegistroConstructor(key,nombre, apellido, fecha,numero , correo, contrasena, ruta, licencia);
                                 dao.add(emp).addOnSuccessListener(suc ->
                                 {
@@ -178,15 +185,17 @@ public class RegistroControl extends AppCompatActivity {
                                 }
                                 if(INTENT==CAMARA_INTENT){
                                     Toast.makeText(getApplicationContext(), "Subida Camara", Toast.LENGTH_SHORT).show();
-                                    filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                    filePath.putFile(photo).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                         @Override
                                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                            Toast.makeText(getApplicationContext(), "Imagen Subida "+ modelName+"", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getApplicationContext(), "Imagen Subida "+ fileName+"", Toast.LENGTH_SHORT).show();
                                         }
                                     });
                                 }
+                                createUser();
                                 sendEmailWithGmail(recipientEmail,recipientPassword, et_correo.getText().toString(),subject,message);
                                 datos();
+
                             }else{
                                 Toast.makeText(getApplicationContext(), "Debes tomarte una foto", Toast.LENGTH_SHORT).show();
                             }
@@ -227,8 +236,28 @@ public class RegistroControl extends AppCompatActivity {
             ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.CAMERA},PCAMARA);
         }
 
+        mAuth = FirebaseAuth.getInstance();
+
+
         nStorage = FirebaseStorage.getInstance().getReference();
         img_control.setImageResource(R.drawable.perfil);
+    }
+
+    private void createUser(){
+        String email = et_correo.getText().toString();
+        String password = et_contrasena.getText().toString();
+
+        mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()){
+                    Toast.makeText(getApplicationContext(), "User registered successfully", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(getApplicationContext(), "Registration Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
     }
 
     private void sendEmailWithGmail(final String recipientEmail, final String recipientPassword,
@@ -341,6 +370,11 @@ public class RegistroControl extends AppCompatActivity {
            // if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
             //Bundle extras = data.getExtras();
                 // imgBitmap = (Bitmap) extras.get("data") ;
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
             filePath = nStorage.child("Perfil").child(fileName);
 
@@ -382,7 +416,7 @@ public class RegistroControl extends AppCompatActivity {
                 e.printStackTrace();
             }
             n++;
-            INTENT=CAMARA_INTENT;
+            //INTENT=CAMARA_INTENT;
 
             // }else {
 

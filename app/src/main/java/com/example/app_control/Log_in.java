@@ -7,11 +7,14 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.app_control.Registro.DaoRegistro;
+import com.example.app_control.Registro.RegistroConstructor;
 import com.example.app_control.Registro.RegistroControl;
 import com.example.app_control.utils.InputValidation;
 import com.facebook.AccessToken;
@@ -33,16 +36,29 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.util.ArrayList;
 
 
 public class Log_in extends AppCompatActivity {
     private EditText et_usuario, et_contrasena;
     private CallbackManager callbackManager;
     private LoginButton loginButton;
-    private FirebaseAuth mAuth;
+    private FirebaseAuth mAuth,nAuth;
     private GoogleSignInClient mGoogleSignInClient;
     int RC_SIGN_IN = 1;
     String TAG = "GoogleSignIn";
+    DatabaseReference nDatabase;
+    DaoRegistro dao;
+    String key =null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +93,6 @@ public class Log_in extends AppCompatActivity {
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
         callbackManager = CallbackManager.Factory.create();
-
 
         loginButton = (LoginButton) findViewById(R.id.login_button);
         loginButton.setReadPermissions("email");
@@ -117,6 +132,53 @@ public class Log_in extends AppCompatActivity {
             }
         });
 
+        nAuth = FirebaseAuth.getInstance();
+
+        dao = new DaoRegistro();
+
+        nDatabase = FirebaseDatabase.getInstance().getReference();
+
+        nDatabase.child("Persona").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    String correo = snapshot.child("Correo").getValue().toString();
+                    String contrasena = snapshot.child("Contrasena").getValue().toString();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
+    private void loadData()
+    {
+
+        dao.get(key).addListenerForSingleValueEvent(new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot)
+            {
+                ArrayList<RegistroConstructor> emps = new ArrayList<>();
+                for (DataSnapshot data : snapshot.getChildren())
+                {
+                    RegistroConstructor emp = data.getValue(RegistroConstructor.class);
+                    emp.setKey(data.getKey());
+                    emps.add(emp);
+                    key = data.getKey();
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error)
+            {
+            }
+        });
     }
 
     @Override
@@ -214,6 +276,32 @@ public class Log_in extends AppCompatActivity {
             db.close();
         }else {
             Toast.makeText(this, "Debes llenar todos los campos", Toast.LENGTH_SHORT).show();
+        }
+
+        loginUser();
+    }
+    private void loginUser() {
+        String email = et_usuario.getText().toString();
+        String password = et_contrasena.getText().toString();
+
+        if (TextUtils.isEmpty(email)) {
+            et_usuario.setError("Email cannot be empty");
+            et_usuario.requestFocus();
+        } else if (TextUtils.isEmpty(password)) {
+            et_contrasena.setError("Password cannot be empty");
+            et_contrasena.requestFocus();
+        } else {
+            nAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(getApplicationContext(), "User logged in successfully", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(Log_in.this, PrincipalMenuActivity.class));
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Log in Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
         }
     }
 }
