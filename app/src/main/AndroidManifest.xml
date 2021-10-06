@@ -13,7 +13,6 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
-
     <dist:module dist:instant="true" />
 
     <application
@@ -23,10 +22,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.App_control" >
-        <meta-data
-            android:name="com.google.android.actions"
-            android:resource="@xml/file_paths" />
-
+        <activity android:name=".Validacion_telefono">
+        </activity>
+        <activity android:name=".ChatActivity"></activity>
+        <activity android:name=".Registro.Aviso_privacidad" />
         <activity android:name=".ConfirmarCuenta" />
         <activity android:name=".Log_in" />
         <activity android:name=".BienvenidoActivity" />
@@ -36,16 +35,6 @@
             android:theme="@style/Theme.App_control.NoActionBar" >
         </activity>
         <activity android:name=".RecuperarContra" />
-
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="com.example.app_control.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true" >
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
-        </provider>
 
         <activity android:name=".Registro.RegistroControl" />
         <activity android:name=".AlertaActivity" />

@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Validacion_telefono">
+
+
+
+    <TextView
+        android:id="@+id/tv_c_bienvenido"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="Validación de número de teléfono"
+        android:textColor="#000000"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tv_telefono"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_c_bienvenido"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="Ingresa el  número de telefono al que se enviara el código" />
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txt_telefono_l"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_telefono"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="18dp"
+        android:ems="10">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txt_telefono"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:gravity="center"
+            android:inputType="phone"
+            tools:ignore="SpeakableTextPresentCheck" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/btn_enviar_codigo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txt_telefono_l"
+        android:layout_marginTop="16dp"
+        android:onClick="requestCode"
+        android:text="Enviar código"
+        app:cornerRadius="10dp"
+        tools:ignore="TextContrastCheck" />
+
+    <TextView
+        android:id="@+id/tv_c_ingresa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btn_enviar_codigo"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="Ingresa el código que se te envió a tu número" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txt_c_codigo1_l"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_c_ingresa"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="16dp"
+        android:ems="10">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txt_c_codigo1"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:gravity="center"
+            android:inputType="number"
+            tools:ignore="SpeakableTextPresentCheck" />
+    </com.google.android.material.textfield.TextInputLayout>
+    <Button
+        android:id="@+id/btn_validar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txt_c_codigo1_l"
+        android:layout_marginTop="16dp"
+        android:onClick="signIn"
+        android:text="Validar"
+        app:cornerRadius="10dp"
+        tools:ignore="TextContrastCheck" />
+
+    <!---<com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txt_c_codigo2_l"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_c_ingresa"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="16.5dp"
+        android:ems="10">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txt_c_codigo2"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="1"
+            tools:ignore="SpeakableTextPresentCheck" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txt_c_codigo3_l"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_c_ingresa"
+        android:layout_marginStart="130dp"
+        android:layout_marginTop="17dp"
+        android:ems="10">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txt_c_codigo3"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="1"
+            tools:ignore="SpeakableTextPresentCheck" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txt_c_codigo4_l"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_c_ingresa"
+        android:layout_marginStart="190dp"
+        android:layout_marginTop="17.5dp"
+        android:ems="10">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txt_c_codigo4"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="1"
+            tools:ignore="SpeakableTextPresentCheck" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txt_c_codigo5_l"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_c_ingresa"
+        android:layout_marginStart="250dp"
+        android:layout_marginTop="18dp"
+        android:ems="10">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txt_c_codigo5"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="1"
+            tools:ignore="SpeakableTextPresentCheck" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txt_c_codigo6_l"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_c_ingresa"
+        android:layout_marginStart="310dp"
+        android:layout_marginTop="18.5dp"
+        android:ems="10">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txt_c_codigo6"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="1"
+            tools:ignore="SpeakableTextPresentCheck" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+
+    <TextView
+        android:id="@+id/tv_c_intentos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btn_validar"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="@string/tv_c_intentos" />-->
+
+
+</RelativeLayout>

@@ -104,6 +104,7 @@ public class RegistroControl extends AppCompatActivity {
     Intent var1;
     String fileName;
     FirebaseAuth mAuth;
+    String error="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,48 +168,73 @@ public class RegistroControl extends AppCompatActivity {
 
                 if (nombre_b && apellido_b && fecha_b && numero_b && correo_b && contrasena_b && confirmar_b && ruta_b && licencia_b && !tipo.equals("Tipo") ) {
                     if (contrasena.equals(confirmar)) {
-                        if (terminos == true) {
-                            if(foto==1){
+                        if (contrasena.length()>=6) {
+                            if (terminos == true) {
+                                if(foto==1){
+                                    //createUser();
+                                    String email = et_correo.getText().toString();
+                                    String password = et_contrasena.getText().toString();
 
-                                RegistroConstructor emp = new RegistroConstructor(key,nombre, apellido, fecha,numero , correo, contrasena, ruta, licencia);
-                                dao.add(emp).addOnSuccessListener(suc ->
-                                {
-                                    Toast.makeText(getApplicationContext(), "Record is inserted", Toast.LENGTH_SHORT).show();
-                                }).addOnFailureListener(er ->
-                                {
-                                    Toast.makeText(getApplicationContext(), "" + er.getMessage(), Toast.LENGTH_SHORT).show();
-                                });
-                                //Eliminar archivos basura
-                                Toast.makeText(getApplicationContext(), "Registro Exitoso", Toast.LENGTH_SHORT).show();
-                                for(int i=0;i<n;i++){
-                                    Toast.makeText(getApplicationContext(), ""+SUBIDAS[i]+"", Toast.LENGTH_SHORT).show();
-                                }
-                                if(INTENT==CAMARA_INTENT){
-                                    Toast.makeText(getApplicationContext(), "Subida Camara", Toast.LENGTH_SHORT).show();
-                                    filePath.putFile(photo).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                    mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                         @Override
-                                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                            Toast.makeText(getApplicationContext(), "Imagen Subida "+ fileName+"", Toast.LENGTH_SHORT).show();
+                                        public void onComplete(@NonNull Task<AuthResult> task) {
+                                            if (task.isSuccessful()){
+                                                Toast.makeText(getApplicationContext(), "User registered successfully", Toast.LENGTH_SHORT).show();
+                                                RegistroConstructor emp = new RegistroConstructor(key,nombre, apellido, fecha,numero , correo, contrasena, ruta, licencia);
+                                                dao.add(emp).addOnSuccessListener(suc ->
+                                                {
+                                                    Toast.makeText(getApplicationContext(), "Record is inserted", Toast.LENGTH_SHORT).show();
+                                                }).addOnFailureListener(er ->
+                                                {
+                                                    Toast.makeText(getApplicationContext(), "" + er.getMessage(), Toast.LENGTH_SHORT).show();
+                                                });
+                                                //Eliminar archivos basura
+                                                Toast.makeText(getApplicationContext(), "Registro Exitoso", Toast.LENGTH_SHORT).show();
+                                                for(int i=0;i<n;i++){
+                                                    Toast.makeText(getApplicationContext(), ""+SUBIDAS[i]+"", Toast.LENGTH_SHORT).show();
+                                                }
+                                                if(INTENT==CAMARA_INTENT){
+                                                    Toast.makeText(getApplicationContext(), "Subida Camara", Toast.LENGTH_SHORT).show();
+                                                    filePath.putFile(photo).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                                        @Override
+                                                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                                            Toast.makeText(getApplicationContext(), "Imagen Subida "+ fileName+"", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
+                                                }
+
+                                                sendEmailWithGmail(recipientEmail,recipientPassword, et_correo.getText().toString(),subject,message);
+                                                datos();
+                                            }else{
+                                                et_correo.setText("");
+                                                error = ""+task.getException().getMessage();
+                                                Toast.makeText(getApplicationContext(), "Registration Error:-" +error+"-", Toast.LENGTH_SHORT).show();
+
+                                            }
                                         }
                                     });
+                                    correo_b = InputValidation.isValidEditText(et_correo, "!");
+                                }else{
+                                    Toast.makeText(getApplicationContext(), "Debes tomarte una foto", Toast.LENGTH_SHORT).show();
                                 }
-                                createUser();
-                                sendEmailWithGmail(recipientEmail,recipientPassword, et_correo.getText().toString(),subject,message);
-                                datos();
-
-                            }else{
-                                Toast.makeText(getApplicationContext(), "Debes tomarte una foto", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Debes aceptar los terminos y condiciones", Toast.LENGTH_SHORT).show();
                             }
                         } else {
-                            Toast.makeText(getApplicationContext(), "Debes aceptar los terminos y condiciones", Toast.LENGTH_SHORT).show();
+                            et_contrasena.setText("");
+                            contrasena_b = InputValidation.isValidEditText(et_contrasena, "!");
+                            et_confirmar.setText("");
+                            confirmar_b = InputValidation.isValidEditText(et_confirmar, "!");
+                            Toast.makeText(getApplicationContext(), "La contrseña debe tener 6 o mas caracteres", Toast.LENGTH_SHORT).show();
                         }
-                    } else {
+                    }else{
                         et_contrasena.setText("");
                         contrasena_b = InputValidation.isValidEditText(et_contrasena, "!");
                         et_confirmar.setText("");
                         confirmar_b = InputValidation.isValidEditText(et_confirmar, "!");
                         Toast.makeText(getApplicationContext(), "Contraseñas incorrectas", Toast.LENGTH_SHORT).show();
                     }
+
                 } else {
                     Toast.makeText(getApplicationContext(), "Debes llenar todos los campos", Toast.LENGTH_SHORT).show();
                 }
@@ -253,7 +279,9 @@ public class RegistroControl extends AppCompatActivity {
                 if (task.isSuccessful()){
                     Toast.makeText(getApplicationContext(), "User registered successfully", Toast.LENGTH_SHORT).show();
                 }else{
-                    Toast.makeText(getApplicationContext(), "Registration Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    error = ""+task.getException().getMessage();
+                    Toast.makeText(getApplicationContext(), "Registration Error:-" +error+"-", Toast.LENGTH_SHORT).show();
+
                 }
             }
         });
@@ -371,7 +399,7 @@ public class RegistroControl extends AppCompatActivity {
             //Bundle extras = data.getExtras();
                 // imgBitmap = (Bitmap) extras.get("data") ;
             try {
-                Thread.sleep(1000);
+                Thread.sleep(2000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -388,7 +416,7 @@ public class RegistroControl extends AppCompatActivity {
             });
 
             try {
-                Thread.sleep(2000);
+                Thread.sleep(2500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -425,6 +453,7 @@ public class RegistroControl extends AppCompatActivity {
 
         }
             if((requestCode == GALLERY_INTENT && resultCode == RESULT_OK )){
+
             Toast.makeText(getApplicationContext(), "SUbida", Toast.LENGTH_SHORT).show();
             uri = data.getData();
             modelName = ""+uri.getLastPathSegment()+".jpg";
@@ -445,7 +474,7 @@ public class RegistroControl extends AppCompatActivity {
             progressDialog.setCancelable(false);
             progressDialog.show();
             try {
-                Thread.sleep(2000);
+                Thread.sleep(2500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -479,17 +508,6 @@ public class RegistroControl extends AppCompatActivity {
             n++;
             INTENT=GALLERY_INTENT;
         }
-    }
-
-    private File createImage() throws IOException{
-        File imagen=null;
-        if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
-            String nombre = "foto_";
-            File directorio = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-            imagen = File.createTempFile(nombre,".jpg",directorio);
-            modelName=imagen.getAbsolutePath();
-        }
-        return imagen;
     }
 
     private final Uri takeAndSavePicture() {

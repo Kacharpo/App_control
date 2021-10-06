@@ -3,6 +3,7 @@ package  com.example.app_control ;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import com.example.app_control.Registro.DaoRegistro;
 import com.example.app_control.Registro.RegistroConstructor;
 import com.example.app_control.Registro.RegistroControl;
+import com.example.app_control.menu.MensajeFragment;
 import com.example.app_control.utils.InputValidation;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -33,6 +35,7 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
@@ -58,6 +61,7 @@ public class Log_in extends AppCompatActivity {
     DatabaseReference nDatabase;
     DaoRegistro dao;
     String key =null;
+    int c = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +113,6 @@ public class Log_in extends AppCompatActivity {
                 toast1.show();
                 Intent a = new Intent(getApplicationContext(), PrincipalMenuActivity.class);
                 startActivity(a);
-
             }
 
             @Override
@@ -155,39 +158,14 @@ public class Log_in extends AppCompatActivity {
 
     }
 
-    private void loadData()
-    {
-
-        dao.get(key).addListenerForSingleValueEvent(new ValueEventListener()
-        {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot)
-            {
-                ArrayList<RegistroConstructor> emps = new ArrayList<>();
-                for (DataSnapshot data : snapshot.getChildren())
-                {
-                    RegistroConstructor emp = data.getValue(RegistroConstructor.class);
-                    emp.setKey(data.getKey());
-                    emps.add(emp);
-                    key = data.getKey();
-                }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error)
-            {
-            }
-        });
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
+
         //Resultado devuelto al iniciar el Intent de GoogleSignInApi.getSignInIntent (...);
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
+        if (requestCode == RC_SIGN_IN  )   {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             if(task.isSuccessful()){
                 try {
@@ -204,6 +182,8 @@ public class Log_in extends AppCompatActivity {
                 Toast.makeText(this, "Ocurrio un error. "+task.getException().toString(),
                         Toast.LENGTH_LONG).show();
             }
+        } else  {
+            callbackManager.onActivityResult(requestCode, resultCode, data);
         }
     }
 
@@ -218,6 +198,7 @@ public class Log_in extends AppCompatActivity {
                             Log.d(TAG, "signInWithCredential:success");
                             //FirebaseUser user = mAuth.getCurrentUser();
                             Intent a = new Intent(getApplicationContext(), PrincipalMenuActivity.class);
+                            checkUser();
                             startActivity(a);
 //Iniciar DASHBOARD u otra actividad luego del SigIn Exitoso
                         } else {
@@ -251,36 +232,11 @@ public class Log_in extends AppCompatActivity {
         finish();
     }
     public void ingresar(View view){
-        AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this, "registro",null,1);
-        SQLiteDatabase db = admin.getWritableDatabase();
-
         String usuario = et_usuario.getText().toString();
         boolean usuario_b = InputValidation.isValidEditText(et_usuario, getString(R.string.field_is_required));
         String contrasena = et_contrasena.getText().toString();
         boolean contrasena_b = InputValidation.isValidEditText(et_contrasena, getString(R.string.field_is_required));
 
-        if(usuario_b && contrasena_b){
-            Cursor fila = db.rawQuery
-                    ("select correo, contrasena from registro_control where correo = '"+usuario+"' and contrasena = '"+contrasena+"'" ,null);
-            if(fila.moveToFirst()) {
-                if(usuario.equals(fila.getString(0)) && contrasena.equals(fila.getString(1))){
-                    Intent i = new Intent(Log_in.this, PrincipalMenuActivity.class);
-                    startActivity(i);
-                    finish();
-                }else{
-                    Toast.makeText(this, "Usuario y/o Contraseña incorrectos", Toast.LENGTH_SHORT).show();
-                }
-            }else {
-                Toast.makeText(this, "No exite el registro", Toast.LENGTH_SHORT).show();
-            }
-            db.close();
-        }else {
-            Toast.makeText(this, "Debes llenar todos los campos", Toast.LENGTH_SHORT).show();
-        }
-
-        loginUser();
-    }
-    private void loginUser() {
         String email = et_usuario.getText().toString();
         String password = et_contrasena.getText().toString();
 
@@ -303,5 +259,15 @@ public class Log_in extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    private final void checkUser() {
+        FirebaseUser currentUser = this.mAuth.getCurrentUser();
+        if (currentUser != null) {
+            Intent intent = new Intent((Context)this, MensajeFragment.class);
+            intent.putExtra("user", currentUser.getEmail());
+            this.finish();
+        }
+
     }
 }
