@@ -38,73 +38,81 @@ public class RecuperarContra extends AppCompatActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recuperar);
+        try {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_recuperar);
 
-        et_correo = (EditText)findViewById(R.id.txt_c_correoContra);
-        tv_olvidaste = (TextView)findViewById(R.id.tv_c_olvidaste);
-        tv_introducir = (TextView)findViewById(R.id.tv_c_introducir);
-        btn_enviar = (Button)findViewById(R.id.btn_c_enviar);
-        img_recuperar = (ImageView)findViewById(R.id.img_c_recuperar);
+            et_correo = (EditText) findViewById(R.id.txt_c_correoContra);
+            tv_olvidaste = (TextView) findViewById(R.id.tv_c_olvidaste);
+            tv_introducir = (TextView) findViewById(R.id.tv_c_introducir);
+            btn_enviar = (Button) findViewById(R.id.btn_c_enviar);
+            img_recuperar = (ImageView) findViewById(R.id.img_c_recuperar);
 
-        //Values received from another Activity (Screen)
-        final String recipientEmail = "kacharpo.service@gmail.com";
-        final String recipientPassword = "Kacharpo2000";
-        final String subject = "Recuperar contraseña";
-        final String message = "Su contraseña es: ";
+            //Values received from another Activity (Screen)
+            final String recipientEmail = "kacharpo.service@gmail.com";
+            final String recipientPassword = "Kacharpo2000";
+            final String subject = "Recuperar contraseña";
+            final String message = "Su contraseña es: ";
 
-        AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this, "registro",null,1);
+            AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this, "registro", null, 1);
 
-        Intent aceptar = new Intent(this,AlertaActivity.class);
+            Intent aceptar = new Intent(this, AlertaActivity.class);
 
-        btn_enviar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (InputValidation.isValidEditText(et_correo, getString(R.string.field_is_required))) {
+            btn_enviar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (InputValidation.isValidEditText(et_correo, getString(R.string.field_is_required))) {
 
-                    String correo = et_correo.getText().toString();
+                        String correo = et_correo.getText().toString();
 
-                    boolean b = false;
-                    for(int i = 0;b == false;i++) {
-                        SQLiteDatabase db = admin.getWritableDatabase();
-                        Cursor fila = db.rawQuery("select correo,contrasena from registro_control where id_control =" + i, null);
-                        if (fila.moveToFirst()) {
-                            if (correo.equals(fila.getString(0))) {
-                                sendEmailWithGmail(recipientEmail, recipientPassword, correo, subject, fila.getString(1));
-                                db.close();
+                        boolean b = false;
+                        for (int i = 0; b == false; i++) {
+                            SQLiteDatabase db = admin.getWritableDatabase();
+                            Cursor fila = db.rawQuery("select correo,contrasena from registro_control where id_control =" + i, null);
+                            if (fila.moveToFirst()) {
+                                if (correo.equals(fila.getString(0))) {
+                                    sendEmailWithGmail(recipientEmail, recipientPassword, correo, subject, fila.getString(1));
+                                    db.close();
+                                    b = true;
+                                    //startActivity(aceptar);
+                                } else {
+                                    db.close();
+                                }
+                            } else if (!fila.moveToFirst()) {
+                                et_correo.setText("");
+                                boolean correo_b = InputValidation.isValidEditText(et_correo, "Correo no registrado");
                                 b = true;
-                                //startActivity(aceptar);
-                            }else{
-                                db.close();
                             }
-                        } else if (!fila.moveToFirst()) {
-                            et_correo.setText("");
-                            boolean correo_b = InputValidation.isValidEditText(et_correo, "Correo no registrado");
-                            b = true;
                         }
                     }
                 }
-            }
-        });
+            });
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), "Error: "+e, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void sendEmailWithGmail(final String recipientEmail, final String recipientPassword,
                                     String to, String subject, String message) {
-        Properties props = new Properties();
-        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.socketFactory.port", "465");
-        props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.port", "465");
+        try {
+            Properties props = new Properties();
+            props.put("mail.smtp.host", "smtp.gmail.com");
+            props.put("mail.smtp.socketFactory.port", "465");
+            props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+            props.put("mail.smtp.auth", "true");
+            props.put("mail.smtp.port", "465");
 
-        Session session = Session.getDefaultInstance(props, new Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(recipientEmail, recipientPassword);
-            }
-        });
+            Session session = Session.getDefaultInstance(props, new Authenticator() {
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(recipientEmail, recipientPassword);
+                }
+            });
 
-        SenderAsyncTask task = new RecuperarContra.SenderAsyncTask(session, recipientEmail, to, subject, message);
-        task.execute();
+            SenderAsyncTask task = new RecuperarContra.SenderAsyncTask(session, recipientEmail, to, subject, message);
+            task.execute();
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), "Error: "+e, Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**

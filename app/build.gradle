@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
 }
 
 android {
@@ -61,5 +62,10 @@ android {
         implementation 'androidx.annotation:annotation:1.2.0'
 
     }
+}
+
+dependencies {
+    implementation 'com.google.firebase:firebase-crashlytics:18.2.1'
+    implementation 'com.google.firebase:firebase-analytics:19.0.1'
 }
 
