@@ -421,7 +421,7 @@ public class RegistroControl extends AppCompatActivity {
         }
 
                 try {
-                    Thread.sleep(2500);
+                    Thread.sleep(3000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -442,7 +442,7 @@ public class RegistroControl extends AppCompatActivity {
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-
+                                abrirAlbum();
                                 Toast.makeText(getApplicationContext(), "Faileed", Toast.LENGTH_SHORT).show();
                             }
                         });
