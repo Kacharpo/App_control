@@ -156,7 +156,7 @@
             tools:ignore="TouchTargetSizeCheck" />
 
         <FrameLayout
-            android:id="@+id/fm_c_fondo"
+            android:id="@+id/fm_c_boton"
             android:layout_width="match_parent"
             android:layout_height="400dp"
             android:layout_alignParentBottom="true"

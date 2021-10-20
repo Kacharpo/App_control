@@ -284,7 +284,7 @@ public class PrincipalFragment extends Fragment implements OnMapReadyCallback ,G
                     card7.setVisibility(View.VISIBLE);
                     card8.setVisibility(View.VISIBLE);
                     tv_alerta.setVisibility(View.VISIBLE);
-                    transaction = getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fm_c_fondo,fragmentAlerta);
+                    transaction = getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fm_c_boton,fragmentAlerta);
                     f = true;
                     // init();
                 }else if(f==true){
@@ -298,7 +298,7 @@ public class PrincipalFragment extends Fragment implements OnMapReadyCallback ,G
                     card8.setVisibility(View.INVISIBLE);
                     tv_alerta.setVisibility(View.INVISIBLE);
                     transaction=getActivity().getSupportFragmentManager().beginTransaction();
-                    transaction.replace(R.id.fm_c_fondo,fragmentBlank);
+                    transaction.replace(R.id.fm_c_boton,fragmentBlank);
                     f = false;
                     if(fa==true){
                         btn_atras.setVisibility(View.INVISIBLE);

@@ -202,7 +202,7 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
                     card7.setVisibility(View.VISIBLE);
                     card8.setVisibility(View.VISIBLE);
                     tv_alerta.setVisibility(View.VISIBLE);
-                    transaction = getSupportFragmentManager().beginTransaction().add(R.id.fm_c_fondo,fragmentAlerta);
+                    transaction = getSupportFragmentManager().beginTransaction().add(R.id.fm_c_boton,fragmentAlerta);
                     f = true;
                    // init();
                 }else if(f==true){
@@ -216,7 +216,7 @@ public class Principal extends AppCompatActivity implements OnMapReadyCallback ,
                     card8.setVisibility(View.INVISIBLE);
                     tv_alerta.setVisibility(View.INVISIBLE);
                     transaction=getSupportFragmentManager().beginTransaction();
-                    transaction.replace(R.id.fm_c_fondo,fragmentBlank);
+                    transaction.replace(R.id.fm_c_boton,fragmentBlank);
                     f = false;
                     if(fa==true){
                         btn_atras.setVisibility(View.INVISIBLE);

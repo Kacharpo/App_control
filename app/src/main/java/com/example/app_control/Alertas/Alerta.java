@@ -4,13 +4,16 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.app_control.Blank;
 import com.example.app_control.R;
 
 /**
@@ -59,27 +62,64 @@ public class Alerta extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
-
+    private Button btn_atras,btn_alerta;
+    private TextView tv_alerta;
     private CardView card1,card2,card3,card4,card5,card6,card7,card8;
-    private View vista;
+    private View v;
 
-    private FragmentTransaction transaction;
+    private FragmentTransaction transaction,transaction1;
     private Fragment fragmentMensaje,fragmentInundacion,fragmentServicio,fragmentTarjeta,
             fragmentAsaltante,fragmentTrafico,fragmentDisponibilidad,fragmentAsistencia;
+    private Fragment fragmentAlerta,fragmentBlank,fragmentBlank1;
+    private boolean f = false;
+    private boolean fa = false;
+private FrameLayout fl_f;
+private RelativeLayout rl_a;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        vista = inflater.inflate(R.layout.fragment_alerta, container, false);
-        /*card1 = vista.findViewById(R.id.cv_c);
-        card2 = vista.findViewById(R.id.cv_c1);
-        card3 = vista.findViewById(R.id.cv_c2);
-        card4 = vista.findViewById(R.id.cv_c3);
-        card5 = vista.findViewById(R.id.cv_c4);
-        card6 = vista.findViewById(R.id.cv_c5);
-        card7 = vista.findViewById(R.id.cv_c6);
-        card8 = vista.findViewById(R.id.cv_c7);
+        v = inflater.inflate(R.layout.fragment_alerta, container, false);
+        btn_atras = (Button)v.findViewById(R.id.btn_c_atras);
+        btn_alerta = (Button)v.findViewById(R.id.btn_c_alerta);
+
+        card1 = (CardView)v.findViewById(R.id.cv_c);
+        card2 = (CardView)v.findViewById(R.id.cv_c1);
+        card3 = (CardView)v.findViewById(R.id.cv_c2);
+        card4 = (CardView)v.findViewById(R.id.cv_c3);
+        card5 = (CardView)v.findViewById(R.id.cv_c4);
+        card6 = (CardView)v.findViewById(R.id.cv_c5);
+        card7 = (CardView)v.findViewById(R.id.cv_c6);
+        card8 = (CardView)v.findViewById(R.id.cv_c7);
+        tv_alerta = (TextView)v.findViewById(R.id.textVAlerta);
+        fl_f =(FrameLayout)v.findViewById(R.id.fm_c_fondo);
+        rl_a=(RelativeLayout)v.findViewById(R.id.rl_c_alertas);
+
+        fragmentBlank = new Blank();
+        fragmentBlank1 = new Blank();
+        btn_alerta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(f==false){
+                    rl_a.setVisibility(View.VISIBLE);
+                    fl_f.setVisibility(View.VISIBLE);
+                    f = true;
+                    // init();
+                }else if(f==true){
+                    rl_a.setVisibility(View.INVISIBLE);
+                    fl_f.setVisibility(View.INVISIBLE);
+                    f = false;
+                    if(fa==true){
+                        btn_atras.setVisibility(View.INVISIBLE);
+                        transaction1=getActivity().getSupportFragmentManager().beginTransaction();
+                        transaction1.replace(R.id.fm_c_alerta,fragmentBlank1);
+                        transaction1.commit();
+                        fa=false;
+                    }
+                }
+            }
+        });
 
         fragmentMensaje = new AlertaMensaje();
         fragmentInundacion = new AlertaInundacion();
@@ -93,70 +133,105 @@ public class Alerta extends Fragment {
         card1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //et_edt_Ubi.setVisibility(View.VISIBLE);
-                //et_edt_num_Ubi.setVisibility(View.INVISIBLE);
-                //transaction = (R.id.fm_c_boton,fragmentMensaje);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                rl_a.setVisibility(View.INVISIBLE);
+                btn_atras.setVisibility(View.VISIBLE);
+                transaction1 = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction1.replace(R.id.fm_c_alerta,fragmentMensaje);
+                transaction1.commit();
+                fa=true;
             }
         });
         card2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // transaction = getSupportFragmentManager().beginTransaction().add(R.id.fm_c_boton,fragmentInundacion);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                rl_a.setVisibility(View.INVISIBLE);
+                btn_atras.setVisibility(View.VISIBLE);
+                transaction1 = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction1.replace(R.id.fm_c_alerta,fragmentInundacion);
+                transaction1.commit();
+                fa=true;
             }
         });
         card3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //transaction = getSupportFragmentManager().beginTransaction().add(R.id.fm_c_boton,fragmentServicio);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                rl_a.setVisibility(View.INVISIBLE);
+                btn_atras.setVisibility(View.VISIBLE);
+                transaction1 = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction1.replace(R.id.fm_c_alerta,fragmentServicio);
+                transaction1.commit();
+                fa=true;
             }
         });
         card4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //transaction = getSupportFragmentManager().beginTransaction().add(R.id.fm_c_boton,fragmentTarjeta);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                rl_a.setVisibility(View.INVISIBLE);
+                btn_atras.setVisibility(View.VISIBLE);
+                transaction1 = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction1.replace(R.id.fm_c_alerta,fragmentTarjeta);
+                transaction1.commit();
+                fa=true;
             }
         });
         card5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //transaction = getSupportFragmentManager().beginTransaction().add(R.id.fm_c_boton,fragmentAsaltante);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                rl_a.setVisibility(View.INVISIBLE);
+                btn_atras.setVisibility(View.VISIBLE);
+                transaction1 = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction1.replace(R.id.fm_c_alerta,fragmentAsaltante);
+                transaction1.commit();
+                fa=true;
             }
         });
         card6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //transaction = getSupportFragmentManager().beginTransaction().add(R.id.fm_c_boton,fragmentTrafico);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                rl_a.setVisibility(View.INVISIBLE);
+                btn_atras.setVisibility(View.VISIBLE);
+                transaction1 = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction1.replace(R.id.fm_c_alerta,fragmentTrafico);
+                transaction1.commit();
+                fa=true;
             }
         });
         card7.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //transaction = getSupportFragmentManager().beginTransaction().add(R.id.fm_c_boton,fragmentDisponibilidad);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                rl_a.setVisibility(View.INVISIBLE);
+                btn_atras.setVisibility(View.VISIBLE);
+                transaction1 = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction1.replace(R.id.fm_c_alerta,fragmentDisponibilidad);
+                transaction1.commit();
+                fa=true;
             }
         });
         card8.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //transaction = getSupportFragmentManager().beginTransaction().add(R.id.fm_c_boton,fragmentAsistencia);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                rl_a.setVisibility(View.INVISIBLE);
+                btn_atras.setVisibility(View.VISIBLE);
+                transaction1 = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction1.replace(R.id.fm_c_alerta,fragmentAsistencia);
+                transaction1.commit();
+                fa=true;
             }
-        }); */
-        return vista;
+        });
+
+        btn_atras.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                rl_a.setVisibility(View.VISIBLE);
+                btn_atras.setVisibility(View.INVISIBLE);
+                transaction1=getActivity().getSupportFragmentManager().beginTransaction();
+                transaction1.replace(R.id.fm_c_alerta,fragmentBlank1);
+                transaction1.commit();
+                fa=false;
+            }
+        });
+
+        return v;
     }
 
 }

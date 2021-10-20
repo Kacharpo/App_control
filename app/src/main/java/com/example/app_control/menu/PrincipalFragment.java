@@ -31,7 +31,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -47,7 +46,6 @@ import com.example.app_control.Alertas.AlertaMensaje;
 import com.example.app_control.Alertas.AlertaServicio;
 import com.example.app_control.Alertas.AlertaTarjeta;
 import com.example.app_control.Alertas.AlertaTrafico;
-import com.example.app_control.Blank;
 import com.example.app_control.Controlador.PagerController;
 import com.example.app_control.Fragmento;
 import com.example.app_control.PrincipalMenuActivity;
@@ -139,7 +137,7 @@ public class PrincipalFragment extends Fragment implements OnMapReadyCallback ,G
     Handler h = new Handler();
     boolean isOn = false;
 
-    private CardView card1,card2,card3,card4,card5,card6,card7,card8;
+
     private View vista;
 
     private Fragment fragmentMensaje,fragmentInundacion,fragmentServicio,fragmentTarjeta,
@@ -258,243 +256,12 @@ public class PrincipalFragment extends Fragment implements OnMapReadyCallback ,G
         //SupportMapFragment para uso de GoogleMaps
         SupportMapFragment supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         supportMapFragment.getMapAsync(this);
-        card1 = (CardView)v.findViewById(R.id.cv_c);
-        card2 = (CardView)v.findViewById(R.id.cv_c1);
-        card3 = (CardView)v.findViewById(R.id.cv_c2);
-        card4 = (CardView)v.findViewById(R.id.cv_c3);
-        card5 = (CardView)v.findViewById(R.id.cv_c4);
-        card6 = (CardView)v.findViewById(R.id.cv_c5);
-        card7 = (CardView)v.findViewById(R.id.cv_c6);
-        card8 = (CardView)v.findViewById(R.id.cv_c7);
+
         tv_alerta = (TextView)v.findViewById(R.id.textVAlerta);
 
         fragmentAlerta = new Alerta();
-        fragmentBlank = new Blank();
-        fragmentBlank1 = new Blank();
-        btn_alerta.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(f==false){
-                    card1.setVisibility(View.VISIBLE);
-                    card2.setVisibility(View.VISIBLE);
-                    card3.setVisibility(View.VISIBLE);
-                    card4.setVisibility(View.VISIBLE);
-                    card5.setVisibility(View.VISIBLE);
-                    card6.setVisibility(View.VISIBLE);
-                    card7.setVisibility(View.VISIBLE);
-                    card8.setVisibility(View.VISIBLE);
-                    tv_alerta.setVisibility(View.VISIBLE);
-                    transaction = getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fm_c_fondo,fragmentAlerta);
-                    f = true;
-                    // init();
-                }else if(f==true){
-                    card1.setVisibility(View.INVISIBLE);
-                    card2.setVisibility(View.INVISIBLE);
-                    card3.setVisibility(View.INVISIBLE);
-                    card4.setVisibility(View.INVISIBLE);
-                    card5.setVisibility(View.INVISIBLE);
-                    card6.setVisibility(View.INVISIBLE);
-                    card7.setVisibility(View.INVISIBLE);
-                    card8.setVisibility(View.INVISIBLE);
-                    tv_alerta.setVisibility(View.INVISIBLE);
-                    transaction=getActivity().getSupportFragmentManager().beginTransaction();
-                    transaction.replace(R.id.fm_c_fondo,fragmentBlank);
-                    f = false;
-                    if(fa==true){
-                        btn_atras.setVisibility(View.INVISIBLE);
-                        transaction1=getActivity().getSupportFragmentManager().beginTransaction();
-                        transaction1.replace(R.id.fm_c_alerta,fragmentBlank1);
-                        transaction1.commit();
-                        fa=false;
-                    }
-                }
-                transaction.commit();
-            }
-        });
-
-        fragmentMensaje = new AlertaMensaje();
-        fragmentInundacion = new AlertaInundacion();
-        fragmentServicio = new AlertaServicio();
-        fragmentTarjeta = new AlertaTarjeta();
-        fragmentAsaltante = new AlertaAsaltante();
-        fragmentTrafico = new AlertaTrafico();
-        fragmentDisponibilidad = new AlertaDisponibilidad();
-        fragmentAsistencia = new AlertaAsistencia();
-
-        card1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                card1.setVisibility(View.INVISIBLE);
-                card2.setVisibility(View.INVISIBLE);
-                card3.setVisibility(View.INVISIBLE);
-                card4.setVisibility(View.INVISIBLE);
-                card5.setVisibility(View.INVISIBLE);
-                card6.setVisibility(View.INVISIBLE);
-                card7.setVisibility(View.INVISIBLE);
-                card8.setVisibility(View.INVISIBLE);
-                btn_atras.setVisibility(View.VISIBLE);
-                tv_alerta.setVisibility(View.INVISIBLE);
-                transaction1 = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction1.replace(R.id.fm_c_alerta,fragmentMensaje);
-                transaction1.commit();
-                fa=true;
-            }
-        });
-        card2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                card1.setVisibility(View.INVISIBLE);
-                card2.setVisibility(View.INVISIBLE);
-                card3.setVisibility(View.INVISIBLE);
-                card4.setVisibility(View.INVISIBLE);
-                card5.setVisibility(View.INVISIBLE);
-                card6.setVisibility(View.INVISIBLE);
-                card7.setVisibility(View.INVISIBLE);
-                card8.setVisibility(View.INVISIBLE);
-                btn_atras.setVisibility(View.VISIBLE);
-                tv_alerta.setVisibility(View.INVISIBLE);
-                transaction1 = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction1.replace(R.id.fm_c_alerta,fragmentInundacion);
-                transaction1.commit();
-                fa=true;
-            }
-        });
-        card3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                card1.setVisibility(View.INVISIBLE);
-                card2.setVisibility(View.INVISIBLE);
-                card3.setVisibility(View.INVISIBLE);
-                card4.setVisibility(View.INVISIBLE);
-                card5.setVisibility(View.INVISIBLE);
-                card6.setVisibility(View.INVISIBLE);
-                card7.setVisibility(View.INVISIBLE);
-                card8.setVisibility(View.INVISIBLE);
-                btn_atras.setVisibility(View.VISIBLE);
-                tv_alerta.setVisibility(View.INVISIBLE);
-                transaction1 = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction1.replace(R.id.fm_c_alerta,fragmentServicio);
-                transaction1.commit();
-                fa=true;
-            }
-        });
-        card4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                card1.setVisibility(View.INVISIBLE);
-                card2.setVisibility(View.INVISIBLE);
-                card3.setVisibility(View.INVISIBLE);
-                card4.setVisibility(View.INVISIBLE);
-                card5.setVisibility(View.INVISIBLE);
-                card6.setVisibility(View.INVISIBLE);
-                card7.setVisibility(View.INVISIBLE);
-                btn_atras.setVisibility(View.VISIBLE);
-                card8.setVisibility(View.INVISIBLE);
-                tv_alerta.setVisibility(View.INVISIBLE);
-                transaction1 = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction1.replace(R.id.fm_c_alerta,fragmentTarjeta);
-                transaction1.commit();
-                fa=true;
-            }
-        });
-        card5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                card1.setVisibility(View.INVISIBLE);
-                card2.setVisibility(View.INVISIBLE);
-                card3.setVisibility(View.INVISIBLE);
-                card4.setVisibility(View.INVISIBLE);
-                card5.setVisibility(View.INVISIBLE);
-                card6.setVisibility(View.INVISIBLE);
-                card7.setVisibility(View.INVISIBLE);
-                card8.setVisibility(View.INVISIBLE);
-                btn_atras.setVisibility(View.VISIBLE);
-                tv_alerta.setVisibility(View.INVISIBLE);
-                transaction1 = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction1.replace(R.id.fm_c_alerta,fragmentAsaltante);
-                transaction1.commit();
-                fa=true;
-            }
-        });
-        card6.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                card1.setVisibility(View.INVISIBLE);
-                card2.setVisibility(View.INVISIBLE);
-                card3.setVisibility(View.INVISIBLE);
-                card4.setVisibility(View.INVISIBLE);
-                card5.setVisibility(View.INVISIBLE);
-                card6.setVisibility(View.INVISIBLE);
-                card7.setVisibility(View.INVISIBLE);
-                card8.setVisibility(View.INVISIBLE);
-                btn_atras.setVisibility(View.VISIBLE);
-                tv_alerta.setVisibility(View.INVISIBLE);
-                transaction1 = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction1.replace(R.id.fm_c_alerta,fragmentTrafico);
-                transaction1.commit();
-                fa=true;
-            }
-        });
-        card7.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                card1.setVisibility(View.INVISIBLE);
-                card2.setVisibility(View.INVISIBLE);
-                card3.setVisibility(View.INVISIBLE);
-                card4.setVisibility(View.INVISIBLE);
-                card5.setVisibility(View.INVISIBLE);
-                card6.setVisibility(View.INVISIBLE);
-                card7.setVisibility(View.INVISIBLE);
-                card8.setVisibility(View.INVISIBLE);
-                btn_atras.setVisibility(View.VISIBLE);
-                tv_alerta.setVisibility(View.INVISIBLE);
-                transaction1 = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction1.replace(R.id.fm_c_alerta,fragmentDisponibilidad);
-                transaction1.commit();
-                fa=true;
-            }
-        });
-        card8.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                card1.setVisibility(View.INVISIBLE);
-                card2.setVisibility(View.INVISIBLE);
-                card3.setVisibility(View.INVISIBLE);
-                card4.setVisibility(View.INVISIBLE);
-                card5.setVisibility(View.INVISIBLE);
-                card6.setVisibility(View.INVISIBLE);
-                card7.setVisibility(View.INVISIBLE);
-                card8.setVisibility(View.INVISIBLE);
-                btn_atras.setVisibility(View.VISIBLE);
-                tv_alerta.setVisibility(View.INVISIBLE);
-                transaction1 = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction1.replace(R.id.fm_c_alerta,fragmentAsistencia);
-                transaction1.commit();
-                fa=true;
-            }
-        });
-
-        btn_atras.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                card1.setVisibility(View.VISIBLE);
-                card2.setVisibility(View.VISIBLE);
-                card3.setVisibility(View.VISIBLE);
-                card4.setVisibility(View.VISIBLE);
-                card5.setVisibility(View.VISIBLE);
-                card6.setVisibility(View.VISIBLE);
-                card7.setVisibility(View.VISIBLE);
-                card8.setVisibility(View.VISIBLE);
-                tv_alerta.setVisibility(View.VISIBLE);
-                btn_atras.setVisibility(View.INVISIBLE);
-                transaction1=getActivity().getSupportFragmentManager().beginTransaction();
-                transaction1.replace(R.id.fm_c_alerta,fragmentBlank1);
-                transaction1.commit();
-                fa=false;
-            }
-        });
-
-
+        transaction = getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fm_c_boton,fragmentAlerta);
+        transaction.commit();
 
         return v;
     }

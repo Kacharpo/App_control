@@ -400,13 +400,9 @@ public class RegistroControl extends AppCompatActivity {
                 //Bundle extras = data.getExtras();
                 // imgBitmap = (Bitmap) extras.get("data") ;
 
-                    try {
+                try {
                         filePath = nStorage.child("Perfil").child(fileName);
-                    } catch (Exception e) {
-                        Toast.makeText(getApplicationContext(), "Error subir: "+e, Toast.LENGTH_SHORT).show();
-                        abrirAlbum();
-                    }
-                        try {
+
                             filePath.putFile(photo).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                 @Override
                                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -428,7 +424,7 @@ public class RegistroControl extends AppCompatActivity {
 
                     //Conexion con Firebase Storage
                     FirebaseStorage mFirebaseStorage = FirebaseStorage.getInstance();
-                    try {
+
                         storageRef = mFirebaseStorage.getReference("Perfil/" + fileName + "");
                         File localfile = File.createTempFile("tempfile", ".jpg");
                         storageRef.getFile(localfile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
@@ -446,10 +442,7 @@ public class RegistroControl extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(), "Faileed", Toast.LENGTH_SHORT).show();
                             }
                         });
-                    } catch (IOException e) {
-                        Toast.makeText(getApplicationContext(), "Error insertar: "+e, Toast.LENGTH_SHORT).show();
-                        abrirAlbum();
-                    }
+
                     n++;
                     //INTENT=CAMARA_INTENT;
 
