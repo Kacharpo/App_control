@@ -112,6 +112,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/cv_c_txt"
+            android:visibility="invisible"
             tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 
 
@@ -119,10 +120,11 @@
             android:id="@+id/cv_c_tl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/sp_c_rutas"
             android:animateLayoutChanges="true"
+            android:visibility="invisible"
             app:cardCornerRadius="20dp"
             app:cardElevation="4dp"
-            android:layout_below="@id/sp_c_rutas"
             app:cardUseCompatPadding="true">
 
             <LinearLayout
@@ -192,7 +194,8 @@
             android:layout_height="100dp"
             android:layout_alignParentBottom="true"
             android:background="#FFFFFF"
-            android:text="@string/tv_c_ficha" />
+            android:text="@string/tv_c_ficha"
+            android:visibility="invisible" />
 
         <FrameLayout
             android:id="@+id/fm_c_boton"
