@@ -155,7 +155,8 @@ public class Log_in extends AppCompatActivity {
 
             }
         });
-
+        nAuth.setLanguageCode("es");
+        mAuth.setLanguageCode("es");
     }
 
 

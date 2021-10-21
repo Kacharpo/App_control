@@ -13,8 +13,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.app_control.Registro.DaoRegistro;
+import com.example.app_control.Registro.RegistroConstructor;
 import com.example.app_control.utils.InputValidation;
 
+import java.util.HashMap;
 import java.util.Properties;
 import java.util.Random;
 
@@ -71,7 +74,7 @@ public class ConfirmarCuenta extends AppCompatActivity {
         }
     });
 
-    Intent aceptar = new Intent(getApplicationContext(), RecuperarContra.class);
+    Intent aceptar = new Intent(getApplicationContext(), PrincipalMenuActivity.class);
 
     et_codigo1.setOnKeyListener(new View.OnKeyListener() {
         @Override
@@ -244,7 +247,18 @@ public class ConfirmarCuenta extends AppCompatActivity {
                     }
 
                 }
-
+               /* DaoRegistro dao =new DaoRegistro();
+                RegistroConstructor emp_edit = new RegistroConstructor();
+                HashMap<String, Object> hashMap = new HashMap<>();
+                hashMap.put("contrasena", "Perroo");
+                dao.update(emp_edit.getKey(), hashMap).addOnSuccessListener(suc ->
+                {
+                    Toast.makeText(getApplicationContext(), "Record is updated", Toast.LENGTH_SHORT).show();
+                    finish();
+                }).addOnFailureListener(er ->
+                {
+                    Toast.makeText(getApplicationContext(), "" + er.getMessage(), Toast.LENGTH_SHORT).show();
+                });*/
             }
 
             return false;

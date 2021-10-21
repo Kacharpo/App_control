@@ -268,6 +268,7 @@ public class RegistroControl extends AppCompatActivity {
 
            nStorage = FirebaseStorage.getInstance().getReference();
            img_control.setImageResource(R.drawable.perfil);
+           mAuth.setLanguageCode("es");
        } catch (Exception e) {
            Toast.makeText(getApplicationContext(), "Error: "+e, Toast.LENGTH_SHORT).show();
        }

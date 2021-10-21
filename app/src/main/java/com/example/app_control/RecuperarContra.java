@@ -14,9 +14,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.app_control.utils.InputValidation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Properties;
 
@@ -35,6 +39,8 @@ public class RecuperarContra extends AppCompatActivity{
     private TextView tv_olvidaste, tv_introducir;
     private Button btn_enviar;
     private ImageView img_recuperar;
+    private FirebaseAuth auth;
+    private boolean e=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,9 +60,8 @@ public class RecuperarContra extends AppCompatActivity{
             final String subject = "Recuperar contraseña";
             final String message = "Su contraseña es: ";
 
-            AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this, "registro", null, 1);
-
-            Intent aceptar = new Intent(this, AlertaActivity.class);
+            Intent aceptar = new Intent(this, Log_in.class);
+            auth = FirebaseAuth.getInstance();
 
             btn_enviar.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -64,26 +69,18 @@ public class RecuperarContra extends AppCompatActivity{
                     if (InputValidation.isValidEditText(et_correo, getString(R.string.field_is_required))) {
 
                         String correo = et_correo.getText().toString();
-
-                        boolean b = false;
-                        for (int i = 0; b == false; i++) {
-                            SQLiteDatabase db = admin.getWritableDatabase();
-                            Cursor fila = db.rawQuery("select correo,contrasena from registro_control where id_control =" + i, null);
-                            if (fila.moveToFirst()) {
-                                if (correo.equals(fila.getString(0))) {
-                                    sendEmailWithGmail(recipientEmail, recipientPassword, correo, subject, fila.getString(1));
-                                    db.close();
-                                    b = true;
-                                    //startActivity(aceptar);
-                                } else {
-                                    db.close();
+                        auth.setLanguageCode("es");
+                        auth.sendPasswordResetEmail(correo).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if(task.isSuccessful()){
+                                    Toast.makeText(getApplicationContext(), "Correo enviado", Toast.LENGTH_SHORT).show();
+                                    startActivity(aceptar);
+                                }else{
+                                    Toast.makeText(getApplicationContext(), "Correo no registrado", Toast.LENGTH_SHORT).show();
                                 }
-                            } else if (!fila.moveToFirst()) {
-                                et_correo.setText("");
-                                boolean correo_b = InputValidation.isValidEditText(et_correo, "Correo no registrado");
-                                b = true;
                             }
-                        }
+                        });
                     }
                 }
             });

@@ -58,6 +58,7 @@
         <entry key="app/src/main/res/layout/activity_confirmar_cuenta.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_log_in.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_principal_menu.xml" value="0.1838768115942029" />
+        <entry key="app/src/main/res/layout/activity_recuperar.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_registro_control.xml" value="0.22291666666666668" />
         <entry key="app/src/main/res/layout/activity_validacion_telefono.xml" value="0.1" />
         <entry key="app/src/main/res/layout/app_bar_principal_menu.xml" value="0.1838768115942029" />

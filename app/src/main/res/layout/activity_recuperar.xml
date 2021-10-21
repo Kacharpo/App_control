@@ -42,23 +42,25 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/txt_c_correoContra_l"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="#FF0101"
             android:ems="10"
-            android:gravity="center"
-            android:hint="@string/txt_c_correoContra"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:hint="@string/txt_c_correo"
+
+
+            >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/txt_c_correoContra"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/border_set"
+                android:layout_height="match_parent"
+                android:backgroundTint="#FF0101"
                 android:ems="10"
                 android:gravity="center"
-                android:inputType="textEmailAddress"
+                android:inputType="textPersonName"
                 android:textAlignment="center" />
         </com.google.android.material.textfield.TextInputLayout>
 
