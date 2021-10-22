@@ -16,10 +16,10 @@ public class RegistroConstructor implements Serializable {
     private String contrasena;
     private String ruta;
     private String licencia;
+    private String confirmado;
 
     public RegistroConstructor(){}
-    public RegistroConstructor(String key, String nombre, String apellido, String fecha, String numero, String correo, String contrasena, String ruta, String licencia) {
-        this.key = key;
+    public RegistroConstructor( String nombre, String apellido, String fecha, String numero, String correo, String contrasena, String ruta, String licencia,String confirmado) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.fecha = fecha;
@@ -28,6 +28,7 @@ public class RegistroConstructor implements Serializable {
         this.contrasena = contrasena;
         this.ruta = ruta;
         this.licencia = licencia;
+        this.confirmado = confirmado;
     }
 
     public String getKey() {
@@ -100,5 +101,13 @@ public class RegistroConstructor implements Serializable {
 
     public void setLicencia(String licencia) {
         this.licencia = licencia;
+    }
+
+    public String getConfirmado() {
+        return confirmado;
+    }
+
+    public void setConfirmado(String confirmado) {
+        this.confirmado = confirmado;
     }
 }

@@ -17,6 +17,7 @@ import com.example.app_control.Registro.DaoRegistro;
 import com.example.app_control.Registro.RegistroConstructor;
 import com.example.app_control.utils.InputValidation;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.Random;
@@ -39,6 +40,7 @@ public class ConfirmarCuenta extends AppCompatActivity {
     int c = 5,codigon ;
     String codigo = "";
     String message = "";
+    String key = "", nombre = "", apellido = "", fecha = "", numero = "", correo = "", contrasena = "", ruta = "", licencia = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +61,16 @@ public class ConfirmarCuenta extends AppCompatActivity {
     btn_reenviar = (Button) findViewById(R.id.btn_c_reenviar);
 
     codigo = getIntent().getStringExtra("Codigo");
+    key = getIntent().getStringExtra("key");
+    nombre = getIntent().getStringExtra("nombre");
+    apellido = getIntent().getStringExtra("apellido");
+    fecha = getIntent().getStringExtra("fecha");
+    numero = getIntent().getStringExtra("numero");
+    correo = getIntent().getStringExtra("correo");
+    contrasena = getIntent().getStringExtra("contrasena");
+    ruta = getIntent().getStringExtra("ruta");
+    licencia = getIntent().getStringExtra("licencia");
+
     message = "Su codigo es: " + codigo;
     final String recipientEmail = "kacharpo.service@gmail.com";
     final String recipientPassword = "Kacharpo2000";
@@ -233,7 +245,31 @@ public class ConfirmarCuenta extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Listo", Toast.LENGTH_SHORT).show();
                     codigotxt = et_codigo1.getText().toString() + "" + et_codigo2.getText().toString() + "" + et_codigo3.getText().toString() + "" + et_codigo4.getText().toString() + "" + et_codigo5.getText().toString() + "" + et_codigo6.getText().toString();
                     if (codigotxt.equals(codigo)) {
-                        startActivity(aceptar);
+                        try{
+                        DaoRegistro dao =new DaoRegistro();
+                        HashMap<String, Object> hashMap = new HashMap<>();
+                        hashMap.put("nombre", nombre);
+                        hashMap.put("apellido", apellido);
+                        hashMap.put("fecha",fecha);
+                        hashMap.put("numero", numero);
+                        hashMap.put("correo", correo);
+                        hashMap.put("contrasena", contrasena);
+                        hashMap.put("ruta", ruta);
+                            hashMap.put("confirmado", "true");
+
+                            hashMap.put("licencia", licencia);
+                            Toast.makeText(getApplicationContext(), ""+key, Toast.LENGTH_SHORT).show();
+                        dao.update(key, hashMap).addOnSuccessListener(suc ->
+                        {
+                            Toast.makeText(getApplicationContext(), "Record is updated", Toast.LENGTH_SHORT).show();
+                            startActivity(aceptar);
+                        }).addOnFailureListener(er ->
+                        {
+                            Toast.makeText(getApplicationContext(), "" + er.getMessage(), Toast.LENGTH_SHORT).show();
+                        });
+                        }catch (Exception eo){
+                            Toast.makeText(getApplicationContext(), "e"+eo, Toast.LENGTH_SHORT).show();
+                        }
                     } else {
                         c--;
                         if (c < 0) {
@@ -247,18 +283,7 @@ public class ConfirmarCuenta extends AppCompatActivity {
                     }
 
                 }
-               /* DaoRegistro dao =new DaoRegistro();
-                RegistroConstructor emp_edit = new RegistroConstructor();
-                HashMap<String, Object> hashMap = new HashMap<>();
-                hashMap.put("contrasena", "Perroo");
-                dao.update(emp_edit.getKey(), hashMap).addOnSuccessListener(suc ->
-                {
-                    Toast.makeText(getApplicationContext(), "Record is updated", Toast.LENGTH_SHORT).show();
-                    finish();
-                }).addOnFailureListener(er ->
-                {
-                    Toast.makeText(getApplicationContext(), "" + er.getMessage(), Toast.LENGTH_SHORT).show();
-                });*/
+
             }
 
             return false;

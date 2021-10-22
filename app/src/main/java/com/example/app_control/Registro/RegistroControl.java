@@ -45,6 +45,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -57,6 +63,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.Properties;
 import java.util.Random;
 
@@ -79,7 +86,6 @@ public class RegistroControl extends AppCompatActivity {
     ProgressDialog progressDialog;
 
     DaoRegistro dao = new DaoRegistro();
-    String key ="1";
 
     private Spinner sp_tipo;
     private EditText et_nombre, et_apellido, et_fecha,et_numero , et_correo, et_contrasena, et_confirmar, et_ruta, et_licencia;
@@ -88,6 +94,7 @@ public class RegistroControl extends AppCompatActivity {
     private RadioButton rb_terminos;
     private int codigo = codigo(999999);
 
+    String key = "0";
     CardView cv_Camara,cv_Subir;
     int foto = 0,n=0;
     StorageReference nStorage;
@@ -105,6 +112,17 @@ public class RegistroControl extends AppCompatActivity {
     String fileName;
     FirebaseAuth mAuth;
     String error="";
+    String nombre ;
+    String apellido;
+    String fecha;
+    String numero ;
+    String correo ;
+    String contrasena ;
+    String ruta ;
+    String licencia ;
+    String tipo;
+    boolean k=true;
+    int cont=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,23 +164,23 @@ public class RegistroControl extends AppCompatActivity {
                public void onClick(View view) {
 
                    int id_control = 1;
-                   String nombre = et_nombre.getText().toString();
+                   nombre = et_nombre.getText().toString();
                    boolean nombre_b = InputValidation.isValidEditText(et_nombre, "Campo requerido");
-                   String apellido = et_apellido.getText().toString();
+                   apellido = et_apellido.getText().toString();
                    boolean apellido_b = InputValidation.isValidEditText(et_apellido, "Campo requerido");
-                   String fecha = et_fecha.getText().toString();
+                   fecha = et_fecha.getText().toString();
                    boolean fecha_b = InputValidation.isValidEditText(et_fecha, "Campo requerido");
-                   String numero = et_numero.getText().toString();
+                   numero = et_numero.getText().toString();
                    boolean numero_b = InputValidation.isValidEditText(et_numero, "Campo requerido");
-                   String correo = et_correo.getText().toString();
+                   correo = et_correo.getText().toString();
                    boolean correo_b = InputValidation.isValidEditText(et_correo, "Campo requerido");
-                   String contrasena = et_contrasena.getText().toString();
+                   contrasena = et_contrasena.getText().toString();
                    boolean contrasena_b = InputValidation.isValidEditText(et_contrasena, "Campo requerido");
                    String confirmar = et_confirmar.getText().toString();
                    boolean confirmar_b = InputValidation.isValidEditText(et_confirmar, "Campo requerido");
-                   String ruta = et_ruta.getText().toString();
+                   ruta = et_ruta.getText().toString();
                    boolean ruta_b = InputValidation.isValidEditText(et_ruta, "Campo requerido");
-                   String licencia = et_licencia.getText().toString();
+                   licencia = et_licencia.getText().toString();
                    boolean licencia_b = InputValidation.isValidEditText(et_licencia, "Campo requerido");
                    String tipo = sp_tipo.getSelectedItem().toString();
                    boolean terminos = rb_terminos.isChecked();
@@ -181,18 +199,54 @@ public class RegistroControl extends AppCompatActivity {
                                            public void onComplete(@NonNull Task<AuthResult> task) {
                                                if (task.isSuccessful()) {
                                                    Toast.makeText(getApplicationContext(), "User registered successfully", Toast.LENGTH_SHORT).show();
-                                                   RegistroConstructor emp = new RegistroConstructor(key, nombre, apellido, fecha, numero, correo, contrasena, ruta, licencia);
-                                                   dao.add(emp).addOnSuccessListener(suc ->
+                                                   RegistroConstructor emp = new RegistroConstructor( nombre, apellido, fecha, numero, correo, contrasena, ruta, licencia,"false");
+                                                   DatabaseReference bbdd;
+
+                                                   bbdd = FirebaseDatabase.getInstance().getReference("RegistroConstructor");
+                                                   Query q=bbdd.orderByKey().equalTo(key);
+                                                    //Query q=bbdd.orderByChild("Nombre del Campo").equalTo(key);
+                                                   q.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                       @Override
+                                                       public void onDataChange(DataSnapshot dataSnapshot) {
+                                                           for(DataSnapshot datasnapshot: dataSnapshot.getChildren()){
+                                                               cont++;
+                                                               key = ""+cont;
+                                                               Toast.makeText(getApplicationContext(), "He encontrado "+cont, Toast.LENGTH_LONG).show();
+                                                           }
+                                                           emp.setKey(key);
+                                                           key = emp.getKey();
+
+                                                       }
+
+                                                       @Override
+                                                       public void onCancelled(DatabaseError databaseError) {
+
+                                                       }
+                                                   });
+
+                                                   HashMap<String, Object> hashMap = new HashMap<>();
+                                                   hashMap.put("nombre", nombre);
+                                                   hashMap.put("apellido", apellido);
+                                                   hashMap.put("fecha", fecha);
+                                                   hashMap.put("numero", numero);
+                                                   hashMap.put("correo", correo);
+                                                   hashMap.put("contrasena", contrasena);
+                                                   hashMap.put("ruta", ruta);
+                                                   hashMap.put("confirmado", "false");
+
+                                                   hashMap.put("licencia", licencia);
+                                                   Toast.makeText(getApplicationContext(), "" + key, Toast.LENGTH_SHORT).show();
+                                                   dao.update(key, hashMap).addOnSuccessListener(suc ->
                                                    {
-                                                       Toast.makeText(getApplicationContext(), "Record is inserted", Toast.LENGTH_SHORT).show();
+                                                       Toast.makeText(getApplicationContext(), "Record is updated", Toast.LENGTH_SHORT).show();
                                                    }).addOnFailureListener(er ->
                                                    {
                                                        Toast.makeText(getApplicationContext(), "" + er.getMessage(), Toast.LENGTH_SHORT).show();
                                                    });
                                                    //Eliminar archivos basura
                                                    Toast.makeText(getApplicationContext(), "Registro Exitoso", Toast.LENGTH_SHORT).show();
-                                                   for (int i = 0; i < n; i++) {
-                                                       Toast.makeText(getApplicationContext(), "" + SUBIDAS[i] + "", Toast.LENGTH_SHORT).show();
+                                                   for (int ii = 0; ii < n; ii++) {
+                                                       Toast.makeText(getApplicationContext(), "" + SUBIDAS[ii] + "", Toast.LENGTH_SHORT).show();
                                                    }
                                                    if (INTENT == CAMARA_INTENT) {
                                                        Toast.makeText(getApplicationContext(), "Subida Camara", Toast.LENGTH_SHORT).show();
@@ -206,6 +260,8 @@ public class RegistroControl extends AppCompatActivity {
 
                                                    sendEmailWithGmail(recipientEmail, recipientPassword, et_correo.getText().toString(), subject, message);
                                                    datos();
+
+
                                                } else {
                                                    et_correo.setText("");
                                                    error = "" + task.getException().getMessage();
@@ -352,10 +408,20 @@ public class RegistroControl extends AppCompatActivity {
 
     private void datos(){
         try {
-        Intent correo = new Intent(getApplicationContext(), ConfirmarCuenta.class);
-        correo.putExtra("EmailTo",et_correo.getText().toString());
-        correo.putExtra("Codigo",""+codigo);
-        startActivity(correo);} catch (Exception e) {
+        Intent correos = new Intent(getApplicationContext(), ConfirmarCuenta.class);
+        correos.putExtra("EmailTo",et_correo.getText().toString());
+        correos.putExtra("Codigo",""+codigo);
+        correos.putExtra("key",key);
+        correos.putExtra("nombre",nombre);
+        correos.putExtra("apellido",apellido);
+        correos.putExtra("fecha",fecha);
+        correos.putExtra("numero",numero);
+        correos.putExtra("correo",correo);
+        correos.putExtra("contrasena",contrasena);
+        correos.putExtra("ruta",ruta);
+        correos.putExtra("licencia",licencia);
+
+        startActivity(correos);} catch (Exception e) {
             Toast.makeText(getApplicationContext(), "Error: "+e, Toast.LENGTH_SHORT).show();
         }
 
@@ -376,6 +442,8 @@ public class RegistroControl extends AppCompatActivity {
 
             if (var1.resolveActivity(this.getPackageManager()) != null) {
                 var1.putExtra("output", (Parcelable) photo);
+
+
                 this.startActivityForResult(var1, CAMARA_INTENT);
             }
         } catch (Exception e) {
@@ -401,21 +469,17 @@ public class RegistroControl extends AppCompatActivity {
                 //Bundle extras = data.getExtras();
                 // imgBitmap = (Bitmap) extras.get("data") ;
 
-                try {
-                        filePath = nStorage.child("Perfil").child(fileName);
+                /*try {
+                    filePath = nStorage.child("Perfil").child(fileName);
 
-                            filePath.putFile(photo).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                @Override
-                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                    SUBIDAS[n] = fileName;
-                                    Toast.makeText(getApplicationContext(), "Imagen Subida " + SUBIDAS[n] + "", Toast.LENGTH_SHORT).show();
-                                    foto = 1;
-                                }
-                            });
-                        } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "Error insertar: "+e, Toast.LENGTH_SHORT).show();
-                            abrirAlbum();
-        }
+                    filePath.putFile(photo).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            SUBIDAS[n] = fileName;
+                            Toast.makeText(getApplicationContext(), "Imagen Subida " + SUBIDAS[n] + "", Toast.LENGTH_SHORT).show();
+                            foto = 1;
+                        }
+                    });
 
                 try {
                     Thread.sleep(3000);
@@ -436,21 +500,20 @@ public class RegistroControl extends AppCompatActivity {
                                 //binding.imgLpWallpaper.setImageBitmap(bitmap);
                                 img_control.setImageBitmap(bitmap);
                             }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                abrirAlbum();
-                                Toast.makeText(getApplicationContext(), "Faileed", Toast.LENGTH_SHORT).show();
-                            }
                         });
 
                     n++;
+                } catch (Exception e) {
+                    Toast.makeText(getApplicationContext(), "Error insertar: "+e, Toast.LENGTH_SHORT).show();
+                  //  abrirAlbum();
+
+                }*/
                     //INTENT=CAMARA_INTENT;
 
                     // }else {
 
                     // } Uri
-                    //  abrirAlbum();
+                     abrirAlbum();
             }
             if ((requestCode == GALLERY_INTENT && resultCode == RESULT_OK)) {
 
@@ -474,7 +537,7 @@ public class RegistroControl extends AppCompatActivity {
                 progressDialog.setCancelable(false);
                 progressDialog.show();
                 try {
-                    Thread.sleep(2500);
+                    Thread.sleep(5000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -605,6 +668,8 @@ public class RegistroControl extends AppCompatActivity {
         if(uri==null){
             takeAndSavePicture();
         }
+
+
         return uri;
     }
 
