@@ -16,6 +16,14 @@ import android.widget.Toast;
 import com.example.app_control.Registro.DaoRegistro;
 import com.example.app_control.Registro.RegistroConstructor;
 import com.example.app_control.utils.InputValidation;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -41,6 +49,8 @@ public class ConfirmarCuenta extends AppCompatActivity {
     String codigo = "";
     String message = "";
     String key = "", nombre = "", apellido = "", fecha = "", numero = "", correo = "", contrasena = "", ruta = "", licencia = "";
+    DaoRegistro dao = new DaoRegistro();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -246,27 +256,57 @@ public class ConfirmarCuenta extends AppCompatActivity {
                     codigotxt = et_codigo1.getText().toString() + "" + et_codigo2.getText().toString() + "" + et_codigo3.getText().toString() + "" + et_codigo4.getText().toString() + "" + et_codigo5.getText().toString() + "" + et_codigo6.getText().toString();
                     if (codigotxt.equals(codigo)) {
                         try{
-                        DaoRegistro dao =new DaoRegistro();
-                        HashMap<String, Object> hashMap = new HashMap<>();
-                        hashMap.put("nombre", nombre);
-                        hashMap.put("apellido", apellido);
-                        hashMap.put("fecha",fecha);
-                        hashMap.put("numero", numero);
-                        hashMap.put("correo", correo);
-                        hashMap.put("contrasena", contrasena);
-                        hashMap.put("ruta", ruta);
-                            hashMap.put("confirmado", "true");
 
-                            hashMap.put("licencia", licencia);
-                            Toast.makeText(getApplicationContext(), ""+key, Toast.LENGTH_SHORT).show();
-                        dao.update(key, hashMap).addOnSuccessListener(suc ->
-                        {
-                            Toast.makeText(getApplicationContext(), "Record is updated", Toast.LENGTH_SHORT).show();
-                            startActivity(aceptar);
-                        }).addOnFailureListener(er ->
-                        {
-                            Toast.makeText(getApplicationContext(), "" + er.getMessage(), Toast.LENGTH_SHORT).show();
-                        });
+                            RegistroConstructor emp = new RegistroConstructor( nombre, apellido, fecha, numero, correo, contrasena, ruta, licencia,"false");
+                            DatabaseReference bbdd;
+
+                            bbdd = FirebaseDatabase.getInstance().getReference("RegistroConstructor");
+
+                            Query q=bbdd.orderByChild("confirmado").equalTo("true");
+
+                            q.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    int cont =0;
+                                    for(DataSnapshot datasnapshot: dataSnapshot.getChildren()){
+                                        cont++;
+                                        Toast.makeText(getApplicationContext(), "He encontrado "+cont, Toast.LENGTH_LONG).show();
+                                    }
+                                    key = ""+cont;
+                                    emp.setKey(key);
+                                    key = emp.getKey();
+                                    HashMap<String, Object> hashMap = new HashMap<>();
+                                    hashMap.put("nombre", nombre);
+                                    hashMap.put("apellido", apellido);
+                                    hashMap.put("fecha", fecha);
+                                    hashMap.put("numero", numero);
+                                    hashMap.put("correo", correo);
+                                    hashMap.put("contrasena", contrasena);
+                                    hashMap.put("ruta", ruta);
+                                    hashMap.put("confirmado", "true");
+
+                                    hashMap.put("licencia", licencia);
+                                    Toast.makeText(getApplicationContext(), "" + key, Toast.LENGTH_SHORT).show();
+                                    dao.update(key, hashMap).addOnSuccessListener(suc ->
+                                    {
+                                        Toast.makeText(getApplicationContext(), "Record is updated", Toast.LENGTH_SHORT).show();
+                                    }).addOnFailureListener(er ->
+                                    {
+                                        Toast.makeText(getApplicationContext(), "" + er.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+
+                                    startActivity(aceptar);
+
+
+
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+
                         }catch (Exception eo){
                             Toast.makeText(getApplicationContext(), "e"+eo, Toast.LENGTH_SHORT).show();
                         }

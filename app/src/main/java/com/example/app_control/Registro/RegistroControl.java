@@ -85,8 +85,6 @@ public class RegistroControl extends AppCompatActivity {
     StorageReference storageRef;
     ProgressDialog progressDialog;
 
-    DaoRegistro dao = new DaoRegistro();
-
     private Spinner sp_tipo;
     private EditText et_nombre, et_apellido, et_fecha,et_numero , et_correo, et_contrasena, et_confirmar, et_ruta, et_licencia;
     private Button btn_aceptar;
@@ -122,7 +120,6 @@ public class RegistroControl extends AppCompatActivity {
     String licencia ;
     String tipo;
     boolean k=true;
-    int cont=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -199,51 +196,7 @@ public class RegistroControl extends AppCompatActivity {
                                            public void onComplete(@NonNull Task<AuthResult> task) {
                                                if (task.isSuccessful()) {
                                                    Toast.makeText(getApplicationContext(), "User registered successfully", Toast.LENGTH_SHORT).show();
-                                                   RegistroConstructor emp = new RegistroConstructor( nombre, apellido, fecha, numero, correo, contrasena, ruta, licencia,"false");
-                                                   DatabaseReference bbdd;
 
-                                                   bbdd = FirebaseDatabase.getInstance().getReference("RegistroConstructor");
-                                                   Query q=bbdd.orderByKey().equalTo(key);
-                                                    //Query q=bbdd.orderByChild("Nombre del Campo").equalTo(key);
-                                                   q.addListenerForSingleValueEvent(new ValueEventListener() {
-                                                       @Override
-                                                       public void onDataChange(DataSnapshot dataSnapshot) {
-                                                           for(DataSnapshot datasnapshot: dataSnapshot.getChildren()){
-                                                               cont++;
-                                                               key = ""+cont;
-                                                               Toast.makeText(getApplicationContext(), "He encontrado "+cont, Toast.LENGTH_LONG).show();
-                                                           }
-                                                           emp.setKey(key);
-                                                           key = emp.getKey();
-
-                                                       }
-
-                                                       @Override
-                                                       public void onCancelled(DatabaseError databaseError) {
-
-                                                       }
-                                                   });
-
-                                                   HashMap<String, Object> hashMap = new HashMap<>();
-                                                   hashMap.put("nombre", nombre);
-                                                   hashMap.put("apellido", apellido);
-                                                   hashMap.put("fecha", fecha);
-                                                   hashMap.put("numero", numero);
-                                                   hashMap.put("correo", correo);
-                                                   hashMap.put("contrasena", contrasena);
-                                                   hashMap.put("ruta", ruta);
-                                                   hashMap.put("confirmado", "false");
-
-                                                   hashMap.put("licencia", licencia);
-                                                   Toast.makeText(getApplicationContext(), "" + key, Toast.LENGTH_SHORT).show();
-                                                   dao.update(key, hashMap).addOnSuccessListener(suc ->
-                                                   {
-                                                       Toast.makeText(getApplicationContext(), "Record is updated", Toast.LENGTH_SHORT).show();
-                                                   }).addOnFailureListener(er ->
-                                                   {
-                                                       Toast.makeText(getApplicationContext(), "" + er.getMessage(), Toast.LENGTH_SHORT).show();
-                                                   });
-                                                   //Eliminar archivos basura
                                                    Toast.makeText(getApplicationContext(), "Registro Exitoso", Toast.LENGTH_SHORT).show();
                                                    for (int ii = 0; ii < n; ii++) {
                                                        Toast.makeText(getApplicationContext(), "" + SUBIDAS[ii] + "", Toast.LENGTH_SHORT).show();
@@ -257,10 +210,8 @@ public class RegistroControl extends AppCompatActivity {
                                                            }
                                                        });
                                                    }
-
                                                    sendEmailWithGmail(recipientEmail, recipientPassword, et_correo.getText().toString(), subject, message);
                                                    datos();
-
 
                                                } else {
                                                    et_correo.setText("");
