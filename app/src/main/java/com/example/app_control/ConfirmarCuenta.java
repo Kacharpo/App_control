@@ -46,11 +46,11 @@ public class ConfirmarCuenta extends AppCompatActivity {
     private Button btn_reenviar;
     String codigotxt = "";
     int c = 5,codigon ;
-    String codigo = "";
-    String message = "";
-    String key = "", nombre = "", apellido = "", fecha = "", numero = "", correo = "", contrasena = "", ruta = "", licencia = "";
-    DaoRegistro dao = new DaoRegistro();
 
+    String message = "";
+    DaoRegistro dao = new DaoRegistro();
+   String key;
+    String codigo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,57 +69,22 @@ public class ConfirmarCuenta extends AppCompatActivity {
     et_codigo5 = (EditText) findViewById(R.id.txt_c_codigo5);
     et_codigo6 = (EditText) findViewById(R.id.txt_c_codigo6);
     btn_reenviar = (Button) findViewById(R.id.btn_c_reenviar);
-
     codigo = getIntent().getStringExtra("Codigo");
-    key = getIntent().getStringExtra("key");
-    nombre = getIntent().getStringExtra("nombre");
-    apellido = getIntent().getStringExtra("apellido");
-    fecha = getIntent().getStringExtra("fecha");
-    numero = getIntent().getStringExtra("numero");
-    correo = getIntent().getStringExtra("correo");
-    contrasena = getIntent().getStringExtra("contrasena");
-    ruta = getIntent().getStringExtra("ruta");
-    licencia = getIntent().getStringExtra("licencia");
-
-    message = "Su codigo es: " + codigo;
-    final String recipientEmail = "kacharpo.service@gmail.com";
-    final String recipientPassword = "Kacharpo2000";
-    final String subject = "Codigo de confrimacion";
-    final String emailto = getIntent().getStringExtra("EmailTo");
 
     btn_reenviar.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            sendEmailWithGmail(recipientEmail, recipientPassword, emailto, subject, message);
-            c = 5;
+            reenviar();
             tv_intentos.setText("Numero de intentos restantes: " + c);
         }
     });
-
-    Intent aceptar = new Intent(getApplicationContext(), PrincipalMenuActivity.class);
 
     et_codigo1.setOnKeyListener(new View.OnKeyListener() {
         @Override
         public boolean onKey(View v, int keyCode, KeyEvent event) {
 
             if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
-
-                boolean codigo1_b = InputValidation.isValidEditText(et_codigo1, null);
-                boolean codigo2_b = InputValidation.isValidEditText(et_codigo2, null);
-                boolean codigo3_b = InputValidation.isValidEditText(et_codigo3, null);
-                boolean codigo4_b = InputValidation.isValidEditText(et_codigo4, null);
-                boolean codigo5_b = InputValidation.isValidEditText(et_codigo5, null);
-                boolean codigo6_b = InputValidation.isValidEditText(et_codigo6, null);
-
-                if (codigo1_b && codigo2_b && codigo3_b && codigo4_b && codigo5_b && codigo6_b) {
-                    Toast.makeText(getApplicationContext(), "Listo", Toast.LENGTH_SHORT).show();
-                    codigotxt = et_codigo1.getText().toString() + "" + et_codigo2.getText().toString() + "" + et_codigo3.getText().toString() + "" + et_codigo4.getText().toString() + "" + et_codigo5.getText().toString() + "" + et_codigo6.getText().toString();
-                    if (codigotxt.equals(codigo)) {
-                        startActivity(aceptar);
-                    }
-
-                }
-
+                confirmar();
             }
 
             return false;
@@ -131,23 +96,7 @@ public class ConfirmarCuenta extends AppCompatActivity {
         public boolean onKey(View v, int keyCode, KeyEvent event) {
 
             if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
-
-                boolean codigo1_b = InputValidation.isValidEditText(et_codigo1, null);
-                boolean codigo2_b = InputValidation.isValidEditText(et_codigo2, null);
-                boolean codigo3_b = InputValidation.isValidEditText(et_codigo3, null);
-                boolean codigo4_b = InputValidation.isValidEditText(et_codigo4, null);
-                boolean codigo5_b = InputValidation.isValidEditText(et_codigo5, null);
-                boolean codigo6_b = InputValidation.isValidEditText(et_codigo6, null);
-
-                if (codigo1_b && codigo2_b && codigo3_b && codigo4_b && codigo5_b && codigo6_b) {
-                    Toast.makeText(getApplicationContext(), "Listo", Toast.LENGTH_SHORT).show();
-                    codigotxt = et_codigo1.getText().toString() + "" + et_codigo2.getText().toString() + "" + et_codigo3.getText().toString() + "" + et_codigo4.getText().toString() + "" + et_codigo5.getText().toString() + "" + et_codigo6.getText().toString();
-                    if (codigotxt.equals(codigo)) {
-                        startActivity(aceptar);
-                    }
-
-                }
-
+                confirmar();
             }
 
             return false;
@@ -159,23 +108,7 @@ public class ConfirmarCuenta extends AppCompatActivity {
         public boolean onKey(View v, int keyCode, KeyEvent event) {
 
             if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
-
-                boolean codigo1_b = InputValidation.isValidEditText(et_codigo1, null);
-                boolean codigo2_b = InputValidation.isValidEditText(et_codigo2, null);
-                boolean codigo3_b = InputValidation.isValidEditText(et_codigo3, null);
-                boolean codigo4_b = InputValidation.isValidEditText(et_codigo4, null);
-                boolean codigo5_b = InputValidation.isValidEditText(et_codigo5, null);
-                boolean codigo6_b = InputValidation.isValidEditText(et_codigo6, null);
-
-                if (codigo1_b && codigo2_b && codigo3_b && codigo4_b && codigo5_b && codigo6_b) {
-                    Toast.makeText(getApplicationContext(), "Listo", Toast.LENGTH_SHORT).show();
-                    codigotxt = et_codigo1.getText().toString() + "" + et_codigo2.getText().toString() + "" + et_codigo3.getText().toString() + "" + et_codigo4.getText().toString() + "" + et_codigo5.getText().toString() + "" + et_codigo6.getText().toString();
-                    if (codigotxt.equals(codigo)) {
-                        startActivity(aceptar);
-                    }
-
-                }
-
+                confirmar();
             }
 
             return false;
@@ -187,23 +120,7 @@ public class ConfirmarCuenta extends AppCompatActivity {
         public boolean onKey(View v, int keyCode, KeyEvent event) {
 
             if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
-
-                boolean codigo1_b = InputValidation.isValidEditText(et_codigo1, null);
-                boolean codigo2_b = InputValidation.isValidEditText(et_codigo2, null);
-                boolean codigo3_b = InputValidation.isValidEditText(et_codigo3, null);
-                boolean codigo4_b = InputValidation.isValidEditText(et_codigo4, null);
-                boolean codigo5_b = InputValidation.isValidEditText(et_codigo5, null);
-                boolean codigo6_b = InputValidation.isValidEditText(et_codigo6, null);
-
-                if (codigo1_b && codigo2_b && codigo3_b && codigo4_b && codigo5_b && codigo6_b) {
-                    Toast.makeText(getApplicationContext(), "Listo", Toast.LENGTH_SHORT).show();
-                    codigotxt = et_codigo1.getText().toString() + "" + et_codigo2.getText().toString() + "" + et_codigo3.getText().toString() + "" + et_codigo4.getText().toString() + "" + et_codigo5.getText().toString() + "" + et_codigo6.getText().toString();
-                    if (codigotxt.equals(codigo)) {
-                        startActivity(aceptar);
-                    }
-
-                }
-
+                confirmar();
             }
 
             return false;
@@ -215,23 +132,7 @@ public class ConfirmarCuenta extends AppCompatActivity {
         public boolean onKey(View v, int keyCode, KeyEvent event) {
 
             if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
-
-                boolean codigo1_b = InputValidation.isValidEditText(et_codigo1, null);
-                boolean codigo2_b = InputValidation.isValidEditText(et_codigo2, null);
-                boolean codigo3_b = InputValidation.isValidEditText(et_codigo3, null);
-                boolean codigo4_b = InputValidation.isValidEditText(et_codigo4, null);
-                boolean codigo5_b = InputValidation.isValidEditText(et_codigo5, null);
-                boolean codigo6_b = InputValidation.isValidEditText(et_codigo6, null);
-
-                if (codigo1_b && codigo2_b && codigo3_b && codigo4_b && codigo5_b && codigo6_b) {
-                    Toast.makeText(getApplicationContext(), "Listo", Toast.LENGTH_SHORT).show();
-                    codigotxt = et_codigo1.getText().toString() + "" + et_codigo2.getText().toString() + "" + et_codigo3.getText().toString() + "" + et_codigo4.getText().toString() + "" + et_codigo5.getText().toString() + "" + et_codigo6.getText().toString();
-                    if (codigotxt.equals(codigo)) {
-                        startActivity(aceptar);
-                    }
-
-                }
-
+                confirmar();
             }
 
             return false;
@@ -243,87 +144,7 @@ public class ConfirmarCuenta extends AppCompatActivity {
         public boolean onKey(View v, int keyCode, KeyEvent event) {
 
             if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
-
-                boolean codigo1_b = InputValidation.isValidEditText(et_codigo1, null);
-                boolean codigo2_b = InputValidation.isValidEditText(et_codigo2, null);
-                boolean codigo3_b = InputValidation.isValidEditText(et_codigo3, null);
-                boolean codigo4_b = InputValidation.isValidEditText(et_codigo4, null);
-                boolean codigo5_b = InputValidation.isValidEditText(et_codigo5, null);
-                boolean codigo6_b = InputValidation.isValidEditText(et_codigo6, null);
-
-                if (codigo1_b && codigo2_b && codigo3_b && codigo4_b && codigo5_b && codigo6_b) {
-                    Toast.makeText(getApplicationContext(), "Listo", Toast.LENGTH_SHORT).show();
-                    codigotxt = et_codigo1.getText().toString() + "" + et_codigo2.getText().toString() + "" + et_codigo3.getText().toString() + "" + et_codigo4.getText().toString() + "" + et_codigo5.getText().toString() + "" + et_codigo6.getText().toString();
-                    if (codigotxt.equals(codigo)) {
-                        try{
-
-                            RegistroConstructor emp = new RegistroConstructor( nombre, apellido, fecha, numero, correo, contrasena, ruta, licencia,"false");
-                            DatabaseReference bbdd;
-
-                            bbdd = FirebaseDatabase.getInstance().getReference("RegistroConstructor");
-
-                            Query q=bbdd.orderByChild("confirmado").equalTo("true");
-
-                            q.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    int cont =0;
-                                    for(DataSnapshot datasnapshot: dataSnapshot.getChildren()){
-                                        cont++;
-                                        Toast.makeText(getApplicationContext(), "He encontrado "+cont, Toast.LENGTH_LONG).show();
-                                    }
-                                    key = ""+cont;
-                                    emp.setKey(key);
-                                    key = emp.getKey();
-                                    HashMap<String, Object> hashMap = new HashMap<>();
-                                    hashMap.put("nombre", nombre);
-                                    hashMap.put("apellido", apellido);
-                                    hashMap.put("fecha", fecha);
-                                    hashMap.put("numero", numero);
-                                    hashMap.put("correo", correo);
-                                    hashMap.put("contrasena", contrasena);
-                                    hashMap.put("ruta", ruta);
-                                    hashMap.put("confirmado", "true");
-
-                                    hashMap.put("licencia", licencia);
-                                    Toast.makeText(getApplicationContext(), "" + key, Toast.LENGTH_SHORT).show();
-                                    dao.update(key, hashMap).addOnSuccessListener(suc ->
-                                    {
-                                        Toast.makeText(getApplicationContext(), "Record is updated", Toast.LENGTH_SHORT).show();
-                                    }).addOnFailureListener(er ->
-                                    {
-                                        Toast.makeText(getApplicationContext(), "" + er.getMessage(), Toast.LENGTH_SHORT).show();
-                                    });
-
-                                    startActivity(aceptar);
-
-
-
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-
-                                }
-                            });
-
-                        }catch (Exception eo){
-                            Toast.makeText(getApplicationContext(), "e"+eo, Toast.LENGTH_SHORT).show();
-                        }
-                    } else {
-                        c--;
-                        if (c < 0) {
-                            codigon = codigo(999999);
-                            codigo = "" + codigon;
-                            message = "Su codigo es: " + codigo;
-                            sendEmailWithGmail(recipientEmail, recipientPassword, emailto, subject, message);
-                            c = 5;
-                        }
-                        tv_intentos.setText("Numero de intentos restantes: " + c);
-                    }
-
-                }
-
+                confirmar();
             }
 
             return false;
@@ -417,5 +238,104 @@ public class ConfirmarCuenta extends AppCompatActivity {
 
         int numero = random.nextInt(max);
         return numero;
+    }
+
+    private void confirmar(){
+
+        boolean codigo1_b = InputValidation.isValidEditText(et_codigo1, null);
+        boolean codigo2_b = InputValidation.isValidEditText(et_codigo2, null);
+        boolean codigo3_b = InputValidation.isValidEditText(et_codigo3, null);
+        boolean codigo4_b = InputValidation.isValidEditText(et_codigo4, null);
+        boolean codigo5_b = InputValidation.isValidEditText(et_codigo5, null);
+        boolean codigo6_b = InputValidation.isValidEditText(et_codigo6, null);
+        Intent aceptar = new Intent(getApplicationContext(), PrincipalMenuActivity.class);
+        key = getIntent().getStringExtra("key");
+        String nombre = getIntent().getStringExtra("nombre");
+        String apellido = getIntent().getStringExtra("apellido");
+        String fecha = getIntent().getStringExtra("fecha");
+        String numero = getIntent().getStringExtra("numero");
+        String correo = getIntent().getStringExtra("correo");
+        String contrasena = getIntent().getStringExtra("contrasena");
+        String ruta = getIntent().getStringExtra("ruta");
+        String licencia = getIntent().getStringExtra("licencia");
+
+        if (codigo1_b && codigo2_b && codigo3_b && codigo4_b && codigo5_b && codigo6_b) {
+            Toast.makeText(getApplicationContext(), "Listo", Toast.LENGTH_SHORT).show();
+            codigotxt = et_codigo1.getText().toString() + "" + et_codigo2.getText().toString() + "" + et_codigo3.getText().toString() + "" + et_codigo4.getText().toString() + "" + et_codigo5.getText().toString() + "" + et_codigo6.getText().toString();
+            if (codigotxt.equals(codigo)) {
+                try{
+
+                    RegistroConstructor emp = new RegistroConstructor( nombre, apellido, fecha, numero, correo, contrasena, ruta, licencia,"false");
+                    DatabaseReference bbdd;
+
+                    bbdd = FirebaseDatabase.getInstance().getReference("RegistroConstructor");
+
+                    Query q=bbdd.orderByChild("confirmado").equalTo("true");
+
+                    q.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            int cont =0;
+                            for(DataSnapshot datasnapshot: dataSnapshot.getChildren()){
+                                cont++;
+                                Toast.makeText(getApplicationContext(), "He encontrado "+cont, Toast.LENGTH_LONG).show();
+                            }
+                            key = ""+cont;
+                            emp.setKey(key);
+                            key = emp.getKey();
+                            HashMap<String, Object> hashMap = new HashMap<>();
+                            hashMap.put("nombre", nombre);
+                            hashMap.put("apellido", apellido);
+                            hashMap.put("fecha", fecha);
+                            hashMap.put("numero", numero);
+                            hashMap.put("correo", correo);
+                            hashMap.put("contrasena", contrasena);
+                            hashMap.put("ruta", ruta);
+                            hashMap.put("confirmado", "true");
+
+                            hashMap.put("licencia", licencia);
+                            Toast.makeText(getApplicationContext(), "" + key, Toast.LENGTH_SHORT).show();
+                            dao.update(key, hashMap).addOnSuccessListener(suc ->
+                            {
+                                Toast.makeText(getApplicationContext(), "Record is updated", Toast.LENGTH_SHORT).show();
+                            }).addOnFailureListener(er ->
+                            {
+                                Toast.makeText(getApplicationContext(), "" + er.getMessage(), Toast.LENGTH_SHORT).show();
+                            });
+
+                            startActivity(aceptar);
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+                }catch (Exception eo){
+                    Toast.makeText(getApplicationContext(), "e"+eo, Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                c--;
+                if (c < 0) {
+                    reenviar();
+                }
+                tv_intentos.setText("Numero de intentos restantes: " + c);
+            }
+
+        }
+    }
+
+    private void reenviar(){
+        final String recipientEmail = "kacharpo.service@gmail.com";
+        final String recipientPassword = "Kacharpo2000";
+        final String subject = "Codigo de confrimacion";
+        final String emailto = getIntent().getStringExtra("EmailTo");
+        codigon = codigo(999999);
+        codigo = "" + codigon;
+        message = "Su codigo es: " + codigo;
+        sendEmailWithGmail(recipientEmail, recipientPassword, emailto, subject, message);
+        c = 5;
     }
 }
