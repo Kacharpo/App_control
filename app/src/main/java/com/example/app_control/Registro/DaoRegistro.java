@@ -12,7 +12,7 @@ public class DaoRegistro {
     public DaoRegistro()
     {
         FirebaseDatabase db =FirebaseDatabase.getInstance();
-        databaseReference = db.getReference(RegistroConstructor.class.getSimpleName());
+        databaseReference = db.getReference("Registro");
     }
     public Task<Void> add(RegistroConstructor emp)
     {

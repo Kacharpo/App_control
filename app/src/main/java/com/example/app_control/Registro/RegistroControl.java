@@ -91,6 +91,7 @@ public class RegistroControl extends AppCompatActivity {
     private ImageView img_control;
     private RadioButton rb_terminos;
     private int codigo = codigo(999999);
+    DaoRegistro dao = new DaoRegistro();
 
     String key = "0";
     CardView cv_Camara,cv_Subir;
@@ -210,7 +211,53 @@ public class RegistroControl extends AppCompatActivity {
                                                            }
                                                        });
                                                    }
-                                                   sendEmailWithGmail(recipientEmail, recipientPassword, et_correo.getText().toString(), subject, message);
+
+                                                   RegistroConstructor emp = new RegistroConstructor( nombre, apellido, fecha, numero, correo, contrasena, ruta, licencia,"false");
+                                                   DatabaseReference bbdd;
+
+                                                   bbdd = FirebaseDatabase.getInstance().getReference("Registro");
+
+                                                   Query q=bbdd.orderByChild("confirmado").equalTo("false");
+
+                                                   q.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                       @Override
+                                                       public void onDataChange(DataSnapshot dataSnapshot) {
+                                                           int cont =0;
+                                                           for(DataSnapshot datasnapshot: dataSnapshot.getChildren()){
+                                                               cont++;
+                                                               Toast.makeText(getApplicationContext(), "He encontrado "+cont, Toast.LENGTH_LONG).show();
+                                                           }
+                                                           key = ""+cont+"_a";
+                                                           emp.setKey(key);
+                                                           key = emp.getKey();
+                                                           HashMap<String, Object> hashMap = new HashMap<>();
+                                                           hashMap.put("nombre", nombre);
+                                                           hashMap.put("apellido", apellido);
+                                                           hashMap.put("fecha", fecha);
+                                                           hashMap.put("numero", numero);
+                                                           hashMap.put("correo", correo);
+                                                           hashMap.put("contrasena", contrasena);
+                                                           hashMap.put("ruta", ruta);
+                                                           hashMap.put("confirmado", "false");
+
+                                                           hashMap.put("licencia", licencia);
+                                                           Toast.makeText(getApplicationContext(), "" + key, Toast.LENGTH_SHORT).show();
+                                                           dao.update(key, hashMap).addOnSuccessListener(suc ->
+                                                           {
+                                                               Toast.makeText(getApplicationContext(), "Record is updated", Toast.LENGTH_SHORT).show();
+                                                           }).addOnFailureListener(er ->
+                                                           {
+                                                               Toast.makeText(getApplicationContext(), "" + er.getMessage(), Toast.LENGTH_SHORT).show();
+                                                           });
+
+                                                       }
+
+                                                       @Override
+                                                       public void onCancelled(DatabaseError databaseError) {
+
+                                                       }
+                                                   });
+
                                                    datos();
 
                                                } else {
@@ -281,28 +328,6 @@ public class RegistroControl extends AppCompatActivity {
        }
     }
 
-    private void sendEmailWithGmail(final String recipientEmail, final String recipientPassword,
-                                    String to, String subject, String message) {
-        try {
-            Properties props = new Properties();
-            props.put("mail.smtp.host", "smtp.gmail.com");
-            props.put("mail.smtp.socketFactory.port", "465");
-            props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-            props.put("mail.smtp.auth", "true");
-            props.put("mail.smtp.port", "465");
-
-            Session session = Session.getDefaultInstance(props, new Authenticator() {
-                protected PasswordAuthentication getPasswordAuthentication() {
-                    return new PasswordAuthentication(recipientEmail, recipientPassword);
-                }
-            });
-
-            SenderAsyncTask task = new RegistroControl.SenderAsyncTask(session, recipientEmail, to, subject, message);
-            task.execute();
-        } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "Error: "+e, Toast.LENGTH_SHORT).show();
-        }
-    }
 
     private class SenderAsyncTask extends AsyncTask<String, String, String> {
 

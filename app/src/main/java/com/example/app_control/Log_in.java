@@ -43,11 +43,14 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Random;
 
 
 public class Log_in extends AppCompatActivity {
@@ -62,6 +65,9 @@ public class Log_in extends AppCompatActivity {
     DaoRegistro dao;
     String key =null;
     int c = 0;
+    String email;
+    private int codigo = codigo(999999);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -238,7 +244,7 @@ public class Log_in extends AppCompatActivity {
         String contrasena = et_contrasena.getText().toString();
         boolean contrasena_b = InputValidation.isValidEditText(et_contrasena, getString(R.string.field_is_required));
 
-        String email = et_usuario.getText().toString();
+        email = et_usuario.getText().toString();
         String password = et_contrasena.getText().toString();
 
         if (TextUtils.isEmpty(email)) {
@@ -253,13 +259,69 @@ public class Log_in extends AppCompatActivity {
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
                         Toast.makeText(getApplicationContext(), "User logged in successfully", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(Log_in.this, PrincipalMenuActivity.class));
+
+                        DatabaseReference bbdd;
+
+                        bbdd = FirebaseDatabase.getInstance().getReference("Registro");
+
+                        Query q=bbdd.orderByChild("correo").equalTo(email);
+
+                        q.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                int cont =0;
+                                for(DataSnapshot datasnapshot: dataSnapshot.getChildren()){
+                                    cont++;
+                                    Toast.makeText(getApplicationContext(), "He encontrado "+cont, Toast.LENGTH_LONG).show();
+                                }
+                                if(cont ==1){
+                                    datos();
+                                }else if(cont ==2){
+                                    startActivity(new Intent(Log_in.this, PrincipalMenuActivity.class));
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
                     } else {
                         Toast.makeText(getApplicationContext(), "Log in Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
             });
         }
+    }
+
+    private void datos(){
+        try {
+            Intent correos = new Intent(getApplicationContext(), ConfirmarCuenta.class);
+            correos.putExtra("EmailTo",email);
+            correos.putExtra("Codigo",""+codigo);
+            correos.putExtra("key",key);
+            correos.putExtra("nombre","nombre");
+            correos.putExtra("apellido","apellido");
+            correos.putExtra("fecha","fecha");
+            correos.putExtra("numero","numero");
+            correos.putExtra("correo",email);
+            correos.putExtra("contrasena","contrasena");
+            correos.putExtra("ruta","ruta");
+            correos.putExtra("licencia","licencia");
+
+            startActivity(correos);} catch (Exception e) {
+            Toast.makeText(getApplicationContext(), "Error: "+e, Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    private int codigo(int max){
+        Random random = new Random();
+        random.setSeed(System.currentTimeMillis());
+
+        int numero = random.nextInt(max);
+        return numero;
     }
 
     private final void checkUser() {

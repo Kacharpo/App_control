@@ -58,20 +58,21 @@ public class ConfirmarCuenta extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirmar_cuenta);
 
-    tv_bienvenido = (TextView) findViewById(R.id.tv_c_bienvenido);
-    tv_ingresa = (TextView) findViewById(R.id.tv_c_ingresa);
-    tv_intentos = (TextView) findViewById(R.id.tv_c_intentos);
-    tv_recibir = (TextView) findViewById(R.id.tv_c_recibir);
-    et_codigo1 = (EditText) findViewById(R.id.txt_c_codigo1);
-    et_codigo2 = (EditText) findViewById(R.id.txt_c_codigo2);
-    et_codigo3 = (EditText) findViewById(R.id.txt_c_codigo3);
-    et_codigo4 = (EditText) findViewById(R.id.txt_c_codigo4);
-    et_codigo5 = (EditText) findViewById(R.id.txt_c_codigo5);
-    et_codigo6 = (EditText) findViewById(R.id.txt_c_codigo6);
-    btn_reenviar = (Button) findViewById(R.id.btn_c_reenviar);
-    codigo = getIntent().getStringExtra("Codigo");
+        tv_bienvenido = (TextView) findViewById(R.id.tv_c_bienvenido);
+        tv_ingresa = (TextView) findViewById(R.id.tv_c_ingresa);
+        tv_intentos = (TextView) findViewById(R.id.tv_c_intentos);
+        tv_recibir = (TextView) findViewById(R.id.tv_c_recibir);
+        et_codigo1 = (EditText) findViewById(R.id.txt_c_codigo1);
+        et_codigo2 = (EditText) findViewById(R.id.txt_c_codigo2);
+        et_codigo3 = (EditText) findViewById(R.id.txt_c_codigo3);
+        et_codigo4 = (EditText) findViewById(R.id.txt_c_codigo4);
+        et_codigo5 = (EditText) findViewById(R.id.txt_c_codigo5);
+        et_codigo6 = (EditText) findViewById(R.id.txt_c_codigo6);
+        btn_reenviar = (Button) findViewById(R.id.btn_c_reenviar);
+        codigo = getIntent().getStringExtra("Codigo");
+        reenviar();
 
-    btn_reenviar.setOnClickListener(new View.OnClickListener() {
+            btn_reenviar.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             reenviar();
@@ -265,10 +266,10 @@ public class ConfirmarCuenta extends AppCompatActivity {
             if (codigotxt.equals(codigo)) {
                 try{
 
-                    RegistroConstructor emp = new RegistroConstructor( nombre, apellido, fecha, numero, correo, contrasena, ruta, licencia,"false");
+                    RegistroConstructor emp = new RegistroConstructor( nombre, apellido, fecha, numero, correo, contrasena, ruta, licencia,"true");
                     DatabaseReference bbdd;
 
-                    bbdd = FirebaseDatabase.getInstance().getReference("RegistroConstructor");
+                    bbdd = FirebaseDatabase.getInstance().getReference("Registro");
 
                     Query q=bbdd.orderByChild("confirmado").equalTo("true");
 
