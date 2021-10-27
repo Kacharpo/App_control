@@ -161,6 +161,10 @@ public class RegistroControl extends AppCompatActivity {
                @Override
                public void onClick(View view) {
 
+                   /*FirebaseDatabase database = FirebaseDatabase.getInstance();
+                   DatabaseReference ref = database.getReference("Registro");
+                   ref.removeValue(); */
+
                    int id_control = 1;
                    nombre = et_nombre.getText().toString();
                    boolean nombre_b = InputValidation.isValidEditText(et_nombre, "Campo requerido");
@@ -211,53 +215,50 @@ public class RegistroControl extends AppCompatActivity {
                                                            }
                                                        });
                                                    }
-
                                                    RegistroConstructor emp = new RegistroConstructor( nombre, apellido, fecha, numero, correo, contrasena, ruta, licencia,"false");
-                                                   DatabaseReference bbdd;
+                                                   DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+                                                   databaseReference.child("Registro").addValueEventListener(new ValueEventListener() {
 
-                                                   bbdd = FirebaseDatabase.getInstance().getReference("Registro");
-
-                                                   Query q=bbdd.orderByChild("confirmado").equalTo("false");
-
-                                                   q.addListenerForSingleValueEvent(new ValueEventListener() {
                                                        @Override
-                                                       public void onDataChange(DataSnapshot dataSnapshot) {
-                                                           int cont =0;
-                                                           for(DataSnapshot datasnapshot: dataSnapshot.getChildren()){
-                                                               cont++;
-                                                               Toast.makeText(getApplicationContext(), "He encontrado "+cont, Toast.LENGTH_LONG).show();
-                                                           }
-                                                           key = ""+cont;
-                                                           emp.setKey(key);
-                                                           key = emp.getKey();
-                                                           HashMap<String, Object> hashMap = new HashMap<>();
-                                                           hashMap.put("nombre", nombre);
-                                                           hashMap.put("apellido", apellido);
-                                                           hashMap.put("fecha", fecha);
-                                                           hashMap.put("numero", numero);
-                                                           hashMap.put("correo", correo);
-                                                           hashMap.put("contrasena", contrasena);
-                                                           hashMap.put("ruta", ruta);
-                                                           hashMap.put("confirmado", "false");
+                                                       public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                                                           hashMap.put("licencia", licencia);
-                                                           Toast.makeText(getApplicationContext(), "" + key, Toast.LENGTH_SHORT).show();
-                                                           dao.update(key, hashMap).addOnSuccessListener(suc ->
-                                                           {
-                                                               Toast.makeText(getApplicationContext(), "Record is updated", Toast.LENGTH_SHORT).show();
-                                                           }).addOnFailureListener(er ->
-                                                           {
-                                                               Toast.makeText(getApplicationContext(), "" + er.getMessage(), Toast.LENGTH_SHORT).show();
-                                                           });
+                                                           if (snapshot.exists()){
+                                                               int cont =0;
+                                                               for (DataSnapshot dataSnapshot : snapshot.getChildren()){
+                                                                   cont++;
+                                                                   key = ""+cont;
+                                                               }
+
+                                                           }
 
                                                        }
 
                                                        @Override
-                                                       public void onCancelled(DatabaseError databaseError) {
+                                                       public void onCancelled(@NonNull DatabaseError error) {
 
                                                        }
                                                    });
+                                                   Toast.makeText(getApplicationContext(), ""+key, Toast.LENGTH_SHORT).show();
+                                                   emp.setKey(key);
+                                                   key = emp.getKey();
+                                                   HashMap<String, Object> hashMap = new HashMap<>();
+                                                   hashMap.put("nombre", nombre);
+                                                   hashMap.put("apellido", apellido);
+                                                   hashMap.put("fecha", fecha);
+                                                   hashMap.put("numero", numero);
+                                                   hashMap.put("correo", correo);
+                                                   hashMap.put("contrasena", contrasena);
+                                                   hashMap.put("ruta", ruta);
+                                                   hashMap.put("confirmado", "false");
 
+                                                   hashMap.put("licencia", licencia);
+                                                   dao.update(key, hashMap).addOnSuccessListener(suc ->
+                                                   {
+                                                       Toast.makeText(getApplicationContext(), "Record is updated", Toast.LENGTH_SHORT).show();
+                                                   }).addOnFailureListener(er ->
+                                                   {
+                                                       Toast.makeText(getApplicationContext(), "" + er.getMessage(), Toast.LENGTH_SHORT).show();
+                                                   });
                                                    datos();
 
                                                } else {

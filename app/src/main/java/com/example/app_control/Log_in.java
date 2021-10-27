@@ -280,7 +280,9 @@ public class Log_in extends AppCompatActivity {
 
                                             String confirmado=dataSnapshot.child("confirmado").getValue().toString();
                                             if(confirmado.equals("true")){
-                                                startActivity(new Intent(Log_in.this, PrincipalMenuActivity.class));
+                                                Intent correo = new Intent(getApplicationContext(), PrincipalMenuActivity.class);
+                                                correo.putExtra("EmailTo",email);
+                                                startActivity(correo);
 
                                             }else{
                                                 datos();

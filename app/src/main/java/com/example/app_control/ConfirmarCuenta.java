@@ -251,7 +251,10 @@ public class ConfirmarCuenta extends AppCompatActivity {
         boolean codigo5_b = InputValidation.isValidEditText(et_codigo5, null);
         boolean codigo6_b = InputValidation.isValidEditText(et_codigo6, null);
         Intent aceptar = new Intent(getApplicationContext(), PrincipalMenuActivity.class);
+
         String correo = getIntent().getStringExtra("EmailTo");
+        aceptar.putExtra("EmailTo",correo);
+
 
         if (codigo1_b && codigo2_b && codigo3_b && codigo4_b && codigo5_b && codigo6_b) {
             Toast.makeText(getApplicationContext(), "Listo", Toast.LENGTH_SHORT).show();
