@@ -245,6 +245,28 @@ public class RegistroControl extends AppCompatActivity {
                                                                    });
                                                                    datos();
                                                                }
+                                                           }else{
+                                                               emp.setKey(key);
+                                                               key = emp.getKey();
+                                                               HashMap<String, Object> hashMap = new HashMap<>();
+                                                               hashMap.put("nombre", nombre);
+                                                               hashMap.put("apellido", apellido);
+                                                               hashMap.put("fecha", fecha);
+                                                               hashMap.put("numero", numero);
+                                                               hashMap.put("correo", correo);
+                                                               hashMap.put("contrasena", contrasena);
+                                                               hashMap.put("ruta", ruta);
+                                                               hashMap.put("confirmado", "false");
+
+                                                               hashMap.put("licencia", licencia);
+                                                               dao.update(key, hashMap).addOnSuccessListener(suc ->
+                                                               {
+                                                                   Toast.makeText(getApplicationContext(), "Record is updated", Toast.LENGTH_SHORT).show();
+                                                               }).addOnFailureListener(er ->
+                                                               {
+                                                                   Toast.makeText(getApplicationContext(), "" + er.getMessage(), Toast.LENGTH_SHORT).show();
+                                                               });
+                                                               datos();
                                                            }
                                                        }
 
