@@ -1,4 +1,4 @@
-package  com.example.app_control ;
+package com.example.app_control ;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -67,6 +68,14 @@ public class Log_in extends AppCompatActivity {
     int c = 0;
     String email;
     private int codigo = codigo(999999);
+    boolean g=false;
+    String password;
+    String nombre="";
+    String apellido="";
+    String fecha="";
+    String numero="";
+    String ruta="";
+    String licencia="";
 
 
     @Override
@@ -172,7 +181,7 @@ public class Log_in extends AppCompatActivity {
 
         //Resultado devuelto al iniciar el Intent de GoogleSignInApi.getSignInIntent (...);
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN  )   {
+        if (requestCode == RC_SIGN_IN )   {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             if(task.isSuccessful()){
                 try {
@@ -189,6 +198,7 @@ public class Log_in extends AppCompatActivity {
                 Toast.makeText(this, "Ocurrio un error. "+task.getException().toString(),
                         Toast.LENGTH_LONG).show();
             }
+
         } else  {
             callbackManager.onActivityResult(requestCode, resultCode, data);
         }
@@ -222,11 +232,8 @@ public class Log_in extends AppCompatActivity {
         //Intent i = new Intent(mGoogleSignInClient.getApplicationContext(), Registro_conductor.class);
         //startActivity(i);
         //finish();
-
-
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
-
 
     public void registro(View view){
         Intent i = new Intent(Log_in.this, RegistroControl.class);
@@ -245,7 +252,7 @@ public class Log_in extends AppCompatActivity {
         boolean contrasena_b = InputValidation.isValidEditText(et_contrasena, getString(R.string.field_is_required));
 
         email = et_usuario.getText().toString();
-        String password = et_contrasena.getText().toString();
+        password = et_contrasena.getText().toString();
 
         if (TextUtils.isEmpty(email)) {
             et_usuario.setError("Email cannot be empty");
@@ -258,34 +265,40 @@ public class Log_in extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
-                        Toast.makeText(getApplicationContext(), "User logged in successfully", Toast.LENGTH_SHORT).show();
 
-                        DatabaseReference bbdd;
+                       DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
-                        bbdd = FirebaseDatabase.getInstance().getReference("Registro");
+                        databaseReference.child("Registro").addValueEventListener(new ValueEventListener() {
 
-                        Query q=bbdd.orderByChild("correo").equalTo(email);
-
-                        q.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                int cont =0;
-                                for(DataSnapshot datasnapshot: dataSnapshot.getChildren()){
-                                    cont++;
-                                    Toast.makeText(getApplicationContext(), "He encontrado "+cont, Toast.LENGTH_LONG).show();
-                                }
-                                if(cont ==1){
-                                    datos();
-                                }else if(cont ==2){
-                                    startActivity(new Intent(Log_in.this, PrincipalMenuActivity.class));
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if (snapshot.exists()){
+                                    for (DataSnapshot dataSnapshot : snapshot.getChildren()){
+
+                                        String mail= dataSnapshot.child("correo").getValue().toString();
+                                        if(email.equals(mail)){
+
+                                            String confirmado=dataSnapshot.child("confirmado").getValue().toString();
+                                            if(confirmado.equals("true")){
+                                                startActivity(new Intent(Log_in.this, PrincipalMenuActivity.class));
+
+                                            }else{
+                                                datos();
+                                            }
+                                        }
+
+                                    }
                                 }
                             }
-
                             @Override
-                            public void onCancelled(DatabaseError databaseError) {
+                            public void onCancelled(@NonNull DatabaseError error) {
 
                             }
                         });
+
+                        Toast.makeText(getApplicationContext(), "User logged in successfully", Toast.LENGTH_SHORT).show();
+
+
 
                     } else {
                         Toast.makeText(getApplicationContext(), "Log in Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
@@ -300,16 +313,6 @@ public class Log_in extends AppCompatActivity {
             Intent correos = new Intent(getApplicationContext(), ConfirmarCuenta.class);
             correos.putExtra("EmailTo",email);
             correos.putExtra("Codigo",""+codigo);
-            correos.putExtra("key",key);
-            correos.putExtra("nombre","nombre");
-            correos.putExtra("apellido","apellido");
-            correos.putExtra("fecha","fecha");
-            correos.putExtra("numero","numero");
-            correos.putExtra("correo",email);
-            correos.putExtra("contrasena","contrasena");
-            correos.putExtra("ruta","ruta");
-            correos.putExtra("licencia","licencia");
-
             startActivity(correos);} catch (Exception e) {
             Toast.makeText(getApplicationContext(), "Error: "+e, Toast.LENGTH_SHORT).show();
         }

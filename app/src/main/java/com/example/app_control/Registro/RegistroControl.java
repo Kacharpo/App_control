@@ -227,7 +227,7 @@ public class RegistroControl extends AppCompatActivity {
                                                                cont++;
                                                                Toast.makeText(getApplicationContext(), "He encontrado "+cont, Toast.LENGTH_LONG).show();
                                                            }
-                                                           key = ""+cont+"_a";
+                                                           key = ""+cont;
                                                            emp.setKey(key);
                                                            key = emp.getKey();
                                                            HashMap<String, Object> hashMap = new HashMap<>();

@@ -1,5 +1,6 @@
 package com.example.app_control;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
@@ -250,15 +251,7 @@ public class ConfirmarCuenta extends AppCompatActivity {
         boolean codigo5_b = InputValidation.isValidEditText(et_codigo5, null);
         boolean codigo6_b = InputValidation.isValidEditText(et_codigo6, null);
         Intent aceptar = new Intent(getApplicationContext(), PrincipalMenuActivity.class);
-        key = getIntent().getStringExtra("key");
-        String nombre = getIntent().getStringExtra("nombre");
-        String apellido = getIntent().getStringExtra("apellido");
-        String fecha = getIntent().getStringExtra("fecha");
-        String numero = getIntent().getStringExtra("numero");
-        String correo = getIntent().getStringExtra("correo");
-        String contrasena = getIntent().getStringExtra("contrasena");
-        String ruta = getIntent().getStringExtra("ruta");
-        String licencia = getIntent().getStringExtra("licencia");
+        String correo = getIntent().getStringExtra("EmailTo");
 
         if (codigo1_b && codigo2_b && codigo3_b && codigo4_b && codigo5_b && codigo6_b) {
             Toast.makeText(getApplicationContext(), "Listo", Toast.LENGTH_SHORT).show();
@@ -266,50 +259,42 @@ public class ConfirmarCuenta extends AppCompatActivity {
             if (codigotxt.equals(codigo)) {
                 try{
 
-                    RegistroConstructor emp = new RegistroConstructor( nombre, apellido, fecha, numero, correo, contrasena, ruta, licencia,"true");
-                    DatabaseReference bbdd;
+                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
-                    bbdd = FirebaseDatabase.getInstance().getReference("Registro");
+                    databaseReference.child("Registro").addValueEventListener(new ValueEventListener() {
 
-                    Query q=bbdd.orderByChild("confirmado").equalTo("true");
-
-                    q.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            int cont =0;
-                            for(DataSnapshot datasnapshot: dataSnapshot.getChildren()){
-                                cont++;
-                                Toast.makeText(getApplicationContext(), "He encontrado "+cont, Toast.LENGTH_LONG).show();
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            RegistroConstructor emp = new RegistroConstructor( "nombre", "apellido", "fecha", "numero", correo, "contrasena", "ruta", "licencia","true");
+
+                            if (snapshot.exists()){
+
+                                for (DataSnapshot dataSnapshot : snapshot.getChildren()){
+                                    String mail= dataSnapshot.child("correo").getValue().toString();
+                                    String key = dataSnapshot.getKey();
+                                    emp.setKey(key);
+                                    key = emp.getKey();
+                                    if(correo.equals(mail)){
+
+                                        HashMap<String, Object> hashMap = new HashMap<>();
+
+                                        hashMap.put("confirmado", "true");
+                                        dao.update(key, hashMap).addOnSuccessListener(suc ->
+                                        {
+                                            Toast.makeText(getApplicationContext(), "Record is updated", Toast.LENGTH_SHORT).show();
+                                        }).addOnFailureListener(er ->
+                                        {
+                                            Toast.makeText(getApplicationContext(), "" + er.getMessage(), Toast.LENGTH_SHORT).show();
+                                        });
+
+                                        startActivity(aceptar);
+                                    }
+
+                                }
                             }
-                            key = ""+cont;
-                            emp.setKey(key);
-                            key = emp.getKey();
-                            HashMap<String, Object> hashMap = new HashMap<>();
-                            hashMap.put("nombre", nombre);
-                            hashMap.put("apellido", apellido);
-                            hashMap.put("fecha", fecha);
-                            hashMap.put("numero", numero);
-                            hashMap.put("correo", correo);
-                            hashMap.put("contrasena", contrasena);
-                            hashMap.put("ruta", ruta);
-                            hashMap.put("confirmado", "true");
-
-                            hashMap.put("licencia", licencia);
-                            Toast.makeText(getApplicationContext(), "" + key, Toast.LENGTH_SHORT).show();
-                            dao.update(key, hashMap).addOnSuccessListener(suc ->
-                            {
-                                Toast.makeText(getApplicationContext(), "Record is updated", Toast.LENGTH_SHORT).show();
-                            }).addOnFailureListener(er ->
-                            {
-                                Toast.makeText(getApplicationContext(), "" + er.getMessage(), Toast.LENGTH_SHORT).show();
-                            });
-
-                            startActivity(aceptar);
-
                         }
-
                         @Override
-                        public void onCancelled(DatabaseError databaseError) {
+                        public void onCancelled(@NonNull DatabaseError error) {
 
                         }
                     });

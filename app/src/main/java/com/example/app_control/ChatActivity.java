@@ -49,7 +49,7 @@ public class ChatActivity extends AppCompatActivity {
 
         Intent intent =getIntent();
 
-        String otherEmail = intent.getStringExtra("correo");
+        String otherEmail = intent.getStringExtra("EmailTo");
         String email = mAuth.getCurrentUser().getEmail();
 
         setTitle("Chat with " + otherEmail);
