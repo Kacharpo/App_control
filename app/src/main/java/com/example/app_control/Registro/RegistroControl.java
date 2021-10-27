@@ -121,6 +121,7 @@ public class RegistroControl extends AppCompatActivity {
     String licencia ;
     String tipo;
     boolean k=true;
+    int a=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,37 +201,51 @@ public class RegistroControl extends AppCompatActivity {
                                            @Override
                                            public void onComplete(@NonNull Task<AuthResult> task) {
                                                if (task.isSuccessful()) {
-                                                   Toast.makeText(getApplicationContext(), "User registered successfully", Toast.LENGTH_SHORT).show();
 
                                                    Toast.makeText(getApplicationContext(), "Registro Exitoso", Toast.LENGTH_SHORT).show();
-                                                   for (int ii = 0; ii < n; ii++) {
-                                                       Toast.makeText(getApplicationContext(), "" + SUBIDAS[ii] + "", Toast.LENGTH_SHORT).show();
-                                                   }
-                                                   if (INTENT == CAMARA_INTENT) {
-                                                       Toast.makeText(getApplicationContext(), "Subida Camara", Toast.LENGTH_SHORT).show();
-                                                       filePath.putFile(photo).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                                           @Override
-                                                           public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                                               Toast.makeText(getApplicationContext(), "Imagen Subida " + fileName + "", Toast.LENGTH_SHORT).show();
-                                                           }
-                                                       });
-                                                   }
+
                                                    RegistroConstructor emp = new RegistroConstructor( nombre, apellido, fecha, numero, correo, contrasena, ruta, licencia,"false");
                                                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
                                                    databaseReference.child("Registro").addValueEventListener(new ValueEventListener() {
 
                                                        @Override
                                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-
                                                            if (snapshot.exists()){
                                                                int cont =0;
+                                                               int a=0;
                                                                for (DataSnapshot dataSnapshot : snapshot.getChildren()){
                                                                    cont++;
                                                                    key = ""+cont;
+                                                                   String mail= dataSnapshot.child("correo").getValue().toString();
+                                                                   if(mail==correo){
+                                                                       a=1;
+                                                                   }
                                                                }
+                                                               if(a==0){
+                                                                   Toast.makeText(getApplicationContext(), "" + key, Toast.LENGTH_LONG).show();
+                                                                   emp.setKey(key);
+                                                                   key = emp.getKey();
+                                                                   HashMap<String, Object> hashMap = new HashMap<>();
+                                                                   hashMap.put("nombre", nombre);
+                                                                   hashMap.put("apellido", apellido);
+                                                                   hashMap.put("fecha", fecha);
+                                                                   hashMap.put("numero", numero);
+                                                                   hashMap.put("correo", correo);
+                                                                   hashMap.put("contrasena", contrasena);
+                                                                   hashMap.put("ruta", ruta);
+                                                                   hashMap.put("confirmado", "false");
 
+                                                                   hashMap.put("licencia", licencia);
+                                                                   dao.update(key, hashMap).addOnSuccessListener(suc ->
+                                                                   {
+                                                                       Toast.makeText(getApplicationContext(), "Record is updated", Toast.LENGTH_SHORT).show();
+                                                                   }).addOnFailureListener(er ->
+                                                                   {
+                                                                       Toast.makeText(getApplicationContext(), "" + er.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                   });
+                                                                   datos();
+                                                               }
                                                            }
-
                                                        }
 
                                                        @Override
@@ -238,28 +253,7 @@ public class RegistroControl extends AppCompatActivity {
 
                                                        }
                                                    });
-                                                   Toast.makeText(getApplicationContext(), ""+key, Toast.LENGTH_SHORT).show();
-                                                   emp.setKey(key);
-                                                   key = emp.getKey();
-                                                   HashMap<String, Object> hashMap = new HashMap<>();
-                                                   hashMap.put("nombre", nombre);
-                                                   hashMap.put("apellido", apellido);
-                                                   hashMap.put("fecha", fecha);
-                                                   hashMap.put("numero", numero);
-                                                   hashMap.put("correo", correo);
-                                                   hashMap.put("contrasena", contrasena);
-                                                   hashMap.put("ruta", ruta);
-                                                   hashMap.put("confirmado", "false");
 
-                                                   hashMap.put("licencia", licencia);
-                                                   dao.update(key, hashMap).addOnSuccessListener(suc ->
-                                                   {
-                                                       Toast.makeText(getApplicationContext(), "Record is updated", Toast.LENGTH_SHORT).show();
-                                                   }).addOnFailureListener(er ->
-                                                   {
-                                                       Toast.makeText(getApplicationContext(), "" + er.getMessage(), Toast.LENGTH_SHORT).show();
-                                                   });
-                                                   datos();
 
                                                } else {
                                                    et_correo.setText("");
